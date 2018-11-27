@@ -27,7 +27,7 @@ using namespace std;
 
 int main()
 {
-    GameEngine game_engine(864,608);
+    GameEngine game_engine(400,300);
     //Start up SDL and create window
     if( !game_engine.Init())
     {

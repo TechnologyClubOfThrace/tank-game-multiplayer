@@ -27,8 +27,8 @@
 
 GameEngine::GameEngine(int screenWidth, int screenHeight)
 {
-   mScreenWidth = screenWidth;
-   mScreenHeight = screenHeight;
+   ScreenWidth = screenWidth;
+   ScreenHeight = screenHeight;
 }
 
 bool GameEngine::Init()
@@ -57,7 +57,7 @@ bool GameEngine::Init()
         }
 
         //Create window
-        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mScreenWidth, mScreenHeight, SDL_WINDOW_SHOWN );
+        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN );
         if( gWindow == nullptr )
         {
             printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -229,15 +229,13 @@ void GameEngine::Update()
 //draws the game objects
 void GameEngine::Draw()
 {
-    SDL_Rect temprect;//todo
-
     //first of all draw the level as the last game object in the z-order
     //so that all other game objects are drawn on top
-    level.Draw(temprect);
+    level.Draw(level.camera);
 
     //Draw all other game objects
     for (auto& gameObject : GameObjects::gameObjects){
-        gameObject->Draw(temprect);
+        gameObject->Draw(level.camera);
     }
 }
 

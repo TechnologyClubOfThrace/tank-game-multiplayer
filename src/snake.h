@@ -38,7 +38,7 @@ public:
     void Draw(SDL_Rect &camera);
     void Update(std::chrono::milliseconds::rep deltaTime);
 
-    void setCamera(SDL_Rect &camera);
+    void setCamera();
     void FireBullet();
 
     KeyState keystate;

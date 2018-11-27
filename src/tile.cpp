@@ -32,12 +32,21 @@ Tile::Tile(int x, int y, int w, int h)
 
 void Tile::render( SDL_Rect& camera )
 {
-    //Show the tile
-    //gTileTexture.render( mBox.x - camera.x, mBox.y - camera.y, &gTileClips[ mType ] );
-    sprite.spritesheet_texture->render(
-                mBox.x,
-                mBox.y,
-                &sprite.rect);
+    auto box = this->getBox();//todo
+    if (SDL_HasIntersection(&camera, &box) == SDL_TRUE){
+
+        SDL_Rect target_rect;
+        target_rect.x = this->mBox.x - camera.x;
+        target_rect.y = this->mBox.y - camera.y;
+        target_rect.w = sprite.rect.w;
+        target_rect.h = sprite.rect.h;
+
+
+        SDL_RenderCopyEx(sprite.spritesheet_texture->WindowRenderer,
+                         sprite.spritesheet_texture->mTexture,
+                         &sprite.rect,
+                         &target_rect,0, nullptr, SDL_FLIP_NONE);
+    }
 }
 
 SDL_Rect Tile::getBox()

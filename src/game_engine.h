@@ -55,10 +55,11 @@ public:
 
 
     void StartGameLoop();
-private:
+
     //Screen dimension constants
-    int mScreenWidth = 0;
-    int mScreenHeight = 0;
+    int ScreenWidth = 0;
+    int ScreenHeight = 0;
+private:
 
     std::chrono::milliseconds::rep deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
 };

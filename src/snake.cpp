@@ -131,33 +131,38 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
             Position.y -= Velocity.y * deltaTime;
         }
     }
+
+    setCamera();
 }
 
-void Snake::setCamera( SDL_Rect& camera )
-{
-    /*
+void Snake::setCamera()
+{ 
+
+
     //Center the camera over the dot
-    camera.x = ( mBox.x + DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
-    camera.y = ( mBox.y + DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+    //todo: should fix hardcoded window sizes 400 and 300
+    level->camera.x = round(( Position.x + DOT_WIDTH / 2 ) - (400 / 2));
+    level->camera.y = round(( Position.y + DOT_HEIGHT / 2 ) - (300 / 2));
+    level->camera.w = 400;
+    level->camera.h = 300;
 
     //Keep the camera in bounds
-    if( camera.x < 0 )
+    if( level->camera.x < 0 )
     {
-        camera.x = 0;
+        level->camera.x = 0;
     }
-    if( camera.y < 0 )
+    if( level->camera.y < 0 )
     {
-        camera.y = 0;
+        level->camera.y = 0;
     }
-    if( camera.x > LEVEL_WIDTH - camera.w )
+    if( level->camera.x > level->tileMap.level_width - level->camera.w )
     {
-        camera.x = LEVEL_WIDTH - camera.w;
+        level->camera.x = level->tileMap.level_width - level->camera.w;
     }
-    if( camera.y > LEVEL_HEIGHT - camera.h )
+    if( level->camera.y > level->tileMap.level_height - level->camera.h )
     {
-        camera.y = LEVEL_HEIGHT - camera.h;
+        level->camera.y = level->tileMap.level_height - level->camera.h;
     }
-    */
 }
 
 void Snake::FireBullet()
@@ -166,8 +171,8 @@ void Snake::FireBullet()
     bullet->Texture.WindowRenderer = this->snakeTexture.WindowRenderer;
     bullet->Texture.loadFromFile("bullet_w65h20.png");
 
-    double canon_x = static_cast<int>(std::round(Position.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    double canon_y = static_cast<int>(std::round(Position.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
+    double canon_x = static_cast<int>(std::round(Position.x - level->camera.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
+    double canon_y = static_cast<int>(std::round(Position.y - level->camera.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
 
     //bullet->Position.x = Position.x + 55 + 71*cos(RotationAngle.CurrentAngle * M_PI / 180.0);
     //bullet->Position.y = Position.y  + 14 + 71*sin(RotationAngle.CurrentAngle * M_PI / 180.0);
@@ -177,8 +182,8 @@ void Snake::FireBullet()
     //bullet->Position = this->Position;
     //bullet->Position.Rotate(this->RotationAngle.CurrentAngle * M_PI / 180.0);
     //bullet->Position.Rotate(0.01);
-    bullet->Velocity.x = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.x * 5 : -this->Velocity.x * 5;
-    bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 5 : -this->Velocity.y * 5;
+    bullet->Velocity.x = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.x * 1.1 : -this->Velocity.x * 1.1;
+    bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 1.1 : -this->Velocity.y * 1.1;
     bullet->RotationAngle = this->RotationAngle;
     bullet->level = this->level;
     GameObjects::gameObjects_for_addition.emplace_back(std::move(bullet));
@@ -213,8 +218,8 @@ void Snake::Draw( SDL_Rect& camera )
     //Show the tank
     //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );
 
-    snakeTexture.render(static_cast<int>(std::round(Position.x)),
-                        static_cast<int>(std::round(Position.y)),
+    snakeTexture.render(static_cast<int>(std::round(Position.x - camera.x)),
+                        static_cast<int>(std::round(Position.y - camera.y)),
                         nullptr,RotationAngle.CurrentAngle);
 
 

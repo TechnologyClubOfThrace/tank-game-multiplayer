@@ -42,6 +42,8 @@ public:
     std::vector<Tile> Tiles;
     TileMap tileMap;
     TextureWrapper spritesheet_texture;
+
+    SDL_Rect camera;//todo
 };
 
 #endif // LEVEL_MANAGER_H

@@ -123,9 +123,8 @@ void Level::handleEvent(SDL_Event &e)
 void Level::Draw(SDL_Rect &camera)
 {
     //render all map tiles
-    SDL_Rect tmp;//todo: should fix this
     for (auto& v : Tiles){
-        v.render(tmp);
+        v.render(camera);
     }
 }
 
