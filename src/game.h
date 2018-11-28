@@ -25,10 +25,10 @@
 #include "game_object.h"
 #include "viewport.h"
 
-class Game
+class game
 {
 public:
-    Game();
+    game();
 
     //vector of all game objects
     static std::vector<std::unique_ptr<GameObject>> gameObjects;

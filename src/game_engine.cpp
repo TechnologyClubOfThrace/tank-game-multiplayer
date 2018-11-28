@@ -160,8 +160,7 @@ void GameEngine::StartGameLoop()
        if (fpscounter.DisplayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
            fpscounter.Update(deltaTime);
-           SDL_Rect r;
-           fpscounter.Draw(r);
+           fpscounter.Draw();
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
 
@@ -192,7 +191,7 @@ void GameEngine::HandleEvents()
         }
 
         //call the handleEvent on each game object
-        for (auto& gameObject : Game::gameObjects){
+        for (auto& gameObject : game::gameObjects){
             gameObject->handleEvent(e);
         }
 
@@ -200,9 +199,9 @@ void GameEngine::HandleEvents()
         //has to be created. It is placed in the gameObjects_for_addition vector
         //so that after returning fron the previous handleEvent call, it will be added to the
         //gameObjects vector.
-        if (Game::gameObjects_for_addition.size() > 0){
-            std::move(Game::gameObjects_for_addition.begin(), Game::gameObjects_for_addition.end(), std::back_inserter(Game::gameObjects));  // ##
-            Game::gameObjects_for_addition.clear();
+        if (game::gameObjects_for_addition.size() > 0){
+            std::move(game::gameObjects_for_addition.begin(), game::gameObjects_for_addition.end(), std::back_inserter(game::gameObjects));  // ##
+            game::gameObjects_for_addition.clear();
         }
 
     }
@@ -216,7 +215,7 @@ void GameEngine::Update()
     //the game object is removed from the gameObjects vector and its destructor is called
     //because it is a std::unique_ptr.
     //TODO: check if there is a more efficient method using remove instead of erase.
-    for(auto it = Game::gameObjects.begin(); it != Game::gameObjects.end();)
+    for(auto it = game::gameObjects.begin(); it != game::gameObjects.end();)
     {
         //update game object
         //Because after calling update on each object, the object might non need to exist any more
@@ -226,7 +225,7 @@ void GameEngine::Update()
         (*it)->Update(deltaTime);
         if((*it)->Exists == false){
             //remove the game object if it is required
-            it = Game::gameObjects.erase(it);
+            it = game::gameObjects.erase(it);
         }else{
             ++it;
         }
@@ -238,12 +237,14 @@ void GameEngine::Draw()
 {
     //first of all draw the level as the last game object in the z-order
     //so that all other game objects are drawn on top
-    level.Draw(level.camera);
+    level.Draw();
 
     //Draw all other game objects
-    for (auto& gameObject : Game::gameObjects){
-        gameObject->Draw(level.camera);
+    for (auto& gameObject : game::gameObjects){
+        gameObject->Draw();
     }
+
+    level.DrawRadar();
 }
 
 

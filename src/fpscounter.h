@@ -33,7 +33,7 @@ public:
     FpsCounter();
 
     void handleEvent(SDL_Event &e);
-    void Draw(SDL_Rect &camera);
+    void Draw();
     void Update(std::chrono::milliseconds::rep deltaTime);
 
     void LoadFont(std::string font_file_name = "Roboto-Regular.ttf", int ptsize = 16);

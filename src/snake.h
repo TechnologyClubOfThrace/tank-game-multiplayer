@@ -35,7 +35,7 @@ class Snake : public GameObject
 public:
     Snake();
     void handleEvent(SDL_Event &e);
-    void Draw(SDL_Rect &camera);
+    void Draw();
     void Update(std::chrono::milliseconds::rep deltaTime);
 
     void centerCamera();

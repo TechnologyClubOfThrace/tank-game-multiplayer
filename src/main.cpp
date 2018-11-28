@@ -27,7 +27,7 @@ using namespace std;
 
 int main()
 {
-    GameEngine game_engine(400,300);
+    GameEngine game_engine(400,400);
     //Start up SDL and create window
     if( !game_engine.Init())
     {
@@ -41,7 +41,15 @@ int main()
     viewport.frame.w = game_engine.ScreenWidth;
     viewport.frame.h = game_engine.ScreenHeight;
     viewport.camera.frame = viewport.frame;
-    Game::viewports.emplace_back(viewport);
+    game::viewports.emplace_back(viewport);
+
+    ViewPort viewport_radar;
+    viewport_radar.frame.x = 290;
+    viewport_radar.frame.y = 290;
+    viewport_radar.frame.w = 86;
+    viewport_radar.frame.h = 61;
+    viewport_radar.camera.frame = viewport_radar.frame;
+    game::viewports.emplace_back(viewport_radar);
 
     //Object with information about the game map
     TileMap tile_map;
@@ -72,7 +80,7 @@ int main()
     //snake->snakeTexture.loadFromFile("snake_32x32.png");
     snake->snakeTexture.loadFromFile("tank_133x50.png");
     snake->level = &game_engine.level;
-    Game::gameObjects.emplace_back(std::move(snake));
+    game::gameObjects.emplace_back(std::move(snake));
 
     /*
     //load the tank object in our level

@@ -35,15 +35,17 @@ public:
     int LoadMapTiles(TileMap _tile_map, Spritesheet spritesheet);
 
     void handleEvent(SDL_Event &e);
-    void Draw(SDL_Rect& camera);
+    void Draw();
     void Update(std::chrono::milliseconds::rep deltaTime);
+
+    void DrawRadar();
 
     //public variables
     std::vector<Tile> Tiles;
     TileMap tileMap;
-    TextureWrapper spritesheet_texture;
 
-    SDL_Rect camera;//todo
+    //map building blocks
+    TextureWrapper spritesheet_texture;
 };
 
 #endif // LEVEL_MANAGER_H

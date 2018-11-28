@@ -63,7 +63,7 @@ void SnakeFood::move(Level& level, double deltaTime)
 }
 
 
-void SnakeFood::Draw( SDL_Rect& camera )
+void SnakeFood::Draw()
 {
     //Show the dot
     //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );

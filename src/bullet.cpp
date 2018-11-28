@@ -39,7 +39,7 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
     Position.x += Velocity.x * deltaTime ;
 
     //If the dot went too far to the left or right or touched a wall
-    if( ( Position.x + level->camera.x < 0 ) || ( Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
+    if( ( Position.x + game::viewports[0].camera.frame.x < 0 ) || ( Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
     {
         //move back
         Position.x -= Velocity.x * deltaTime;
@@ -52,7 +52,7 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
     Position.y += Velocity.y * deltaTime ;
 
     //If the dot went too far up or down or touched a wall
-    if( ( Position.y + level->camera.y < 0 ) || ( Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
+    if( ( Position.y + game::viewports[0].camera.frame.y < 0 ) || ( Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
     {
         //move back
         Position.y -= Velocity.y * deltaTime;
@@ -100,8 +100,8 @@ bool Bullet::touchesWall(Level* level)
         {
             auto bb = level->Tiles[i].getBox();//todo
             SDL_Rect box;
-            box.x = static_cast<int>(std::round(Position.x + level->camera.x));
-            box.y = static_cast<int>(std::round(Position.y + level->camera.y));
+            box.x = static_cast<int>(std::round(Position.x + game::viewports[0].camera.frame.x));
+            box.y = static_cast<int>(std::round(Position.y + game::viewports[0].camera.frame.y));
             box.w = DOT_WIDTH;
             box.h = DOT_HEIGHT;
 
@@ -114,7 +114,7 @@ bool Bullet::touchesWall(Level* level)
     return false;
 }
 
-void Bullet::Draw( SDL_Rect& camera )
+void Bullet::Draw()
 {
     //Show the dot
     //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );

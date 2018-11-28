@@ -32,7 +32,7 @@ public:
 
     void handleEvent(SDL_Event &e);
     void Update(std::chrono::milliseconds::rep deltaTime);
-    void Draw(SDL_Rect &camera);
+    void Draw();
 
     void move(Level &level, double deltaTime);
     //The dimensions of the dot

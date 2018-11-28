@@ -34,7 +34,7 @@ void FpsCounter::handleEvent(SDL_Event &e)
 //SDL_GetCPUCount
 //SDL_GetPlatform()
 //SDL_GetVersion(v)
-void FpsCounter::Draw(SDL_Rect &camera)
+void FpsCounter::Draw()
 {
     fps_str = (fps > 0 ? "fps: " + std::to_string(fps) : "fps: " + fps_str);
 

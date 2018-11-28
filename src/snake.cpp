@@ -141,27 +141,25 @@ void Snake::centerCamera()
 
     //Center the camera over the tank
     //todo: should fix hardcoded window sizes 400 and 300
-    level->camera.x = static_cast<int>(round(( Position.x + DOT_WIDTH / 2 ) - (400 / 2)));
-    level->camera.y = static_cast<int>(round(( Position.y + DOT_HEIGHT / 2 ) - (300 / 2)));
-    level->camera.w = 400;
-    level->camera.h = 300;
+    game::viewports[0].camera.frame.x = static_cast<int>(round(( Position.x + DOT_WIDTH / 2 ) - (game::viewports[0].frame.w / 2)));
+    game::viewports[0].camera.frame.y = static_cast<int>(round(( Position.y + DOT_HEIGHT / 2 ) - (game::viewports[0].frame.h / 2)));
 
     //Keep the camera in bounds
-    if( level->camera.x < 0 )
+    if( game::viewports[0].camera.frame.x < 0 )
     {
-        level->camera.x = 0;
+        game::viewports[0].camera.frame.x = 0;
     }
-    if( level->camera.y < 0 )
+    if( game::viewports[0].camera.frame.y < 0 )
     {
-        level->camera.y = 0;
+        game::viewports[0].camera.frame.y = 0;
     }
-    if( level->camera.x > level->tileMap.level_width - level->camera.w )
+    if( game::viewports[0].camera.frame.x > level->tileMap.level_width - game::viewports[0].camera.frame.w )
     {
-        level->camera.x = level->tileMap.level_width - level->camera.w;
+        game::viewports[0].camera.frame.x = level->tileMap.level_width - game::viewports[0].camera.frame.w;
     }
-    if( level->camera.y > level->tileMap.level_height - level->camera.h )
+    if( game::viewports[0].camera.frame.y > level->tileMap.level_height - game::viewports[0].camera.frame.h )
     {
-        level->camera.y = level->tileMap.level_height - level->camera.h;
+        game::viewports[0].camera.frame.y = level->tileMap.level_height - game::viewports[0].camera.frame.h;
     }
 }
 
@@ -171,8 +169,8 @@ void Snake::FireBullet()
     bullet->Texture.WindowRenderer = this->snakeTexture.WindowRenderer;
     bullet->Texture.loadFromFile("bullet_w65h20.png");
 
-    double canon_x = static_cast<int>(std::round(Position.x - level->camera.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    double canon_y = static_cast<int>(std::round(Position.y - level->camera.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
+    double canon_x = static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
+    double canon_y = static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
 
     //bullet->Position.x = Position.x + 55 + 71*cos(RotationAngle.CurrentAngle * M_PI / 180.0);
     //bullet->Position.y = Position.y  + 14 + 71*sin(RotationAngle.CurrentAngle * M_PI / 180.0);
@@ -186,7 +184,7 @@ void Snake::FireBullet()
     bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 1.1 : -this->Velocity.y * 1.1;
     bullet->RotationAngle = this->RotationAngle;
     bullet->level = this->level;
-    Game::gameObjects_for_addition.emplace_back(std::move(bullet));
+    game::gameObjects_for_addition.emplace_back(std::move(bullet));
 }
 
 bool Snake::touchesWall(Level* level)
@@ -213,17 +211,34 @@ bool Snake::touchesWall(Level* level)
     return false;
 }
 
-void Snake::Draw( SDL_Rect& camera )
+void Snake::Draw()
 {
     //Show the tank
     //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );
 
-    snakeTexture.render(static_cast<int>(std::round(Position.x - camera.x)),
-                        static_cast<int>(std::round(Position.y - camera.y)),
+    snakeTexture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
+                        static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
                         nullptr,RotationAngle.CurrentAngle);
 
 
+    SDL_Rect source_rect;
+    source_rect.x = 0;
+    source_rect.y = 0;
+    source_rect.w = round(snakeTexture.getWidth());
+    source_rect.h = round(snakeTexture.getHeight());
 
+    SDL_Rect dest_rect;
+    dest_rect.x = round(game::viewports[1].frame.x + Position.x/10);
+    dest_rect.y = round(game::viewports[1].frame.y + Position.y/10);
+    dest_rect.w = round(snakeTexture.getWidth()/10);
+    dest_rect.h = round(snakeTexture.getHeight()/10);
+
+    SDL_RenderCopyEx(snakeTexture.WindowRenderer,
+                      snakeTexture.mTexture,
+                      &source_rect,
+                      &dest_rect,
+                      RotationAngle.CurrentAngle,
+                      nullptr,SDL_FLIP_NONE);
 
     SDL_Rect rect;
     //rect.x = static_cast<int>(std::round(Position.x));

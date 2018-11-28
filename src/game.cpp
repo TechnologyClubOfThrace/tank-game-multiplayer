@@ -20,11 +20,11 @@
 
 #include "game.h"
 
-std::vector<std::unique_ptr<GameObject>> Game::gameObjects;
-std::vector<std::unique_ptr<GameObject>> Game::gameObjects_for_addition;
-std::vector<ViewPort> Game::viewports;
+std::vector<std::unique_ptr<GameObject>> game::gameObjects;
+std::vector<std::unique_ptr<GameObject>> game::gameObjects_for_addition;
+std::vector<ViewPort> game::viewports;
 
-Game::Game()
+game::game()
 {
 
 }

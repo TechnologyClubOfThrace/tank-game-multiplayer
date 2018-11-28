@@ -32,7 +32,7 @@ public:
 
     virtual void handleEvent(SDL_Event &e) = 0;
     virtual void Update(std::chrono::milliseconds::rep deltaTime) = 0;
-    virtual void Draw(SDL_Rect& camera) = 0;
+    virtual void Draw() = 0;
 
     bool Exists = true;
 };

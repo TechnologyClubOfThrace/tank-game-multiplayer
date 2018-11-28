@@ -30,14 +30,14 @@ Tile::Tile(int x, int y, int w, int h)
     mBox.h = h;
 }
 
-void Tile::render( SDL_Rect& camera )
+void Tile::render()
 {
     auto box = this->getBox();//todo
-    if (SDL_HasIntersection(&camera, &box) == SDL_TRUE){
+    if (SDL_HasIntersection(&game::viewports[0].camera.frame, &box) == SDL_TRUE){
 
         SDL_Rect target_rect;
-        target_rect.x = this->mBox.x - camera.x;
-        target_rect.y = this->mBox.y - camera.y;
+        target_rect.x = this->mBox.x - game::viewports[0].camera.frame.x;
+        target_rect.y = this->mBox.y - game::viewports[0].camera.frame.y;
         target_rect.w = sprite.rect.w;
         target_rect.h = sprite.rect.h;
 
@@ -48,6 +48,27 @@ void Tile::render( SDL_Rect& camera )
                          &target_rect,0, nullptr, SDL_FLIP_NONE);
     }
 }
+
+void Tile::render_radar()
+{
+    SDL_Rect target_rect;
+    target_rect.x = round(game::viewports[1].frame.x + round(this->mBox.x/10));
+    target_rect.y = round(game::viewports[1].frame.y + round(this->mBox.y/10));
+    target_rect.w = round(sprite.rect.w/10);
+    target_rect.h = round(sprite.rect.h/10);
+
+    SDL_SetTextureBlendMode(sprite.spritesheet_texture->mTexture, SDL_BLENDMODE_BLEND);
+
+    sprite.spritesheet_texture->setAlpha(80);
+    SDL_RenderCopyEx(sprite.spritesheet_texture->WindowRenderer,
+                     sprite.spritesheet_texture->mTexture,
+                     &sprite.rect,
+                     &target_rect,0, nullptr, SDL_FLIP_NONE);
+     sprite.spritesheet_texture->setAlpha(255);
+
+}
+
+
 
 SDL_Rect Tile::getBox()
 {

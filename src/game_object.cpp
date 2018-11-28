@@ -30,7 +30,7 @@ GameObject::~GameObject()
 
 }
 
-void GameObject::Draw(SDL_Rect &camera)
+void GameObject::Draw()
 {
 
 }
