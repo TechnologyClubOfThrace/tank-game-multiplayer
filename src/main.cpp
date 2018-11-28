@@ -35,6 +35,14 @@ int main()
         return 0;
     }
 
+    ViewPort viewport;
+    viewport.frame.x = 0;
+    viewport.frame.y = 0;
+    viewport.frame.w = game_engine.ScreenWidth;
+    viewport.frame.h = game_engine.ScreenHeight;
+    viewport.camera.frame = viewport.frame;
+    Game::viewports.emplace_back(viewport);
+
     //Object with information about the game map
     TileMap tile_map;
     tile_map.level_width = 864;  //640; // <<<<<<<<<<< //Level width

@@ -22,6 +22,7 @@
 
 std::vector<std::unique_ptr<GameObject>> Game::gameObjects;
 std::vector<std::unique_ptr<GameObject>> Game::gameObjects_for_addition;
+std::vector<ViewPort> Game::viewports;
 
 Game::Game()
 {
