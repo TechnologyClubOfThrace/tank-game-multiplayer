@@ -24,7 +24,7 @@
 #include <memory>
 #include "snake.h"
 #include "bullet.h"
-#include "game_objects.h"
+#include "game.h"
 
 
 Snake::Snake() : RotationAngle(0.26)
@@ -132,17 +132,17 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
         }
     }
 
-    setCamera();
+    centerCamera();
 }
 
-void Snake::setCamera()
+void Snake::centerCamera()
 { 
 
 
-    //Center the camera over the dot
+    //Center the camera over the tank
     //todo: should fix hardcoded window sizes 400 and 300
-    level->camera.x = round(( Position.x + DOT_WIDTH / 2 ) - (400 / 2));
-    level->camera.y = round(( Position.y + DOT_HEIGHT / 2 ) - (300 / 2));
+    level->camera.x = static_cast<int>(round(( Position.x + DOT_WIDTH / 2 ) - (400 / 2)));
+    level->camera.y = static_cast<int>(round(( Position.y + DOT_HEIGHT / 2 ) - (300 / 2)));
     level->camera.w = 400;
     level->camera.h = 300;
 
@@ -186,7 +186,7 @@ void Snake::FireBullet()
     bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 1.1 : -this->Velocity.y * 1.1;
     bullet->RotationAngle = this->RotationAngle;
     bullet->level = this->level;
-    GameObjects::gameObjects_for_addition.emplace_back(std::move(bullet));
+    Game::gameObjects_for_addition.emplace_back(std::move(bullet));
 }
 
 bool Snake::touchesWall(Level* level)

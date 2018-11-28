@@ -19,8 +19,10 @@ SOURCES += \
     bullet.cpp \
     fpscounter.cpp \
     keystate.cpp \
-    game_objects.cpp \
-    game_object.cpp
+    game_object.cpp \
+    camera.cpp \
+    game.cpp \
+    viewport.cpp
 
 
 mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.8/lib -lSDL2
@@ -48,5 +50,7 @@ HEADERS += \
     bullet.h \
     fpscounter.h \
     keystate.h \
-    game_objects.h \
-    game_object.h
+    game_object.h \
+    camera.h \
+    game.h \
+    viewport.h

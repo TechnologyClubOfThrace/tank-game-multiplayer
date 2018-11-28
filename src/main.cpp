@@ -21,7 +21,7 @@
 #include <iostream>
 #include <memory>
 #include "game_engine.h"
-#include "game_objects.h"
+#include "game.h"
 
 using namespace std;
 
@@ -64,7 +64,7 @@ int main()
     //snake->snakeTexture.loadFromFile("snake_32x32.png");
     snake->snakeTexture.loadFromFile("tank_133x50.png");
     snake->level = &game_engine.level;
-    GameObjects::gameObjects.emplace_back(std::move(snake));
+    Game::gameObjects.emplace_back(std::move(snake));
 
     /*
     //load the tank object in our level

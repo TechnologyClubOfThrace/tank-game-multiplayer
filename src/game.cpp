@@ -18,12 +18,12 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
-#include "game_objects.h"
+#include "game.h"
 
-std::vector<std::unique_ptr<GameObject>> GameObjects::gameObjects;
-std::vector<std::unique_ptr<GameObject>> GameObjects::gameObjects_for_addition;
+std::vector<std::unique_ptr<GameObject>> Game::gameObjects;
+std::vector<std::unique_ptr<GameObject>> Game::gameObjects_for_addition;
 
-GameObjects::GameObjects()
+Game::Game()
 {
 
 }

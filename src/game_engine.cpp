@@ -23,7 +23,7 @@
 #include <thread>
 #include <cmath>
 #include <iostream>
-#include "game_objects.h"
+#include "game.h"
 
 GameEngine::GameEngine(int screenWidth, int screenHeight)
 {
@@ -57,7 +57,7 @@ bool GameEngine::Init()
         }
 
         //Create window
-        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN );
+        gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN );
         if( gWindow == nullptr )
         {
             printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -141,6 +141,7 @@ void GameEngine::StartGameLoop()
 
         HandleEvents();//process user input from keyboard/mouse/game controlers etc
         Update();//update game objects position, collitions etc
+        SDL_RenderClear(WindowRenderer);
         Draw();//draw the objects on screen
 
         //this duration it took to process the game objects
@@ -167,6 +168,12 @@ void GameEngine::StartGameLoop()
        //display everything in screen
        SDL_RenderPresent(WindowRenderer);
 
+       /*
+       const SDL_Rect r2{50,10,50,50};
+       SDL_RenderSetViewport(WindowRenderer, &r2);
+       SDL_RenderPresent(WindowRenderer);
+       */
+
        deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
     }
 }
@@ -185,7 +192,7 @@ void GameEngine::HandleEvents()
         }
 
         //call the handleEvent on each game object
-        for (auto& gameObject : GameObjects::gameObjects){
+        for (auto& gameObject : Game::gameObjects){
             gameObject->handleEvent(e);
         }
 
@@ -193,9 +200,9 @@ void GameEngine::HandleEvents()
         //has to be created. It is placed in the gameObjects_for_addition vector
         //so that after returning fron the previous handleEvent call, it will be added to the
         //gameObjects vector.
-        if (GameObjects::gameObjects_for_addition.size() > 0){
-            std::move(GameObjects::gameObjects_for_addition.begin(), GameObjects::gameObjects_for_addition.end(), std::back_inserter(GameObjects::gameObjects));  // ##
-            GameObjects::gameObjects_for_addition.clear();
+        if (Game::gameObjects_for_addition.size() > 0){
+            std::move(Game::gameObjects_for_addition.begin(), Game::gameObjects_for_addition.end(), std::back_inserter(Game::gameObjects));  // ##
+            Game::gameObjects_for_addition.clear();
         }
 
     }
@@ -209,7 +216,7 @@ void GameEngine::Update()
     //the game object is removed from the gameObjects vector and its destructor is called
     //because it is a std::unique_ptr.
     //TODO: check if there is a more efficient method using remove instead of erase.
-    for(auto it = GameObjects::gameObjects.begin(); it != GameObjects::gameObjects.end();)
+    for(auto it = Game::gameObjects.begin(); it != Game::gameObjects.end();)
     {
         //update game object
         //Because after calling update on each object, the object might non need to exist any more
@@ -219,7 +226,7 @@ void GameEngine::Update()
         (*it)->Update(deltaTime);
         if((*it)->Exists == false){
             //remove the game object if it is required
-            it = GameObjects::gameObjects.erase(it);
+            it = Game::gameObjects.erase(it);
         }else{
             ++it;
         }
@@ -234,7 +241,7 @@ void GameEngine::Draw()
     level.Draw(level.camera);
 
     //Draw all other game objects
-    for (auto& gameObject : GameObjects::gameObjects){
+    for (auto& gameObject : Game::gameObjects){
         gameObject->Draw(level.camera);
     }
 }

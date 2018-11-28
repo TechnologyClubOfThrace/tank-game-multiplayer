@@ -20,7 +20,7 @@
 
 #include "bullet.h"
 #include <cmath>
-#include "game_objects.h"
+#include "game.h"
 
 Bullet::Bullet() : RotationAngle(0)
 {
