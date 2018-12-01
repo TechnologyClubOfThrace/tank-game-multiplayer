@@ -2,6 +2,9 @@ TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
+CONFIG += exceptions_off #disable c++ exceptions handling to gain memory, speed and code simplicity. http://doc.qt.io/qt-5/qmake-variable-reference.html
+
+
 
 SOURCES += \
         main.cpp \
@@ -13,7 +16,6 @@ SOURCES += \
     sprite.cpp \
     level.cpp \
     snake.cpp \
-    snake_food.cpp \
     vector2d.cpp \
     vector2d_angle.cpp \
     bullet.cpp \
@@ -22,7 +24,11 @@ SOURCES += \
     game_object.cpp \
     camera.cpp \
     game.cpp \
-    viewport.cpp
+    viewport.cpp \
+    scene_manager.cpp \
+    collider2d.cpp \
+    box_collider2d.cpp \
+    polygon_collider2d.cpp
 
 
 mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.8/lib -lSDL2
@@ -44,7 +50,6 @@ HEADERS += \
     sprite.h \
     level.h \
     snake.h \
-    snake_food.h \
     vector2d.h \
     vector2d_angle.h \
     bullet.h \
@@ -53,4 +58,8 @@ HEADERS += \
     game_object.h \
     camera.h \
     game.h \
-    viewport.h
+    viewport.h \
+    scene_manager.h \
+    collider2d.h \
+    box_collider2d.h \
+    polygon_collider2d.h

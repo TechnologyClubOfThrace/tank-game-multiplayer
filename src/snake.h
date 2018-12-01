@@ -36,9 +36,9 @@ public:
     Snake();
     void handleEvent(SDL_Event &e);
     void Draw();
+    void Draw(size_t viewportIndex);
     void Update(std::chrono::milliseconds::rep deltaTime);
 
-    void centerCamera();
     void FireBullet();
 
     KeyState keystate;
@@ -52,15 +52,12 @@ public:
     AngleDirection TankDirection = AngleDirection::Forward;
     AngleDirection TankDirectionBeforeStopping = AngleDirection::Forward;
 
-    TextureWrapper snakeTexture;
-
-    Level * level;
-
     bool touchesWall(Level *level);
 
     Vector2D Velocity;
-    Vector2DAngle RotationAngle;
-    Vector2D Position;
+    Vector2DAngle RotationVector;
+
+    Level * level;
 
 private:
 };

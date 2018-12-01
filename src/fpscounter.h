@@ -42,7 +42,6 @@ public:
     int fps;
     std::string fps_str;
 
-    TextureWrapper texture;
     SDL_Color textColor = { 204, 0, 204, 255 };
 };
 

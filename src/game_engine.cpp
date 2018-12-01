@@ -244,52 +244,13 @@ void GameEngine::Draw()
         gameObject->Draw();
     }
 
-    level.DrawRadar();
-}
+    level.DrawRadar();//todo
 
-
-/*
-//main game loop
-void GameEngine::StartGameLoop()
-{
-    //frame cap related
-    std::chrono::milliseconds::rep frame_delay_for_stable_fps = 1000 / 500;
-    std::chrono::high_resolution_clock::time_point now_time_point;
-    last_frame_time_point = std::chrono::high_resolution_clock::now();
-    now_time_point = last_frame_time_point;
-    deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now_time_point - last_frame_time_point).count();
-
-    //enter game loop
-    while (Running){
-
-        HandleEvents();//process user input from keyboard/mouse/game controlers etc
-        Update();
-        Draw();//draw the objects on screen
-
-        //display the fps counter if needed
-        if (fpscounter.DisplayFpsCounter){
-            fpscounter.Update(deltaTime);
-            SDL_Rect r;
-            fpscounter.Draw(r);
+    //if there are more than one viewports, call the draw oveload
+    //on each game object with the viewport index.
+    for (size_t viewPortIndex = 1; viewPortIndex <= game::gameObjects.size(); viewPortIndex++){
+        for (auto& gameObject : game::gameObjects){
+            gameObject->Draw(viewPortIndex);
         }
-
-        //display everything in screen
-        SDL_RenderPresent(WindowRenderer);
-
-        //frame cap.
-        //If frame finished early wait for the remaining time
-       deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now_time_point - last_frame_time_point).count();
-       if (deltaTime < frame_delay_for_stable_fps){
-           std::this_thread::sleep_for(std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime));
-           //std::cout << "sleeping for: " << std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime).count() << std::endl;
-           now_time_point = std::chrono::high_resolution_clock::now();
-           deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now_time_point - last_frame_time_point).count();
-       } else {
-           now_time_point = std::chrono::high_resolution_clock::now();
-       }
-       last_frame_time_point = now_time_point;
-       //End of frame cap
-
     }
 }
-*/

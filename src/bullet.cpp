@@ -24,12 +24,6 @@
 
 Bullet::Bullet() : RotationAngle(0)
 {
-
-}
-
-void Bullet::handleEvent(SDL_Event &e)
-{
-
 }
 
 void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
@@ -39,7 +33,7 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
     Position.x += Velocity.x * deltaTime ;
 
     //If the dot went too far to the left or right or touched a wall
-    if( ( Position.x + game::viewports[0].camera.frame.x < 0 ) || ( Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
+    if( ( Position.x < 0 ) || ( Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
     {
         //move back
         Position.x -= Velocity.x * deltaTime;
@@ -52,7 +46,7 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
     Position.y += Velocity.y * deltaTime ;
 
     //If the dot went too far up or down or touched a wall
-    if( ( Position.y + game::viewports[0].camera.frame.y < 0 ) || ( Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
+    if( ( Position.y < 0 ) || ( Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
     {
         //move back
         Position.y -= Velocity.y * deltaTime;
@@ -61,33 +55,6 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
         Exists = false;
     }
 
-}
-
-void Bullet::setCamera( SDL_Rect& camera )
-{
-    /*
-    //Center the camera over the dot
-    camera.x = ( mBox.x + DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
-    camera.y = ( mBox.y + DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-
-    //Keep the camera in bounds
-    if( camera.x < 0 )
-    {
-        camera.x = 0;
-    }
-    if( camera.y < 0 )
-    {
-        camera.y = 0;
-    }
-    if( camera.x > LEVEL_WIDTH - camera.w )
-    {
-        camera.x = LEVEL_WIDTH - camera.w;
-    }
-    if( camera.y > LEVEL_HEIGHT - camera.h )
-    {
-        camera.y = LEVEL_HEIGHT - camera.h;
-    }
-    */
 }
 
 bool Bullet::touchesWall(Level* level)
@@ -100,8 +67,8 @@ bool Bullet::touchesWall(Level* level)
         {
             auto bb = level->Tiles[i].getBox();//todo
             SDL_Rect box;
-            box.x = static_cast<int>(std::round(Position.x + game::viewports[0].camera.frame.x));
-            box.y = static_cast<int>(std::round(Position.y + game::viewports[0].camera.frame.y));
+            box.x = static_cast<int>(std::round(Position.x));
+            box.y = static_cast<int>(std::round(Position.y));
             box.w = DOT_WIDTH;
             box.h = DOT_HEIGHT;
 
@@ -116,10 +83,32 @@ bool Bullet::touchesWall(Level* level)
 
 void Bullet::Draw()
 {
-    //Show the dot
-    //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );
-    Texture.render(static_cast<int>(std::round(Position.x)),
-                   static_cast<int>(std::round(Position.y)),
+    texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
+                   static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
                    nullptr,
-                   RotationAngle.CurrentAngle);
+                   RotationAngle.CurrentAngleDegrees);
+}
+
+void Bullet::Draw(size_t viewportIndex)
+{
+    if (viewportIndex != 1) return;
+
+    SDL_Rect source_rect;
+    source_rect.x = 0;
+    source_rect.y = 0;
+    source_rect.w = static_cast<int>(round(texture.getWidth()));
+    source_rect.h = static_cast<int>(round(texture.getHeight()));
+
+    SDL_Rect dest_rect;
+    dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
+    dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
+    dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
+    dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
+
+    SDL_RenderCopyEx(texture.WindowRenderer,
+                      texture.mTexture,
+                      &source_rect,
+                      &dest_rect,
+                      RotationAngle.CurrentAngleDegrees,
+                      nullptr,SDL_FLIP_NONE);
 }

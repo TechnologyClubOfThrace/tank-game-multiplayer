@@ -23,6 +23,11 @@
 
 #include <SDL.h>
 #include <chrono>
+#include <memory>
+#include <vector>
+#include "vector2d.h"
+#include "texture_wrapper.h"
+#include "collider2d.h"
 
 class GameObject
 {
@@ -30,9 +35,15 @@ public:
     GameObject();
     virtual ~GameObject();
 
-    virtual void handleEvent(SDL_Event &e) = 0;
-    virtual void Update(std::chrono::milliseconds::rep deltaTime) = 0;
-    virtual void Draw() = 0;
+    virtual void handleEvent(SDL_Event &e);
+    virtual void Update(std::chrono::milliseconds::rep deltaTime);
+    virtual void Draw();
+    virtual void Draw(size_t viewportIndex);
+
+    std::vector<std::unique_ptr<Collider2D>> colliders;
+
+    Vector2D Position;
+    TextureWrapper texture;
 
     bool Exists = true;
 };

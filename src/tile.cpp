@@ -32,8 +32,7 @@ Tile::Tile(int x, int y, int w, int h)
 
 void Tile::render()
 {
-    auto box = this->getBox();//todo
-    if (SDL_HasIntersection(&game::viewports[0].camera.frame, &box) == SDL_TRUE){
+    if (SDL_HasIntersection(&game::viewports[0].camera.frame, &this->mBox) == SDL_TRUE){
 
         SDL_Rect target_rect;
         target_rect.x = this->mBox.x - game::viewports[0].camera.frame.x;
