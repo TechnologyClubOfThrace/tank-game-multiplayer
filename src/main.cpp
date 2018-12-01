@@ -25,6 +25,8 @@
 
 using namespace std;
 
+#undef main
+
 int main()
 {
     GameEngine game_engine(400,400);

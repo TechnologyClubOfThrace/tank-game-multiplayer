@@ -23,6 +23,7 @@
 #include <thread>
 #include <cmath>
 #include <iostream>
+#include <iterator>
 #include "game.h"
 
 GameEngine::GameEngine(int screenWidth, int screenHeight)

@@ -20,6 +20,7 @@
 
 #include "vector2d_angle.h"
 #include <iostream>
+#include <algorithm>
 
 Vector2DAngle::Vector2DAngle(double angleRadiansPerMilliSec) : AngleRadiansPerMilliSec(angleRadiansPerMilliSec)
 {

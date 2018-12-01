@@ -4,8 +4,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += exceptions_off #disable c++ exceptions handling to gain memory, speed and code simplicity. http://doc.qt.io/qt-5/qmake-variable-reference.html
 
-
-
 SOURCES += \
         main.cpp \
     game_engine.cpp \
@@ -36,10 +34,18 @@ mac: LIBS += -L$$/usr/local/Cellar/sdl2_image/2.0.4/lib -lSDL2_image
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
 #mac: LIBS += -L$$/usr/local/Cellar/sdl2_mixer/2.0.4/lib -lSDL2_mixer
 
-INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.8/include/SDL2
-INCLUDEPATH += /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2
-INCLUDEPATH += /usr/local/Cellar/sdl2_ttf/2.0.14/include/SDL2
+windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x64 -lSDL2
+windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x64 -lSDL2_ttf
+windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x64 -lSDL2_image
+
+mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.8/include/SDL2
+mac:INCLUDEPATH += /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2
+mac:INCLUDEPATH += /usr/local/Cellar/sdl2_ttf/2.0.14/include/SDL2
 #INCLUDEPATH += /usr/local/Cellar/sdl2_mixer/2.0.4/include/SDL2
+
+windows: INCLUDEPATH += C:\\libs\\SDL2-2.0.9\\include
+windows: INCLUDEPATH += C:\\libs\\SDL2_ttf-2.0.14\\include
+windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4\\include
 
 HEADERS += \
     game_engine.h \
