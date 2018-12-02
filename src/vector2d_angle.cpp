@@ -42,7 +42,12 @@ void Vector2DAngle::RemoveAngleDirection(AngleDirection angleDirection)
     } else {
         //more than on direction keys were down.
         //delete the angleDirection and set the last angleDirection of the vector as active
-        angle_directions.erase(std::remove(angle_directions.begin(), angle_directions.end(), static_cast<AngleDirection>(angleDirection)));
+        auto it = std::find(angle_directions.begin(),angle_directions.end(),angleDirection);
+        // check that there actually is a angleDirection in our vector
+        if (it != angle_directions.end()) {
+          angle_directions.erase(it);
+        }
+
         this->mCurrentAngleDirection = angle_directions.back();
     }
 }
