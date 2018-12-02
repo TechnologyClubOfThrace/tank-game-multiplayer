@@ -69,8 +69,8 @@ public:
 private:
 
     //Image dimensions
-    int mWidth;
-    int mHeight;
+    int mWidth = 0;
+    int mHeight = 0;
 };
 
 #endif // TEXTURE_WRAPPER_H

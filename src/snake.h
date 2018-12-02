@@ -43,10 +43,6 @@ public:
 
     KeyState keystate;
 
-    //The dimensions of the dot
-    static const int DOT_WIDTH = 133;
-    static const int DOT_HEIGHT = 50;
-
     double NormalTankSpeed = 0.13;
     double FastTankSpeedMultiplier = 3.50;
     AngleDirection TankDirection = AngleDirection::Forward;

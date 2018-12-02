@@ -58,6 +58,14 @@ int main()
     viewport_radar.frame.h = 61;
     viewport_radar.camera.frame = viewport_radar.frame;
     game::viewports.emplace_back(viewport_radar);
+    //Viewport 3:
+    ViewPort viewport_radar2;
+    viewport_radar2.frame.x = 10;
+    viewport_radar2.frame.y = 290;
+    viewport_radar2.frame.w = 86;
+    viewport_radar2.frame.h = 61;
+    viewport_radar2.camera.frame = viewport_radar2.frame;
+    game::viewports.emplace_back(viewport_radar2);
     //end of viewport configuration
 
     //Object with information about the game map

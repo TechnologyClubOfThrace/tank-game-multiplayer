@@ -115,7 +115,7 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
         Position.x += Velocity.x * deltaTime;
 
         //If the dot went too far to the left or right or touched a wall
-        if( ( Position.x < 0 ) || ( Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
+        if( ( Position.x < 0 ) || ( Position.x + texture.getWidth() > level->tileMap.level_width) || touchesWall(level) )
         {
             //move back
             Position.x -= Velocity.x * deltaTime;
@@ -125,7 +125,7 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
         Position.y += Velocity.y * deltaTime ;
 
         //If the dot went too far up or down or touched a wall
-        if( ( Position.y < 0 ) || ( Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
+        if( ( Position.y < 0 ) || ( Position.y + texture.getHeight() > level->tileMap.level_height) || touchesWall(level) )
         {
             //move back
             Position.y -= Velocity.y * deltaTime;
@@ -164,8 +164,8 @@ bool Snake::touchesWall(Level* level)
             SDL_Rect box;
             box.x = static_cast<int>(std::round(Position.x));
             box.y = static_cast<int>(std::round(Position.y));
-            box.w = DOT_WIDTH;
-            box.h = DOT_HEIGHT;
+            box.w = texture.getWidth();
+            box.h = texture.getHeight();
 
             if (SDL_HasIntersection(&box, &bb))
                 return true;
@@ -186,24 +186,30 @@ void Snake::Draw()
 
 void Snake::Draw(size_t viewportIndex)
 {
-    if (viewportIndex != 1) return;
+    if (viewportIndex == 1 || viewportIndex == 2) {
 
-    SDL_Rect source_rect;
-    source_rect.x = 0;
-    source_rect.y = 0;
-    source_rect.w = static_cast<int>(round(texture.getWidth()));
-    source_rect.h = static_cast<int>(round(texture.getHeight()));
+        SDL_Rect source_rect;
+        source_rect.x = 0;
+        source_rect.y = 0;
+        source_rect.w = static_cast<int>(round(texture.getWidth()));
+        source_rect.h = static_cast<int>(round(texture.getHeight()));
 
-    SDL_Rect dest_rect;
-    dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
-    dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
-    dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
-    dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
+        SDL_Rect dest_rect;
+        dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
+        dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
+        dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
+        dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
 
-    SDL_RenderCopyEx(texture.WindowRenderer,
-                      texture.mTexture,
-                      &source_rect,
-                      &dest_rect,
-                      RotationVector.CurrentAngleDegrees,
-                      nullptr,SDL_FLIP_NONE);
+        if (viewportIndex == 2){
+            SDL_SetRenderDrawColor(texture.WindowRenderer, 0, 0, 0, 80);
+            SDL_RenderFillRect(texture.WindowRenderer,
+                         &game::viewports[viewportIndex].frame);
+        }
+        SDL_RenderCopyEx(texture.WindowRenderer,
+                          texture.mTexture,
+                          &source_rect,
+                          &dest_rect,
+                          RotationVector.CurrentAngleDegrees,
+                          nullptr,SDL_FLIP_NONE);
+    }
 }

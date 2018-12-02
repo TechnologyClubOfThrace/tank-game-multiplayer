@@ -83,6 +83,9 @@ bool GameEngine::Init()
 
     } //Initialize SDL
 
+    //set drawing alpha transparency support (eg. SDL_RenderFillRect)
+    SDL_SetRenderDrawBlendMode(WindowRenderer, SDL_BLENDMODE_BLEND);
+
     // (STEP 2 / 3)
     //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
@@ -250,7 +253,7 @@ void GameEngine::Draw()
 
     //if there are more than one viewports, call the draw oveload
     //on each game object with the viewport index.
-    for (size_t viewPortIndex = 1; viewPortIndex <= game::gameObjects.size(); viewPortIndex++){
+    for (size_t viewPortIndex = 1; viewPortIndex <= game::viewports.size(); viewPortIndex++){
         for (auto& gameObject : game::gameObjects){
             gameObject->Draw(viewPortIndex);
         }

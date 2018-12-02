@@ -30,7 +30,7 @@ public:
     Sprite();
 
     SDL_Rect rect;
-    int index;
+    int index = 0;
 
     TextureWrapper* spritesheet_texture;
 };

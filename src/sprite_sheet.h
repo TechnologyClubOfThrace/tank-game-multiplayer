@@ -29,12 +29,12 @@ class Spritesheet
 public:
     Spritesheet();
 
-    std::string file_name;//the map file path. It contains the position and type of each tile.
-    int total_sprites; //the total number of sprites inside the Spritesheet image file.
-    int columns;
-    int rows;
-    int sprite_width;
-    int sprite_height;
+    std::string file_name = "";//the map file path. It contains the position and type of each tile.
+    int total_sprites = 0; //the total number of sprites inside the Spritesheet image file.
+    int columns = 0;
+    int rows = 0;
+    int sprite_width = 0;
+    int sprite_height = 0;
 
     void SpriteFromIndex(int sprite_index, Sprite& sprite);
 };

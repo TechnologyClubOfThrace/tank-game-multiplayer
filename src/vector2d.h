@@ -27,8 +27,8 @@ class Vector2D
 public:
     Vector2D();
 
-    double x;
-    double y;
+    double x = 0;
+    double y = 0;
     void Rotate(const double angle);
 };
 

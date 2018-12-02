@@ -40,8 +40,8 @@ public:
     void LoadFont(std::string font_file_name = "Roboto-Regular.ttf", int ptsize = 16);
 
     bool DisplayFpsCounter = true;
-    int fps;
-    std::string fps_str;
+    int fps = 0;
+    std::string fps_str = "";
 
     SDL_Color textColor = { 204, 0, 204, 255 };
 };

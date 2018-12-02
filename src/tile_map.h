@@ -29,10 +29,10 @@ public:
     TileMap();
 
     //public variables
-    std::string file_name;//the map file path. It contains the position and type of each tile.
-    int total_tiles; //total number of tiles in the map file
-    int level_width; //the width of the level
-    int level_height; //the hight of the level
+    std::string file_name = "";//the map file path. It contains the position and type of each tile.
+    int total_tiles = 0; //total number of tiles in the map file
+    int level_width = 0; //the width of the level
+    int level_height = 0; //the hight of the level
 };
 
 #endif // MAP_INFO_H

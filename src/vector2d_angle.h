@@ -42,7 +42,8 @@ class Vector2DAngle : public Vector2D
 public:
     Vector2DAngle(double angleRadiansPerMilliSec);
 
-    double AngleRadiansPerMilliSec;
+    double AngleRadiansPerMilliSec;//init from the constructor
+
     void AddAngleDirection(AngleDirection angleDirection);
     void RemoveAngleDirection(AngleDirection angleDirection);
     void Apply(Vector2D &velocity_vector, std::chrono::milliseconds::rep deltaTime);
