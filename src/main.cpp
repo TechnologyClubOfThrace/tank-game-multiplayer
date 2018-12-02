@@ -92,12 +92,12 @@ int main()
     game_engine.LoadMap(tile_map, spritesheet);
 
     //load the tank object in our level
-    auto snake =  std::make_unique<Snake>();
-    snake->texture.WindowRenderer = game_engine.WindowRenderer;
+    auto tank =  std::make_unique<Tank>();
+    tank->texture.WindowRenderer = game_engine.WindowRenderer;
     //snake->snakeTexture.loadFromFile("snake_32x32.png");
-    snake->texture.loadFromFile("tank_133x50.png");
-    snake->level = &game_engine.level;
-    game::gameObjects.emplace_back(std::move(snake));
+    tank->texture.loadFromFile("tank_133x50.png");
+    tank->level = &game_engine.level;
+    game::gameObjects.emplace_back(std::move(tank));
 
 
     //start main game loop

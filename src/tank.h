@@ -18,8 +18,8 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
-#ifndef SNAKE_H
-#define SNAKE_H
+#ifndef TANK_H
+#define TANK_H
 
 #include <SDL.h>
 #include "texture_wrapper.h"
@@ -30,10 +30,10 @@
 #include "game_object.h"
 
 
-class Snake : public GameObject
+class Tank : public GameObject
 {
 public:
-    Snake();
+    Tank();
     void handleEvent(SDL_Event &e);
     void Draw();
     void Draw(size_t viewportIndex);
@@ -58,4 +58,4 @@ public:
 private:
 };
 
-#endif // SNAKE_H
+#endif // TANK_H

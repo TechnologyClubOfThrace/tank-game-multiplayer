@@ -144,7 +144,7 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
         }//switch
 
         //Angle correction. It works without this but i am
-        //settign back the angle in the -355 - 359 range just in
+        //settign back the angle in the -359 to 359 range just in
         //case so that the CurrentAngle value (double) does not get out of range (almost impossible - it is a huge number)
         if (CurrentAngleDegrees > 359){
             CurrentAngleDegrees -= 360;

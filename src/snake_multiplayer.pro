@@ -12,7 +12,6 @@ HEADERS += \
     tile_map.h \
     sprite.h \
     level.h \
-    snake.h \
     vector2d.h \
     vector2d_angle.h \
     bullet.h \
@@ -25,7 +24,8 @@ HEADERS += \
     scene_manager.h \
     collider2d.h \
     box_collider2d.h \
-    polygon_collider2d.h
+    polygon_collider2d.h \
+    tank.h
 
 SOURCES += \
         main.cpp \
@@ -36,7 +36,6 @@ SOURCES += \
     tile_map.cpp \
     sprite.cpp \
     level.cpp \
-    snake.cpp \
     vector2d.cpp \
     vector2d_angle.cpp \
     bullet.cpp \
@@ -49,7 +48,8 @@ SOURCES += \
     scene_manager.cpp \
     collider2d.cpp \
     box_collider2d.cpp \
-    polygon_collider2d.cpp
+    polygon_collider2d.cpp \
+    tank.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

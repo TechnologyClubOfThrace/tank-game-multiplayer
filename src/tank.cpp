@@ -22,12 +22,12 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
-#include "snake.h"
+#include "tank.h"
 #include "bullet.h"
 #include "game.h"
 
 
-Snake::Snake() : RotationVector(0.26 * M_PI / 180.0)
+Tank::Tank() : RotationVector(0.26 * M_PI / 180.0)
 {
     //Initialize the collision box
     Position.x = 50;
@@ -37,7 +37,7 @@ Snake::Snake() : RotationVector(0.26 * M_PI / 180.0)
     Velocity.y = 0.00;
 }
 
-void Snake::handleEvent( SDL_Event& e )
+void Tank::handleEvent( SDL_Event& e )
 {
     //If a key was pressed
     if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
@@ -100,7 +100,7 @@ void Snake::handleEvent( SDL_Event& e )
     }
 }
 
-void Snake::Update(std::chrono::milliseconds::rep deltaTime)
+void Tank::Update(std::chrono::milliseconds::rep deltaTime)
 {
     //std::cout << "deltatime: " << deltaTime << std::endl;
 
@@ -136,7 +136,7 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
 }
 
 
-void Snake::FireBullet()
+void Tank::FireBullet()
 {
     auto bullet = std::make_unique<Bullet>();
     bullet->texture.WindowRenderer = this->texture.WindowRenderer;
@@ -152,7 +152,7 @@ void Snake::FireBullet()
     game::gameObjects_for_addition.emplace_back(std::move(bullet));
 }
 
-bool Snake::touchesWall(Level* level)
+bool Tank::touchesWall(Level* level)
 {
     //Go through the tiles
     for(size_t i = 0; i < level->Tiles.size(); ++i )
@@ -176,7 +176,7 @@ bool Snake::touchesWall(Level* level)
     return false;
 }
 
-void Snake::Draw()
+void Tank::Draw()
 {
     //Show the tank
     texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
@@ -184,7 +184,7 @@ void Snake::Draw()
                    nullptr, RotationVector.CurrentAngleDegrees);
 }
 
-void Snake::Draw(size_t viewportIndex)
+void Tank::Draw(size_t viewportIndex)
 {
     if (viewportIndex == 1 || viewportIndex == 2) {
 
