@@ -20,16 +20,10 @@
 
 #include "bullet.h"
 #include <cmath>
-#include "game_objects.h"
+#include "game.h"
 
 Bullet::Bullet() : RotationAngle(0)
 {
-
-}
-
-void Bullet::handleEvent(SDL_Event &e)
-{
-
 }
 
 void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
@@ -63,33 +57,6 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
 
 }
 
-void Bullet::setCamera( SDL_Rect& camera )
-{
-    /*
-    //Center the camera over the dot
-    camera.x = ( mBox.x + DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
-    camera.y = ( mBox.y + DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-
-    //Keep the camera in bounds
-    if( camera.x < 0 )
-    {
-        camera.x = 0;
-    }
-    if( camera.y < 0 )
-    {
-        camera.y = 0;
-    }
-    if( camera.x > LEVEL_WIDTH - camera.w )
-    {
-        camera.x = LEVEL_WIDTH - camera.w;
-    }
-    if( camera.y > LEVEL_HEIGHT - camera.h )
-    {
-        camera.y = LEVEL_HEIGHT - camera.h;
-    }
-    */
-}
-
 bool Bullet::touchesWall(Level* level)
 {
     //Go through the tiles
@@ -98,7 +65,7 @@ bool Bullet::touchesWall(Level* level)
         //If the tile is a wall type tile
         if( !(level->Tiles[i].sprite.index == 4))
         {
-            auto bb = level->Tiles[i].getBox();
+            auto bb = level->Tiles[i].getBox();//todo
             SDL_Rect box;
             box.x = static_cast<int>(std::round(Position.x));
             box.y = static_cast<int>(std::round(Position.y));
@@ -114,11 +81,34 @@ bool Bullet::touchesWall(Level* level)
     return false;
 }
 
-void Bullet::Draw( SDL_Rect& camera )
+void Bullet::Draw()
 {
-    //Show the dot
-    //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );
-    Texture.render(static_cast<int>(std::round(Position.x)),
-                        static_cast<int>(std::round(Position.y)),
-                        nullptr,RotationAngle.CurrentAngle);
+    texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
+                   static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
+                   nullptr,
+                   RotationAngle.CurrentAngleDegrees);
+}
+
+void Bullet::Draw(size_t viewportIndex)
+{
+    if (viewportIndex != 1) return;
+
+    SDL_Rect source_rect;
+    source_rect.x = 0;
+    source_rect.y = 0;
+    source_rect.w = static_cast<int>(round(texture.getWidth()));
+    source_rect.h = static_cast<int>(round(texture.getHeight()));
+
+    SDL_Rect dest_rect;
+    dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
+    dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
+    dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
+    dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
+
+    SDL_RenderCopyEx(texture.WindowRenderer,
+                      texture.mTexture,
+                      &source_rect,
+                      &dest_rect,
+                      RotationAngle.CurrentAngleDegrees,
+                      nullptr,SDL_FLIP_NONE);
 }

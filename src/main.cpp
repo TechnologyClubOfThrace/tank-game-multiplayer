@@ -21,19 +21,44 @@
 #include <iostream>
 #include <memory>
 #include "game_engine.h"
-#include "game_objects.h"
+#include "game.h"
 
 using namespace std;
 
+#undef main
+
 int main()
 {
-    GameEngine game_engine(864,608);
+    GameEngine game_engine(400,400);
     //Start up SDL and create window
     if( !game_engine.Init())
     {
         printf( "Failed to initialize!\n" );
         return 0;
     }
+
+    //game viewports configuration
+    //The tank game has 2 viewports;
+    //1. One viewport of the main game window with a camera that follows the player tank
+    //2. One viewport on the bottom right corner that displays the game map, the player tank position
+    //within the map and other game objects that will be added if needed.
+    //Viewport 1:
+    ViewPort viewport;
+    viewport.frame.x = 0;
+    viewport.frame.y = 0;
+    viewport.frame.w = game_engine.ScreenWidth;
+    viewport.frame.h = game_engine.ScreenHeight;
+    viewport.camera.frame = viewport.frame;
+    game::viewports.emplace_back(viewport);
+    //Viewport 2:
+    ViewPort viewport_radar;
+    viewport_radar.frame.x = 290;
+    viewport_radar.frame.y = 290;
+    viewport_radar.frame.w = 86;
+    viewport_radar.frame.h = 61;
+    viewport_radar.camera.frame = viewport_radar.frame;
+    game::viewports.emplace_back(viewport_radar);
+    //end of viewport configuration
 
     //Object with information about the game map
     TileMap tile_map;
@@ -60,41 +85,12 @@ int main()
 
     //load the tank object in our level
     auto snake =  std::make_unique<Snake>();
-    snake->snakeTexture.WindowRenderer = game_engine.WindowRenderer;
+    snake->texture.WindowRenderer = game_engine.WindowRenderer;
     //snake->snakeTexture.loadFromFile("snake_32x32.png");
-    snake->snakeTexture.loadFromFile("tank_133x50.png");
+    snake->texture.loadFromFile("tank_133x50.png");
     snake->level = &game_engine.level;
-    GameObjects::gameObjects.emplace_back(std::move(snake));
+    game::gameObjects.emplace_back(std::move(snake));
 
-    /*
-    //load the tank object in our level
-    std::unique_ptr<Snake> snake2(new Snake);
-    snake2->Position.y += 100;
-    snake2->snakeTexture.WindowRenderer = game_engine.WindowRenderer;
-    //snake->snakeTexture.loadFromFile("snake_32x32.png");
-    snake2->snakeTexture.loadFromFile("tank_133x50.png");
-    snake2->level = &game_engine.level;
-    GameObjects::gameObjects.emplace_back(std::move(snake2));
-
-    //load the tank object in our level
-    std::unique_ptr<Snake> snake3(new Snake);
-    snake3->Position.y += 200;
-    snake3->snakeTexture.WindowRenderer = game_engine.WindowRenderer;
-    //snake->snakeTexture.loadFromFile("snake_32x32.png");
-    snake3->snakeTexture.loadFromFile("tank_133x50.png");
-    snake3->level = &game_engine.level;
-    GameObjects::gameObjects.emplace_back(std::move(snake3));
-
-
-    //load the tank object in our level
-    std::unique_ptr<Snake> snake4(new Snake);
-    snake4->Position.y += 300;
-    snake4->snakeTexture.WindowRenderer = game_engine.WindowRenderer;
-    //snake->snakeTexture.loadFromFile("snake_32x32.png");
-    snake4->snakeTexture.loadFromFile("tank_133x50.png");
-    snake4->level = &game_engine.level;
-    GameObjects::gameObjects.emplace_back(std::move(snake4));
-    */
 
     //start main game loop
     game_engine.StartGameLoop();

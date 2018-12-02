@@ -20,8 +20,9 @@
 
 #include "vector2d_angle.h"
 #include <iostream>
+#include <algorithm>
 
-Vector2DAngle::Vector2DAngle(double anglePerMilliSec) : AnglePerMilliSec(anglePerMilliSec)
+Vector2DAngle::Vector2DAngle(double angleRadiansPerMilliSec) : AngleRadiansPerMilliSec(angleRadiansPerMilliSec)
 {
     mCurrentAngleDirection = AngleDirection::None;
 }
@@ -64,7 +65,7 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
         //std::cout << velocity_vector.x << " y:" << velocity_vector.y << std::endl;
 
         //std::cout << "AnglePerMilliSec * deltaTime: " << (AnglePerMilliSec * deltaTime) << std::endl;
-        const double angleStep = round(AnglePerMilliSec * deltaTime);
+        const double angleStepRadians = AngleRadiansPerMilliSec * deltaTime;
 
         switch (this->mCurrentAngleDirection) {
 
@@ -74,13 +75,13 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
             if ((velocity_vector.x < 0 && velocity_vector.y <= 0 ) ||
                (velocity_vector.x < 0 && velocity_vector.y >= 0 ))
             {
-                velocity_vector.Rotate((angleStep * M_PI / 180.0));
-                CurrentAngle += angleStep;
+                velocity_vector.Rotate(angleStepRadians);
+                CurrentAngleDegrees += angleStepRadians * 180 / M_PI;
 
            } else if ((velocity_vector.x > 0 && velocity_vector.y >= 0 ) ||
                       (velocity_vector.x > 0 && velocity_vector.y <= 0 )){
-                velocity_vector.Rotate(-(angleStep * M_PI / 180.0));
-                CurrentAngle += -(angleStep);
+                velocity_vector.Rotate(-angleStepRadians);
+                CurrentAngleDegrees += -angleStepRadians * 180 / M_PI;
             }
 
             break;
@@ -91,13 +92,13 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
             if ((velocity_vector.x < 0 && velocity_vector.y <= 0 ) ||
                (velocity_vector.x < 0 && velocity_vector.y >= 0 ))
             {
-                velocity_vector.Rotate(-(angleStep * M_PI / 180.0));
-                CurrentAngle += -(angleStep);
+                velocity_vector.Rotate(-angleStepRadians);
+                CurrentAngleDegrees += -angleStepRadians * 180 / M_PI;
 
            } else if ((velocity_vector.x > 0 && velocity_vector.y >= 0 ) ||
                       (velocity_vector.x > 0 && velocity_vector.y <= 0 )){
-                velocity_vector.Rotate((angleStep * M_PI / 180.0));
-                CurrentAngle += (angleStep);
+                velocity_vector.Rotate(angleStepRadians);
+                CurrentAngleDegrees += angleStepRadians * 180 / M_PI;
             }
 
             break;
@@ -107,12 +108,12 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
 
             if ( (velocity_vector.x <= 0 && velocity_vector.y < 0) ||
                  (velocity_vector.x >= 0 && velocity_vector.y < 0) ){
-                velocity_vector.Rotate(-(angleStep * M_PI / 180.0));
-                CurrentAngle += -(angleStep);
+                velocity_vector.Rotate(-angleStepRadians);
+                CurrentAngleDegrees += -(angleStepRadians * 180 / M_PI);
             } else if ( (velocity_vector.x <= 0 && velocity_vector.y > 0) ||
                     (velocity_vector.x >= 0 && velocity_vector.y > 0) ){
-                velocity_vector.Rotate((angleStep * M_PI / 180.0));
-                CurrentAngle += (angleStep);
+                velocity_vector.Rotate(angleStepRadians);
+                CurrentAngleDegrees += angleStepRadians * 180 / M_PI;
            }
             break;
 
@@ -121,15 +122,17 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
 
             if ( (velocity_vector.x <= 0 && velocity_vector.y < 0) || //aristera-panw
                  (velocity_vector.x >= 0 && velocity_vector.y < 0) ){ //deksia-panw
-                velocity_vector.Rotate((angleStep * M_PI / 180.0));
-                CurrentAngle += (angleStep);
+                velocity_vector.Rotate(angleStepRadians);
+                CurrentAngleDegrees += (angleStepRadians * 180 / M_PI);
             } else if ( (velocity_vector.x <= 0 && velocity_vector.y > 0) || //aristera-karw
                     (velocity_vector.x >= 0 && velocity_vector.y > 0) ){ //deksia-katw
-                velocity_vector.Rotate(-(angleStep * M_PI / 180.0));
-                CurrentAngle += -(angleStep);
+                velocity_vector.Rotate(-angleStepRadians);
+                CurrentAngleDegrees += -angleStepRadians * 180 / M_PI;
            }
             break;
 
+        case AngleDirection::Forward:
+        case AngleDirection::Backward:
         case AngleDirection::None: break;
 
 
@@ -138,10 +141,10 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
         //Angle correction. It works without this but i am
         //settign back the angle in the -355 - 359 range just in
         //case so that the CurrentAngle value (double) does not get out of range (almost impossible - it is a huge number)
-        if (CurrentAngle > 359){
-            CurrentAngle -= 360;
-        } else if (CurrentAngle < -359){
-            CurrentAngle += 360;
+        if (CurrentAngleDegrees > 359){
+            CurrentAngleDegrees -= 360;
+        } else if (CurrentAngleDegrees < -359){
+            CurrentAngleDegrees += 360;
         }
 
     }

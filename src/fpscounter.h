@@ -23,6 +23,7 @@
 
 //#include "iblabla.h"
 //#include "idrawable.h"
+#include <math.h>
 #include "texture_wrapper.h"
 #include <string>
 #include "game_object.h"
@@ -33,7 +34,7 @@ public:
     FpsCounter();
 
     void handleEvent(SDL_Event &e);
-    void Draw(SDL_Rect &camera);
+    void Draw();
     void Update(std::chrono::milliseconds::rep deltaTime);
 
     void LoadFont(std::string font_file_name = "Roboto-Regular.ttf", int ptsize = 16);
@@ -42,7 +43,6 @@ public:
     int fps;
     std::string fps_str;
 
-    TextureWrapper texture;
     SDL_Color textColor = { 204, 0, 204, 255 };
 };
 

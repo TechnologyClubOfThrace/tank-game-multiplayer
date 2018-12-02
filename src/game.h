@@ -18,16 +18,17 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
-#ifndef GAME_OBJECTS_H
-#define GAME_OBJECTS_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <vector>
 #include "game_object.h"
+#include "viewport.h"
 
-class GameObjects
+class game
 {
 public:
-    GameObjects();
+    game();
 
     //vector of all game objects
     static std::vector<std::unique_ptr<GameObject>> gameObjects;
@@ -35,6 +36,8 @@ public:
     //vector of any objects that should be added to the gameObjects vector
     //like bullets fired etc
     static std::vector<std::unique_ptr<GameObject>> gameObjects_for_addition;
+
+    static std::vector<ViewPort> viewports;//the related viewports of the level. At least there should be one.
 };
 
-#endif // GAME_OBJECTS_H
+#endif // GAME_H

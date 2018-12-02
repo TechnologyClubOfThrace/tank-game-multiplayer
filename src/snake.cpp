@@ -24,10 +24,10 @@
 #include <memory>
 #include "snake.h"
 #include "bullet.h"
-#include "game_objects.h"
+#include "game.h"
 
 
-Snake::Snake() : RotationAngle(0.26)
+Snake::Snake() : RotationVector(0.26 * M_PI / 180.0)
 {
     //Initialize the collision box
     Position.x = 50;
@@ -45,10 +45,10 @@ void Snake::handleEvent( SDL_Event& e )
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-        case SDLK_w: RotationAngle.AddAngleDirection(AngleDirection::Up);break;
-        case SDLK_s: RotationAngle.AddAngleDirection(AngleDirection::Down);break;
-        case SDLK_d: RotationAngle.AddAngleDirection(AngleDirection::Right);break;
-        case SDLK_a: RotationAngle.AddAngleDirection(AngleDirection::Left);break;
+        case SDLK_w: RotationVector.AddAngleDirection(AngleDirection::Up);break;
+        case SDLK_s: RotationVector.AddAngleDirection(AngleDirection::Down);break;
+        case SDLK_d: RotationVector.AddAngleDirection(AngleDirection::Right);break;
+        case SDLK_a: RotationVector.AddAngleDirection(AngleDirection::Left);break;
 
         case SDLK_SPACE: FireBullet();break;  //fire
 
@@ -90,10 +90,10 @@ void Snake::handleEvent( SDL_Event& e )
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-        case SDLK_s: RotationAngle.RemoveAngleDirection(AngleDirection::Down);break;
-        case SDLK_w: RotationAngle.RemoveAngleDirection(AngleDirection::Up);break;
-        case SDLK_a: RotationAngle.RemoveAngleDirection(AngleDirection::Left);break;
-        case SDLK_d: RotationAngle.RemoveAngleDirection(AngleDirection::Right);break;
+        case SDLK_s: RotationVector.RemoveAngleDirection(AngleDirection::Down);break;
+        case SDLK_w: RotationVector.RemoveAngleDirection(AngleDirection::Up);break;
+        case SDLK_a: RotationVector.RemoveAngleDirection(AngleDirection::Left);break;
+        case SDLK_d: RotationVector.RemoveAngleDirection(AngleDirection::Right);break;
 
         case SDLK_p: Velocity.x /= FastTankSpeedMultiplier; Velocity.y /= FastTankSpeedMultiplier;break;
         }
@@ -104,7 +104,7 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
 {
     //std::cout << "deltatime: " << deltaTime << std::endl;
 
-    RotationAngle.Apply(this->Velocity, deltaTime);
+    RotationVector.Apply(this->Velocity, deltaTime);
 
     //position equation
     //P(t)=P(0)+v*t
@@ -131,57 +131,25 @@ void Snake::Update(std::chrono::milliseconds::rep deltaTime)
             Position.y -= Velocity.y * deltaTime;
         }
     }
+
+    game::viewports[0].camera.followGameObject(*this, level->tileMap.level_width, level->tileMap.level_height);
 }
 
-void Snake::setCamera( SDL_Rect& camera )
-{
-    /*
-    //Center the camera over the dot
-    camera.x = ( mBox.x + DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
-    camera.y = ( mBox.y + DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-
-    //Keep the camera in bounds
-    if( camera.x < 0 )
-    {
-        camera.x = 0;
-    }
-    if( camera.y < 0 )
-    {
-        camera.y = 0;
-    }
-    if( camera.x > LEVEL_WIDTH - camera.w )
-    {
-        camera.x = LEVEL_WIDTH - camera.w;
-    }
-    if( camera.y > LEVEL_HEIGHT - camera.h )
-    {
-        camera.y = LEVEL_HEIGHT - camera.h;
-    }
-    */
-}
 
 void Snake::FireBullet()
 {
     auto bullet = std::make_unique<Bullet>();
-    bullet->Texture.WindowRenderer = this->snakeTexture.WindowRenderer;
-    bullet->Texture.loadFromFile("bullet_w65h20.png");
+    bullet->texture.WindowRenderer = this->texture.WindowRenderer;
+    bullet->texture.loadFromFile("bullet_w65h20.png");
 
-    double canon_x = static_cast<int>(std::round(Position.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    double canon_y = static_cast<int>(std::round(Position.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
+    bullet->Position.x = Position.x + 55 + 71*cos(RotationVector.CurrentAngleDegrees * M_PI / 180);//todo
+    bullet->Position.y = Position.y  + 14 + 71*sin(RotationVector.CurrentAngleDegrees * M_PI / 180);
 
-    //bullet->Position.x = Position.x + 55 + 71*cos(RotationAngle.CurrentAngle * M_PI / 180.0);
-    //bullet->Position.y = Position.y  + 14 + 71*sin(RotationAngle.CurrentAngle * M_PI / 180.0);
-    bullet->Position.x = canon_x;
-    bullet->Position.y = canon_y;
-
-    //bullet->Position = this->Position;
-    //bullet->Position.Rotate(this->RotationAngle.CurrentAngle * M_PI / 180.0);
-    //bullet->Position.Rotate(0.01);
-    bullet->Velocity.x = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.x * 5 : -this->Velocity.x * 5;
-    bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 5 : -this->Velocity.y * 5;
-    bullet->RotationAngle = this->RotationAngle;
+    bullet->Velocity.x = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.x * 1.1 : -this->Velocity.x * 1.1;
+    bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 1.1 : -this->Velocity.y * 1.1;
+    bullet->RotationAngle = this->RotationVector;
     bullet->level = this->level;
-    GameObjects::gameObjects_for_addition.emplace_back(std::move(bullet));
+    game::gameObjects_for_addition.emplace_back(std::move(bullet));
 }
 
 bool Snake::touchesWall(Level* level)
@@ -208,48 +176,34 @@ bool Snake::touchesWall(Level* level)
     return false;
 }
 
-void Snake::Draw( SDL_Rect& camera )
+void Snake::Draw()
 {
     //Show the tank
-    //gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );
+    texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
+                   static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
+                   nullptr, RotationVector.CurrentAngleDegrees);
+}
 
-    snakeTexture.render(static_cast<int>(std::round(Position.x)),
-                        static_cast<int>(std::round(Position.y)),
-                        nullptr,RotationAngle.CurrentAngle);
+void Snake::Draw(size_t viewportIndex)
+{
+    if (viewportIndex != 1) return;
 
+    SDL_Rect source_rect;
+    source_rect.x = 0;
+    source_rect.y = 0;
+    source_rect.w = static_cast<int>(round(texture.getWidth()));
+    source_rect.h = static_cast<int>(round(texture.getHeight()));
 
+    SDL_Rect dest_rect;
+    dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
+    dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
+    dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
+    dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
 
-
-    SDL_Rect rect;
-    //rect.x = static_cast<int>(std::round(Position.x));
-    //rect.y = static_cast<int>(std::round(Position.y));
-    rect.w = 100;
-    rect.h = 20;
-    Vector2D v;
-    //v.x = 32;
-    //v.y = 32;
-    //v.Rotate(RotationAngle.CurrentAngle);
-    //v.Rotate(RotationAngle.CurrentAngle);
-
-
-    //rect.x = Position.x + 120*cosf(RotationAngle.CurrentAngle)  ;
-    //rect.y = Position.y + 120*sinf(RotationAngle.CurrentAngle) ;
-
-    //rect.x = static_cast<int>(std::round(Position.x + 60 + 71*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    //rect.y = static_cast<int>(std::round(Position.y + 20 + 71*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
-
-
-    //std::cout << "rotation angle: " << RotationAngle.CurrentAngle << std::endl;
-
-    //double xt = (rect.x * cos(std::div(RotationAngle.CurrentAngle,180).rem)) - (rect.y * sin(std::div(RotationAngle.CurrentAngle,180).rem));
-    // yt = (rect.y * cos(std::div(RotationAngle.CurrentAngle, 180).rem)) + (rect.x * sin(std::div(RotationAngle.CurrentAngle,180).rem));
-    //rect.x = static_cast<int>(std::round(xt));
-    //rect.y = static_cast<int>(std::round(yt));
-
-    //rect.x = static_cast<int>(std::round(Position.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    //rect.y = static_cast<int>(std::round(Position.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
-
-    //SDL_SetRenderDrawColor(snakeTexture.WindowRenderer, 255, 10, 255, 255);
-    //SDL_RenderFillRect(snakeTexture.WindowRenderer, &rect);
-
+    SDL_RenderCopyEx(texture.WindowRenderer,
+                      texture.mTexture,
+                      &source_rect,
+                      &dest_rect,
+                      RotationVector.CurrentAngleDegrees,
+                      nullptr,SDL_FLIP_NONE);
 }

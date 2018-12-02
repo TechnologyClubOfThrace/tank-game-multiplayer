@@ -32,23 +32,19 @@ class Bullet : public GameObject
 public:
     Bullet();
 
-    void handleEvent(SDL_Event &e);
-    void Draw(SDL_Rect &camera);
     void Update(std::chrono::milliseconds::rep deltaTime);
-
-    void setCamera(SDL_Rect &camera);
+    void Draw();
+    void Draw(size_t viewportIndex);
 
     //The dimensions of the dot
     static const int DOT_WIDTH = 65;
     static const int DOT_HEIGHT = 20;
 
-    TextureWrapper Texture;
     Level* level;
 
     bool touchesWall(Level* level);
 
     Vector2D Velocity;
-    Vector2D Position;
     Vector2D StartPosition;
     Vector2DAngle RotationAngle;
     double Range = 10000;//100 pixels (sqrt)

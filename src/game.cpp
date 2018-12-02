@@ -18,43 +18,13 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
-#ifndef SNAKE_FOOD_H
-#define SNAKE_FOOD_H
+#include "game.h"
 
-#include <SDL.h>
-#include "level.h"
-#include "game_object.h"
+std::vector<std::unique_ptr<GameObject>> game::gameObjects;
+std::vector<std::unique_ptr<GameObject>> game::gameObjects_for_addition;
+std::vector<ViewPort> game::viewports;
 
-class SnakeFood : public GameObject
+game::game()
 {
-public:
-    SnakeFood();
 
-    void handleEvent(SDL_Event &e);
-    void Update(std::chrono::milliseconds::rep deltaTime);
-    void Draw(SDL_Rect &camera);
-
-    void move(Level &level, double deltaTime);
-    //The dimensions of the dot
-    static const int DOT_WIDTH = 32;
-    static const int DOT_HEIGHT = 32;
-    //Maximum axis velocity of the dot
-    static const int DOT_VEL = 2;
-
-    TextureWrapper snakeFoodTexture;
-
-    int random(int min, int max);
-private:
-    //Collision box of the dot
-    SDL_Rect mBox;
-
-    //The velocity of the dot
-    int mVelX, mVelY;
-
-    double mDOT_SPEED = 1.5;
-
-    int alpha = 255;
-    int alpha_Vel = -1;
-};
-
-#endif // SNAKE_FOOD_H
+}

@@ -23,12 +23,13 @@
 #include <thread>
 #include <cmath>
 #include <iostream>
-#include "game_objects.h"
+#include <iterator>
+#include "game.h"
 
 GameEngine::GameEngine(int screenWidth, int screenHeight)
 {
-   mScreenWidth = screenWidth;
-   mScreenHeight = screenHeight;
+   ScreenWidth = screenWidth;
+   ScreenHeight = screenHeight;
 }
 
 bool GameEngine::Init()
@@ -47,7 +48,7 @@ bool GameEngine::Init()
     {
 
         // Better drawing quality
-         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+         //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 
 
         //Set texture filtering to linear
@@ -57,7 +58,7 @@ bool GameEngine::Init()
         }
 
         //Create window
-        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mScreenWidth, mScreenHeight, SDL_WINDOW_SHOWN );
+        gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN );
         if( gWindow == nullptr )
         {
             printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -141,6 +142,7 @@ void GameEngine::StartGameLoop()
 
         HandleEvents();//process user input from keyboard/mouse/game controlers etc
         Update();//update game objects position, collitions etc
+        SDL_RenderClear(WindowRenderer);
         Draw();//draw the objects on screen
 
         //this duration it took to process the game objects
@@ -159,13 +161,19 @@ void GameEngine::StartGameLoop()
        if (fpscounter.DisplayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
            fpscounter.Update(deltaTime);
-           SDL_Rect r;
-           fpscounter.Draw(r);
+           fpscounter.Draw();
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
 
        //display everything in screen
+
        SDL_RenderPresent(WindowRenderer);
+
+       /*
+       const SDL_Rect r2{50,10,50,50};
+       SDL_RenderSetViewport(WindowRenderer, &r2);
+       SDL_RenderPresent(WindowRenderer);
+       */
 
        deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
     }
@@ -185,7 +193,7 @@ void GameEngine::HandleEvents()
         }
 
         //call the handleEvent on each game object
-        for (auto& gameObject : GameObjects::gameObjects){
+        for (auto& gameObject : game::gameObjects){
             gameObject->handleEvent(e);
         }
 
@@ -193,9 +201,9 @@ void GameEngine::HandleEvents()
         //has to be created. It is placed in the gameObjects_for_addition vector
         //so that after returning fron the previous handleEvent call, it will be added to the
         //gameObjects vector.
-        if (GameObjects::gameObjects_for_addition.size() > 0){
-            std::move(GameObjects::gameObjects_for_addition.begin(), GameObjects::gameObjects_for_addition.end(), std::back_inserter(GameObjects::gameObjects));  // ##
-            GameObjects::gameObjects_for_addition.clear();
+        if (game::gameObjects_for_addition.size() > 0){
+            std::move(game::gameObjects_for_addition.begin(), game::gameObjects_for_addition.end(), std::back_inserter(game::gameObjects));  // ##
+            game::gameObjects_for_addition.clear();
         }
 
     }
@@ -209,7 +217,7 @@ void GameEngine::Update()
     //the game object is removed from the gameObjects vector and its destructor is called
     //because it is a std::unique_ptr.
     //TODO: check if there is a more efficient method using remove instead of erase.
-    for(auto it = GameObjects::gameObjects.begin(); it != GameObjects::gameObjects.end();)
+    for(auto it = game::gameObjects.begin(); it != game::gameObjects.end();)
     {
         //update game object
         //Because after calling update on each object, the object might non need to exist any more
@@ -219,7 +227,7 @@ void GameEngine::Update()
         (*it)->Update(deltaTime);
         if((*it)->Exists == false){
             //remove the game object if it is required
-            it = GameObjects::gameObjects.erase(it);
+            it = game::gameObjects.erase(it);
         }else{
             ++it;
         }
@@ -229,61 +237,22 @@ void GameEngine::Update()
 //draws the game objects
 void GameEngine::Draw()
 {
-    SDL_Rect temprect;//todo
-
     //first of all draw the level as the last game object in the z-order
     //so that all other game objects are drawn on top
-    level.Draw(temprect);
+    level.Draw();
 
     //Draw all other game objects
-    for (auto& gameObject : GameObjects::gameObjects){
-        gameObject->Draw(temprect);
+    for (auto& gameObject : game::gameObjects){
+        gameObject->Draw();
     }
-}
 
+    level.DrawRadar();//todo
 
-/*
-//main game loop
-void GameEngine::StartGameLoop()
-{
-    //frame cap related
-    std::chrono::milliseconds::rep frame_delay_for_stable_fps = 1000 / 500;
-    std::chrono::high_resolution_clock::time_point now_time_point;
-    last_frame_time_point = std::chrono::high_resolution_clock::now();
-    now_time_point = last_frame_time_point;
-    deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now_time_point - last_frame_time_point).count();
-
-    //enter game loop
-    while (Running){
-
-        HandleEvents();//process user input from keyboard/mouse/game controlers etc
-        Update();
-        Draw();//draw the objects on screen
-
-        //display the fps counter if needed
-        if (fpscounter.DisplayFpsCounter){
-            fpscounter.Update(deltaTime);
-            SDL_Rect r;
-            fpscounter.Draw(r);
+    //if there are more than one viewports, call the draw oveload
+    //on each game object with the viewport index.
+    for (size_t viewPortIndex = 1; viewPortIndex <= game::gameObjects.size(); viewPortIndex++){
+        for (auto& gameObject : game::gameObjects){
+            gameObject->Draw(viewPortIndex);
         }
-
-        //display everything in screen
-        SDL_RenderPresent(WindowRenderer);
-
-        //frame cap.
-        //If frame finished early wait for the remaining time
-       deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now_time_point - last_frame_time_point).count();
-       if (deltaTime < frame_delay_for_stable_fps){
-           std::this_thread::sleep_for(std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime));
-           //std::cout << "sleeping for: " << std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime).count() << std::endl;
-           now_time_point = std::chrono::high_resolution_clock::now();
-           deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now_time_point - last_frame_time_point).count();
-       } else {
-           now_time_point = std::chrono::high_resolution_clock::now();
-       }
-       last_frame_time_point = now_time_point;
-       //End of frame cap
-
     }
 }
-*/

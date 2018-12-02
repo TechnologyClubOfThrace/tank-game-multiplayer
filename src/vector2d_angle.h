@@ -40,13 +40,13 @@ class Vector2DAngle : public Vector2D
 {
 
 public:
-    Vector2DAngle(double anglePerMilliSec);
+    Vector2DAngle(double angleRadiansPerMilliSec);
 
-    double AnglePerMilliSec;
+    double AngleRadiansPerMilliSec;
     void AddAngleDirection(AngleDirection angleDirection);
     void RemoveAngleDirection(AngleDirection angleDirection);
     void Apply(Vector2D &velocity_vector, std::chrono::milliseconds::rep deltaTime);
-    double CurrentAngle;
+    double CurrentAngleDegrees = 0;
     double ignoreValue = 0.0025;
 
     std::vector<AngleDirection> angle_directions;

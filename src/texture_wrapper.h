@@ -64,9 +64,9 @@ public:
     SDL_Renderer* WindowRenderer = nullptr;
     TTF_Font * font = nullptr;
 
-private:
     //The actual hardware texture
     SDL_Texture* mTexture;
+private:
 
     //Image dimensions
     int mWidth;

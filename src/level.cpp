@@ -120,12 +120,19 @@ void Level::handleEvent(SDL_Event &e)
 
 }
 
-void Level::Draw(SDL_Rect &camera)
+void Level::Draw()
 {
     //render all map tiles
-    SDL_Rect tmp;//todo: should fix this
     for (auto& v : Tiles){
-        v.render(tmp);
+        v.render();
+    }
+}
+
+void Level::DrawRadar()
+{
+    //render all map tiles
+    for (auto& v : Tiles){
+        v.render_radar();
     }
 }
 

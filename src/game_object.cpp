@@ -22,17 +22,15 @@
 
 GameObject::GameObject()
 {
-
 }
 
 GameObject::~GameObject()
 {
-
 }
 
-void GameObject::Draw(SDL_Rect &camera)
-{
 
+void GameObject::handleEvent(SDL_Event &e)
+{
 }
 
 void GameObject::Update(std::chrono::milliseconds::rep deltaTime)
@@ -40,7 +38,11 @@ void GameObject::Update(std::chrono::milliseconds::rep deltaTime)
 
 }
 
-void GameObject::handleEvent(SDL_Event &e)
+void GameObject::Draw()
 {
-
 }
+
+void GameObject::Draw(size_t viewportIndex)
+{
+}
+

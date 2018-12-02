@@ -22,8 +22,10 @@
 #define TILE_H
 
 #include <SDL.h>
+#include <math.h>
 #include "texture_wrapper.h"
 #include "sprite.h"
+#include "game.h"
 
 //The tile
 class Tile
@@ -33,7 +35,8 @@ class Tile
         Tile(int x, int y, int w, int h);
 
         //Shows the tile
-        void render( SDL_Rect& camera );
+        void render();
+        void render_radar();
 
         //Get the collision box
         SDL_Rect getBox();
