@@ -23,6 +23,7 @@
 
 //#include "iblabla.h"
 //#include "idrawable.h"
+#include <math.h>
 #include "texture_wrapper.h"
 #include <string>
 #include "game_object.h"

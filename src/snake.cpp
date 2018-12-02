@@ -188,8 +188,29 @@ void Snake::Draw()
 {
     //Show the tank
     texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
-                        static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
-                        nullptr,RotationVector.CurrentAngleDegrees);
+                   static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
+                   nullptr, RotationVector.CurrentAngleDegrees);
+
+
+    /*
+    SDL_Rect source_rect;
+    source_rect.x = 0;
+    source_rect.y = 0;
+    source_rect.w = DOT_WIDTH;
+    source_rect.h = DOT_HEIGHT;
+
+    SDL_Rect target_rect;
+    target_rect.x = static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x));
+    target_rect.y = static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y));
+    target_rect.w = DOT_WIDTH;
+    target_rect.h = DOT_HEIGHT;
+
+
+    SDL_RenderCopyEx(texture.WindowRenderer,
+                     texture.mTexture,
+                     &source_rect,
+                     &target_rect,RotationVector.CurrentAngleDegrees, nullptr, SDL_FLIP_NONE);
+                     */
 
     /*
     SDL_Rect rect;

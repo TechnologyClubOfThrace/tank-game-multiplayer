@@ -22,6 +22,7 @@
 #define TILE_H
 
 #include <SDL.h>
+#include <math.h>
 #include "texture_wrapper.h"
 #include "sprite.h"
 #include "game.h"

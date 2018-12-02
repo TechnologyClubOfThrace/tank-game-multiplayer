@@ -166,6 +166,7 @@ void GameEngine::StartGameLoop()
        }
 
        //display everything in screen
+
        SDL_RenderPresent(WindowRenderer);
 
        /*

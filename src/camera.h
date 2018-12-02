@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include <SDL.h>
+#include <math.h>
 #include "game_object.h"
 
 class Camera
