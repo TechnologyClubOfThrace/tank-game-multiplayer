@@ -48,7 +48,7 @@ bool GameEngine::Init()
     {
 
         // Better drawing quality
-         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+         //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 
 
         //Set texture filtering to linear

@@ -131,6 +131,8 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
            }
             break;
 
+        case AngleDirection::Forward:
+        case AngleDirection::Backward:
         case AngleDirection::None: break;
 
 

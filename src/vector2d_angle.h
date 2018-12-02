@@ -46,7 +46,7 @@ public:
     void AddAngleDirection(AngleDirection angleDirection);
     void RemoveAngleDirection(AngleDirection angleDirection);
     void Apply(Vector2D &velocity_vector, std::chrono::milliseconds::rep deltaTime);
-    double CurrentAngleDegrees;
+    double CurrentAngleDegrees = 0;
     double ignoreValue = 0.0025;
 
     std::vector<AngleDirection> angle_directions;

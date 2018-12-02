@@ -142,17 +142,9 @@ void Snake::FireBullet()
     bullet->texture.WindowRenderer = this->texture.WindowRenderer;
     bullet->texture.loadFromFile("bullet_w65h20.png");
 
-    double canon_x = static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationVector.CurrentAngleDegrees * M_PI / 180)));
-    double canon_y = static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationVector.CurrentAngleDegrees * M_PI / 180)));
-
     bullet->Position.x = Position.x + 55 + 71*cos(RotationVector.CurrentAngleDegrees * M_PI / 180);//todo
     bullet->Position.y = Position.y  + 14 + 71*sin(RotationVector.CurrentAngleDegrees * M_PI / 180);
-    //bullet->Position.x = canon_x;
-    //bullet->Position.y = canon_y;
 
-    //bullet->Position = this->Position;
-    //bullet->Position.Rotate(this->RotationAngle.CurrentAngle * M_PI / 180.0);
-    //bullet->Position.Rotate(0.01);
     bullet->Velocity.x = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.x * 1.1 : -this->Velocity.x * 1.1;
     bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 1.1 : -this->Velocity.y * 1.1;
     bullet->RotationAngle = this->RotationVector;
@@ -190,37 +182,6 @@ void Snake::Draw()
     texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
                    static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
                    nullptr, RotationVector.CurrentAngleDegrees);
-
-
-    /*
-    SDL_Rect source_rect;
-    source_rect.x = 0;
-    source_rect.y = 0;
-    source_rect.w = DOT_WIDTH;
-    source_rect.h = DOT_HEIGHT;
-
-    SDL_Rect target_rect;
-    target_rect.x = static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x));
-    target_rect.y = static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y));
-    target_rect.w = DOT_WIDTH;
-    target_rect.h = DOT_HEIGHT;
-
-
-    SDL_RenderCopyEx(texture.WindowRenderer,
-                     texture.mTexture,
-                     &source_rect,
-                     &target_rect,RotationVector.CurrentAngleDegrees, nullptr, SDL_FLIP_NONE);
-                     */
-
-    /*
-    SDL_Rect rect;
-    rect.w = 20;
-    rect.h = 20;
-    rect.x = static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x + DOT_WIDTH/2 + DOT_WIDTH/2*cos(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    rect.y = static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y + DOT_HEIGHT/2 + DOT_WIDTH/2*sin(RotationAngle.CurrentAngle * M_PI / 180.0)));
-    SDL_SetRenderDrawColor(texture.WindowRenderer, 255, 10, 255, 255);
-    SDL_RenderFillRect(texture.WindowRenderer, &rect);
-    */
 }
 
 void Snake::Draw(size_t viewportIndex)
