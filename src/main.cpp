@@ -60,7 +60,7 @@ int main()
     game::viewports.emplace_back(viewport_radar);
     //Viewport 3:
     ViewPort viewport_radar2;
-    viewport_radar2.frame.x = 10;
+    viewport_radar2.frame.x = 20;
     viewport_radar2.frame.y = 290;
     viewport_radar2.frame.w = 86;
     viewport_radar2.frame.h = 61;
