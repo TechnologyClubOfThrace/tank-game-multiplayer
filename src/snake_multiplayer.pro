@@ -52,7 +52,6 @@ SOURCES += \
     polygon_collider2d.cpp
 
 
-
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
 #64bit mingw selected kit
 windows: LIBS += -LC:\\libs\\SDL2_mingw-2.0.9\\x86_64-w64-mingw32\\lib -lmingw32 -lSDL2main -lSDL2
@@ -63,6 +62,7 @@ windows: INCLUDEPATH += C:\\libs\\SDL2_mingw-2.0.9\\x86_64-w64-mingw32\\include\
 windows: INCLUDEPATH += C:\\libs\\SDL2_ttf-2.0.14-mingw\\x86_64-w64-mingw32\\include\\SDL2
 windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4-mingw\\x86_64-w64-mingw32\\include\\SDL2
 } else {
+win32-g++:{
 #32bit mingw selected kit
 windows: LIBS += -LC:\\libs\\SDL2_mingw-2.0.9\\i686-w64-mingw32\\lib -lmingw32 -lSDL2main -lSDL2
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14-mingw\\i686-w64-mingw32\\lib -lSDL2_ttf
@@ -72,6 +72,8 @@ windows: INCLUDEPATH += C:\\libs\\SDL2_mingw-2.0.9\\i686-w64-mingw32\\include\\S
 windows: INCLUDEPATH += C:\\libs\\SDL2_ttf-2.0.14-mingw\\i686-w64-mingw32\\include\\SDL2
 windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4-mingw\\i686-w64-mingw32\\include\\SDL2
 }
+}
+
 
 win32-msvc*:contains(QMAKE_HOST.arch, x86_64) {
 #64bit msvc selected kit
