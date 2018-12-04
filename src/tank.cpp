@@ -137,7 +137,10 @@ void Tank::Update(std::chrono::milliseconds::rep deltaTime)
 {
     //std::cout << "deltatime: " << deltaTime << std::endl;
 
-    RotationVector.Apply(this->Velocity, deltaTime);
+    state == enumState::moveForward ||
+    state == enumState::moveBackwards ?
+                RotationVector.Apply(this->Velocity, deltaTime) :
+                RotationVector.Apply(this->previousVelocity, deltaTime);
 
     //position equation
     //P(t)=P(0)+v*t
@@ -180,20 +183,20 @@ void Tank::FireBullet()
 
     switch (state) {
     case enumState::moveForward:
-        bullet->Velocity.x = this->Velocity.x * 1.5;
-        bullet->Velocity.y = this->Velocity.y * 1.5;
+        bullet->Velocity.x = this->Velocity.x * 5;
+        bullet->Velocity.y = this->Velocity.y * 5;
         break;
     case enumState::moveBackwards:
-        bullet->Velocity.x = -this->Velocity.x * 1.5;
-        bullet->Velocity.y = -this->Velocity.y * 1.5;
+        bullet->Velocity.x = -this->Velocity.x * 5;
+        bullet->Velocity.y = -this->Velocity.y * 5;
         break;
     case enumState::stoppedFromForwards:
-        bullet->Velocity.x = this->previousVelocity.x * 1.5;
-        bullet->Velocity.y = this->previousVelocity.y * 1.5;
+        bullet->Velocity.x = this->previousVelocity.x * 5;
+        bullet->Velocity.y = this->previousVelocity.y * 5;
         break;
     case enumState::stoppedFromBackwards:
-        bullet->Velocity.x = -this->previousVelocity.x * 1.5;
-        bullet->Velocity.y = -this->previousVelocity.y * 1.5;
+        bullet->Velocity.x = -this->previousVelocity.x * 5;
+        bullet->Velocity.y = -this->previousVelocity.y * 5;
         break;
     }
 

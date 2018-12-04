@@ -51,10 +51,10 @@ void Tile::render()
 void Tile::render_radar()
 {
     SDL_Rect target_rect;
-    target_rect.x = round(game::viewports[1].frame.x + round(this->mBox.x/10));
-    target_rect.y = round(game::viewports[1].frame.y + round(this->mBox.y/10));
-    target_rect.w = round(sprite.rect.w/10);
-    target_rect.h = round(sprite.rect.h/10);
+    target_rect.x = static_cast<int>(round(game::viewports[1].frame.x + this->mBox.x/10));
+    target_rect.y = static_cast<int>(round(game::viewports[1].frame.y + this->mBox.y/10));
+    target_rect.w = static_cast<int>(round(sprite.rect.w/10));
+    target_rect.h = static_cast<int>(round(sprite.rect.h/10));
 
     SDL_SetTextureBlendMode(sprite.spritesheet_texture->mTexture, SDL_BLENDMODE_BLEND);
 
