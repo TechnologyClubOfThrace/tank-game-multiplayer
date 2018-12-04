@@ -68,8 +68,9 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
     if (mCurrentAngleDirection != AngleDirection::None){
 
         //std::cout << velocity_vector.x << " y:" << velocity_vector.y << std::endl;
+        //std::cout << "AnglePerMilliSec * deltaTime: " << (AngleRadiansPerMilliSec * deltaTime) << std::endl;
 
-        //std::cout << "AnglePerMilliSec * deltaTime: " << (AnglePerMilliSec * deltaTime) << std::endl;
+        //the rotation radians based on the deltaTime
         const double angleStepRadians = AngleRadiansPerMilliSec * deltaTime;
 
         switch (this->mCurrentAngleDirection) {
@@ -143,6 +144,9 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
 
         }//switch
 
+        //std::cout << "AngleDegreesPerMilliSec * deltaTime: " << (AngleRadiansPerMilliSec * deltaTime * 180 / M_PI) << std::endl;
+        //std::cout << "CurrentAngleDegrees: " << CurrentAngleDegrees << std::endl;
+
         //Angle correction. It works without this but i am
         //settign back the angle in the -359 to 359 range just in
         //case so that the CurrentAngle value (double) does not get out of range (almost impossible - it is a huge number)
@@ -150,6 +154,51 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
             CurrentAngleDegrees -= 360;
         } else if (CurrentAngleDegrees < -359){
             CurrentAngleDegrees += 360;
+        }
+
+        //Angle correction: If angle is eg. 91 degrees
+        //positive
+        const double angleDeggressCorrection = 2;
+        if (CurrentAngleDegrees > 0-angleDeggressCorrection && CurrentAngleDegrees < 0+angleDeggressCorrection){
+            double radsCorrection = (0 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
+        }
+
+        else if (CurrentAngleDegrees > 90-angleDeggressCorrection && CurrentAngleDegrees < 90+angleDeggressCorrection){
+            double radsCorrection = (90 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
+        }
+
+        else if (CurrentAngleDegrees > 180-angleDeggressCorrection && CurrentAngleDegrees < 180+angleDeggressCorrection){
+            double radsCorrection = (180 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
+        }
+
+        else if (CurrentAngleDegrees > 270-angleDeggressCorrection && CurrentAngleDegrees < 270+angleDeggressCorrection){
+            double radsCorrection = (270 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
+        }
+        //negative
+        else if (CurrentAngleDegrees < -90+angleDeggressCorrection && CurrentAngleDegrees > -90-angleDeggressCorrection){
+            double radsCorrection = (-90 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
+        }
+
+        else if (CurrentAngleDegrees < -180+angleDeggressCorrection && CurrentAngleDegrees > -180-angleDeggressCorrection){
+            double radsCorrection = (-180 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
+        }
+
+        else if (CurrentAngleDegrees < -270+angleDeggressCorrection && CurrentAngleDegrees > -270-angleDeggressCorrection){
+            double radsCorrection = (-270 - CurrentAngleDegrees) / 180 * M_PI;
+            velocity_vector.Rotate(radsCorrection);
+            CurrentAngleDegrees += radsCorrection * 180 / M_PI;
         }
 
     }

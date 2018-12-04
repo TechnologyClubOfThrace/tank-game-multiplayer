@@ -29,6 +29,14 @@
 #include "keystate.h"
 #include "game_object.h"
 
+enum class enumState
+{
+    stopped,
+    stoppedFromForwards,
+    stoppedFromBackwards,
+    moveForward,
+    moveBackwards
+};
 
 class Tank : public GameObject
 {
@@ -44,18 +52,21 @@ public:
     KeyState keystate;
 
     double NormalTankSpeed = 0.13;
-    double FastTankSpeedMultiplier = 3.50;
+    double FastTankSpeedMultiplier = 2.00;
     AngleDirection TankDirection = AngleDirection::Forward;
     AngleDirection TankDirectionBeforeStopping = AngleDirection::Forward;
 
     bool touchesWall(Level *level);
 
     Vector2D Velocity;
+    Vector2D previousVelocity;
     Vector2DAngle RotationVector;
 
     Level * level;
 
 private:
+    enumState state = enumState::stopped;
+    void setAngleDirection(SDL_Keysym& keysym);
 };
 
 #endif // TANK_H

@@ -33,59 +33,83 @@ Tank::Tank() : RotationVector(0.26 * M_PI / 180.0)
     Position.x = 50;
     Position.y = 50;
 
-    Velocity.x = NormalTankSpeed;
+    Velocity.x = 0.00;
     Velocity.y = 0.00;
+    previousVelocity = Velocity;
 }
 
 void Tank::handleEvent( SDL_Event& e )
 {
-    //If a key was pressed
-    if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
+    switch (state) {
+    case enumState::stopped:
         switch( e.key.keysym.sym )
         {
-        case SDLK_w: RotationVector.AddAngleDirection(AngleDirection::Up);break;
-        case SDLK_s: RotationVector.AddAngleDirection(AngleDirection::Down);break;
-        case SDLK_d: RotationVector.AddAngleDirection(AngleDirection::Right);break;
-        case SDLK_a: RotationVector.AddAngleDirection(AngleDirection::Left);break;
-
-        case SDLK_SPACE: FireBullet();break;  //fire
-
-        case SDLK_o://go forward
-            if (TankDirection == AngleDirection::Backward || TankDirectionBeforeStopping == AngleDirection::Backward){
-                Velocity.x = -Velocity.x; Velocity.y = -Velocity.y;
-            }
-            TankDirection = AngleDirection::Forward;
-            TankDirectionBeforeStopping = TankDirection;
-            break; //forward
-
-        case SDLK_k: //go backwards
-            if (TankDirection == AngleDirection::Forward || TankDirectionBeforeStopping == AngleDirection::Forward){
-                Velocity.x = -Velocity.x; Velocity.y = -Velocity.y;
-            }
-            TankDirection = AngleDirection::Backward;
-            TankDirectionBeforeStopping = TankDirection;
-            break; //forward
-
-        case SDLK_m: //stop tank
-           //RotationAngle.angle_directions.clear();
-            if (TankDirection != AngleDirection::None){
-               TankDirectionBeforeStopping = TankDirection;
-               TankDirection = AngleDirection::None;
-            } else {
-                //tank was allready stopped, so move again in the last direction before stopped
-                TankDirection = TankDirectionBeforeStopping;
-            }
-           break;
-
-
-        case SDLK_p: Velocity.x *= FastTankSpeedMultiplier; Velocity.y *= FastTankSpeedMultiplier; break;
-
+        case SDLK_w:case SDLK_s:case SDLK_a:case SDLK_d:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+            setAngleDirection(e.key.keysym);
+            state = enumState::moveForward;
+            Velocity.x = NormalTankSpeed;
+            break;
         }
-    }
+        }
+        break;//stopped
+
+    case enumState::moveForward:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
+        {
+        setAngleDirection(e.key.keysym);
+        switch( e.key.keysym.sym )
+        {
+        case SDLK_q: Velocity.x = -Velocity.x; Velocity.y = -Velocity.y; state = enumState::moveBackwards; break;
+        case SDLK_z: previousVelocity = Velocity; Velocity.x = 0; Velocity.y = 0; state = enumState::stoppedFromForwards; break;
+        case SDLK_m: Velocity.x *= this->FastTankSpeedMultiplier; Velocity.y *= this->FastTankSpeedMultiplier;break;
+        case SDLK_SPACE: FireBullet();break;
+        }
+        }
+        break;
+
+    case enumState::moveBackwards:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
+        {
+        setAngleDirection(e.key.keysym);
+        switch( e.key.keysym.sym )
+        {
+        case SDLK_q: Velocity.x = -Velocity.x; Velocity.y = -Velocity.y; state = enumState::moveForward; break;
+        case SDLK_z: previousVelocity = Velocity; Velocity.x = 0; Velocity.y = 0; state = enumState::stoppedFromBackwards; break;
+        case SDLK_m: Velocity.x *= this->FastTankSpeedMultiplier; Velocity.y *= this->FastTankSpeedMultiplier;break;
+        case SDLK_SPACE: FireBullet();break;
+        }
+        }
+        break;
+
+    case enumState::stoppedFromForwards:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
+        {
+        setAngleDirection(e.key.keysym);
+        switch( e.key.keysym.sym )
+        {
+        case SDLK_z: case SDLK_q: Velocity = previousVelocity; state = enumState::moveForward; break;
+        case SDLK_SPACE: FireBullet();break;
+        }
+        }
+        break;
+
+
+    case enumState::stoppedFromBackwards:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
+        {
+        setAngleDirection(e.key.keysym);
+        switch( e.key.keysym.sym )
+        {
+        case SDLK_z: case SDLK_q: Velocity = previousVelocity; state = enumState::moveBackwards; break;
+        case SDLK_SPACE: FireBullet();break;
+        }
+        }
+        break;
+    } // switch state
+
     //If a key was released
-    else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
+    if( e.type == SDL_KEYUP && e.key.repeat == 0 )
     {
         //Adjust the velocity
         switch( e.key.keysym.sym )
@@ -94,9 +118,18 @@ void Tank::handleEvent( SDL_Event& e )
         case SDLK_w: RotationVector.RemoveAngleDirection(AngleDirection::Up);break;
         case SDLK_a: RotationVector.RemoveAngleDirection(AngleDirection::Left);break;
         case SDLK_d: RotationVector.RemoveAngleDirection(AngleDirection::Right);break;
-
-        case SDLK_p: Velocity.x /= FastTankSpeedMultiplier; Velocity.y /= FastTankSpeedMultiplier;break;
+        case SDLK_m: Velocity.x /= FastTankSpeedMultiplier; Velocity.y /= FastTankSpeedMultiplier;break;
         }
+    }
+}
+
+void Tank::setAngleDirection(SDL_Keysym &keysym)
+{
+    switch (keysym.sym) {
+    case SDLK_w: RotationVector.AddAngleDirection(AngleDirection::Up);break;
+    case SDLK_s: RotationVector.AddAngleDirection(AngleDirection::Down);break;
+    case SDLK_d: RotationVector.AddAngleDirection(AngleDirection::Right);break;
+    case SDLK_a: RotationVector.AddAngleDirection(AngleDirection::Left);break;
     }
 }
 
@@ -145,8 +178,25 @@ void Tank::FireBullet()
     bullet->Position.x = Position.x + 55 + 71*cos(RotationVector.CurrentAngleDegrees * M_PI / 180);//todo
     bullet->Position.y = Position.y  + 14 + 71*sin(RotationVector.CurrentAngleDegrees * M_PI / 180);
 
-    bullet->Velocity.x = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.x * 1.1 : -this->Velocity.x * 1.1;
-    bullet->Velocity.y = TankDirection == AngleDirection::Forward || TankDirection == AngleDirection::None ? this->Velocity.y * 1.1 : -this->Velocity.y * 1.1;
+    switch (state) {
+    case enumState::moveForward:
+        bullet->Velocity.x = this->Velocity.x * 1.5;
+        bullet->Velocity.y = this->Velocity.y * 1.5;
+        break;
+    case enumState::moveBackwards:
+        bullet->Velocity.x = -this->Velocity.x * 1.5;
+        bullet->Velocity.y = -this->Velocity.y * 1.5;
+        break;
+    case enumState::stoppedFromForwards:
+        bullet->Velocity.x = this->previousVelocity.x * 1.5;
+        bullet->Velocity.y = this->previousVelocity.y * 1.5;
+        break;
+    case enumState::stoppedFromBackwards:
+        bullet->Velocity.x = -this->previousVelocity.x * 1.5;
+        bullet->Velocity.y = -this->previousVelocity.y * 1.5;
+        break;
+    }
+
     bullet->RotationAngle = this->RotationVector;
     bullet->level = this->level;
     game::gameObjects_for_addition.emplace_back(std::move(bullet));
@@ -175,6 +225,7 @@ bool Tank::touchesWall(Level* level)
     //If no wall tiles were touched
     return false;
 }
+
 
 void Tank::Draw()
 {
