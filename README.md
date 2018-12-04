@@ -4,7 +4,7 @@
 A     -> Move left
 D     -> Move right
 W     -> Move up
-S     -> Move downa
+S     -> Move down
 
 Q     -> Move forward / backwards
 Z     -> Stop / move
