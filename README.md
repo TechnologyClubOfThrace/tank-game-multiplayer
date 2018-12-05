@@ -1,6 +1,6 @@
 # Tank Game Multiplayer
 
-Tank game is a collaborative project by some members of the Technology Club Of Thrace. The plan is the creation of a fun tank game with exceptional multiplayer game play, music and speed. 
+Tank game is a collaborative project by some members of the Technology Club Of Thrace. The plan is the creation of a fun 2D Tank game with exceptional multiplayer game play, music and speed. 
 
 
 # Controls
