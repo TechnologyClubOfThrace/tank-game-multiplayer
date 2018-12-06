@@ -27,11 +27,13 @@
 #include "game.h"
 
 
-Tank::Tank() : RotationVector(0.26 * M_PI / 180.0)
+Tank::Tank()
 {
     //Initialize the collision box
-    Position.x = 50;
-    Position.y = 50;
+    transform.Position.x = 50;
+    transform.Position.y = 50;
+
+    transform.Rotation.AngleRadiansPerMilliSec = 0.26 * M_PI / 180.0;
 
     Velocity.x = 0.00;
     Velocity.y = 0.00;
@@ -114,10 +116,10 @@ void Tank::handleEvent( SDL_Event& e )
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-        case SDLK_s: RotationVector.RemoveAngleDirection(AngleDirection::Down);break;
-        case SDLK_w: RotationVector.RemoveAngleDirection(AngleDirection::Up);break;
-        case SDLK_a: RotationVector.RemoveAngleDirection(AngleDirection::Left);break;
-        case SDLK_d: RotationVector.RemoveAngleDirection(AngleDirection::Right);break;
+        case SDLK_s: transform.Rotation.RemoveAngleDirection(AngleDirection::Down);break;
+        case SDLK_w: transform.Rotation.RemoveAngleDirection(AngleDirection::Up);break;
+        case SDLK_a: transform.Rotation.RemoveAngleDirection(AngleDirection::Left);break;
+        case SDLK_d: transform.Rotation.RemoveAngleDirection(AngleDirection::Right);break;
         case SDLK_m: Velocity.x /= FastTankSpeedMultiplier; Velocity.y /= FastTankSpeedMultiplier;break;
         }
     }
@@ -126,10 +128,10 @@ void Tank::handleEvent( SDL_Event& e )
 void Tank::setAngleDirection(SDL_Keysym &keysym)
 {
     switch (keysym.sym) {
-    case SDLK_w: RotationVector.AddAngleDirection(AngleDirection::Up);break;
-    case SDLK_s: RotationVector.AddAngleDirection(AngleDirection::Down);break;
-    case SDLK_d: RotationVector.AddAngleDirection(AngleDirection::Right);break;
-    case SDLK_a: RotationVector.AddAngleDirection(AngleDirection::Left);break;
+    case SDLK_w: transform.Rotation.AddAngleDirection(AngleDirection::Up);break;
+    case SDLK_s: transform.Rotation.AddAngleDirection(AngleDirection::Down);break;
+    case SDLK_d: transform.Rotation.AddAngleDirection(AngleDirection::Right);break;
+    case SDLK_a: transform.Rotation.AddAngleDirection(AngleDirection::Left);break;
     }
 }
 
@@ -139,8 +141,8 @@ void Tank::Update(std::chrono::milliseconds::rep deltaTime)
 
     state == enumState::moveForward ||
     state == enumState::moveBackwards ?
-                RotationVector.Apply(this->Velocity, deltaTime) :
-                RotationVector.Apply(this->previousVelocity, deltaTime);
+                transform.Rotation.Apply(this->Velocity, deltaTime) :
+                transform.Rotation.Apply(this->previousVelocity, deltaTime);
 
     //position equation
     //P(t)=P(0)+v*t
@@ -148,23 +150,23 @@ void Tank::Update(std::chrono::milliseconds::rep deltaTime)
     if (TankDirection != AngleDirection::None){
         //Move the tank based on the user input
         //check if the user stoped the tank (AngleDirection::None)
-        Position.x += Velocity.x * deltaTime;
+        transform.Position.x += Velocity.x * deltaTime;
 
         //If the dot went too far to the left or right or touched a wall
-        if( ( Position.x < 0 ) || ( Position.x + texture.getWidth() > level->tileMap.level_width) || touchesWall(level) )
+        if( ( transform.Position.x < 0 ) || ( transform.Position.x + texture.getWidth() > level->tileMap.level_width) || touchesWall(level) )
         {
             //move back
-            Position.x -= Velocity.x * deltaTime;
+            transform.Position.x -= Velocity.x * deltaTime;
         }
 
         //Move the dot up or down
-        Position.y += Velocity.y * deltaTime ;
+        transform.Position.y += Velocity.y * deltaTime ;
 
         //If the dot went too far up or down or touched a wall
-        if( ( Position.y < 0 ) || ( Position.y + texture.getHeight() > level->tileMap.level_height) || touchesWall(level) )
+        if( ( transform.Position.y < 0 ) || ( transform.Position.y + texture.getHeight() > level->tileMap.level_height) || touchesWall(level) )
         {
             //move back
-            Position.y -= Velocity.y * deltaTime;
+            transform.Position.y -= Velocity.y * deltaTime;
         }
     }
 
@@ -178,8 +180,8 @@ void Tank::FireBullet()
     bullet->texture.WindowRenderer = this->texture.WindowRenderer;
     bullet->texture.loadFromFile("bullet_w65h20.png");
 
-    bullet->Position.x = Position.x + 55 + 71*cos(RotationVector.CurrentAngleDegrees * M_PI / 180);//todo
-    bullet->Position.y = Position.y  + 14 + 71*sin(RotationVector.CurrentAngleDegrees * M_PI / 180);
+    bullet->transform.Position.x = transform.Position.x + 55 + 71*cos(transform.Rotation.CurrentAngleDegrees * M_PI / 180);//todo
+    bullet->transform.Position.y = transform.Position.y  + 14 + 71*sin(transform.Rotation.CurrentAngleDegrees * M_PI / 180);
 
     switch (state) {
     case enumState::moveForward:
@@ -202,7 +204,7 @@ void Tank::FireBullet()
         break;//the tank cannot fire when game begins
     }
 
-    bullet->RotationAngle = this->RotationVector;
+    bullet->RotationAngle = this->transform.Rotation;
     bullet->level = this->level;
     game::gameObjects_for_addition.emplace_back(std::move(bullet));
 }
@@ -217,8 +219,8 @@ bool Tank::touchesWall(Level* level)
         {
             auto bb = level->Tiles[i].getBox();
             SDL_Rect box;
-            box.x = static_cast<int>(std::round(Position.x));
-            box.y = static_cast<int>(std::round(Position.y));
+            box.x = static_cast<int>(std::round(transform.Position.x));
+            box.y = static_cast<int>(std::round(transform.Position.y));
             box.w = texture.getWidth();
             box.h = texture.getHeight();
 
@@ -235,9 +237,9 @@ bool Tank::touchesWall(Level* level)
 void Tank::Draw()
 {
     //Show the tank
-    texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
-                   static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
-                   nullptr, RotationVector.CurrentAngleDegrees);
+    texture.render(static_cast<int>(std::round(transform.Position.x - game::viewports[0].camera.frame.x)),
+                   static_cast<int>(std::round(transform.Position.y - game::viewports[0].camera.frame.y)),
+                   nullptr, transform.Rotation.CurrentAngleDegrees);
 }
 
 void Tank::Draw(size_t viewportIndex)
@@ -251,8 +253,8 @@ void Tank::Draw(size_t viewportIndex)
         source_rect.h = static_cast<int>(round(texture.getHeight()));
 
         SDL_Rect dest_rect;
-        dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
-        dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
+        dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + transform.Position.x/10));
+        dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + transform.Position.y/10));
         dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
         dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
 
@@ -265,7 +267,7 @@ void Tank::Draw(size_t viewportIndex)
                           texture.mTexture,
                           &source_rect,
                           &dest_rect,
-                          RotationVector.CurrentAngleDegrees,
+                          transform.Rotation.CurrentAngleDegrees,
                           nullptr,SDL_FLIP_NONE);
     }
 }

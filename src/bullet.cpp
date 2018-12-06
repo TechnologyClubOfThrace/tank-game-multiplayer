@@ -22,7 +22,7 @@
 #include <cmath>
 #include "game.h"
 
-Bullet::Bullet() : RotationAngle(0)
+Bullet::Bullet()
 {
 }
 
@@ -30,26 +30,26 @@ void Bullet::Update(std::chrono::milliseconds::rep deltaTime)
 {
 
     //Move the dot left or right
-    Position.x += Velocity.x * deltaTime ;
+    transform.Position.x += Velocity.x * deltaTime ;
 
     //If the dot went too far to the left or right or touched a wall
-    if( ( Position.x < 0 ) || ( Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
+    if( ( transform.Position.x < 0 ) || ( transform.Position.x + DOT_WIDTH > level->tileMap.level_width) || touchesWall(level) )
     {
         //move back
-        Position.x -= Velocity.x * deltaTime;
+        transform.Position.x -= Velocity.x * deltaTime;
 
         //mark object for deletion
         Exists = false;
     }
 
     //Move the dot up or down
-    Position.y += Velocity.y * deltaTime ;
+    transform.Position.y += Velocity.y * deltaTime ;
 
     //If the dot went too far up or down or touched a wall
-    if( ( Position.y < 0 ) || ( Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
+    if( ( transform.Position.y < 0 ) || ( transform.Position.y + DOT_HEIGHT > level->tileMap.level_height) || touchesWall(level) )
     {
         //move back
-        Position.y -= Velocity.y * deltaTime;
+        transform.Position.y -= Velocity.y * deltaTime;
 
         //mark object for deletion
         Exists = false;
@@ -67,8 +67,8 @@ bool Bullet::touchesWall(Level* level)
         {
             auto bb = level->Tiles[i].getBox();//todo
             SDL_Rect box;
-            box.x = static_cast<int>(std::round(Position.x));
-            box.y = static_cast<int>(std::round(Position.y));
+            box.x = static_cast<int>(std::round(transform.Position.x));
+            box.y = static_cast<int>(std::round(transform.Position.y));
             box.w = DOT_WIDTH;
             box.h = DOT_HEIGHT;
 
@@ -83,8 +83,8 @@ bool Bullet::touchesWall(Level* level)
 
 void Bullet::Draw()
 {
-    texture.render(static_cast<int>(std::round(Position.x - game::viewports[0].camera.frame.x)),
-                   static_cast<int>(std::round(Position.y - game::viewports[0].camera.frame.y)),
+    texture.render(static_cast<int>(std::round(transform.Position.x - game::viewports[0].camera.frame.x)),
+                   static_cast<int>(std::round(transform.Position.y - game::viewports[0].camera.frame.y)),
                    nullptr,
                    RotationAngle.CurrentAngleDegrees);
 }
@@ -100,8 +100,8 @@ void Bullet::Draw(size_t viewportIndex)
     source_rect.h = static_cast<int>(round(texture.getHeight()));
 
     SDL_Rect dest_rect;
-    dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + Position.x/10));
-    dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + Position.y/10));
+    dest_rect.x = static_cast<int>(round(game::viewports[viewportIndex].frame.x + transform.Position.x/10));
+    dest_rect.y = static_cast<int>(round(game::viewports[viewportIndex].frame.y + transform.Position.y/10));
     dest_rect.w = static_cast<int>(round(texture.getWidth()/10));
     dest_rect.h = static_cast<int>(round(texture.getHeight()/10));
 

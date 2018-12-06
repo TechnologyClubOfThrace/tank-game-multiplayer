@@ -28,6 +28,7 @@
 #include "vector2d.h"
 #include "texture_wrapper.h"
 #include "collider2d.h"
+#include "transform.h"
 
 class GameObject
 {
@@ -42,7 +43,7 @@ public:
 
     std::vector<std::unique_ptr<Collider2D>> colliders;
 
-    Vector2D Position;
+    Transform transform;
     TextureWrapper texture;
 
     bool Exists = true;

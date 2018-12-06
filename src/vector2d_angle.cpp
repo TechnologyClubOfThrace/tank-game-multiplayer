@@ -22,8 +22,9 @@
 #include <iostream>
 #include <algorithm>
 
-Vector2DAngle::Vector2DAngle(double angleRadiansPerMilliSec) : AngleRadiansPerMilliSec(angleRadiansPerMilliSec)
+Vector2DAngle::Vector2DAngle()
 {
+    AngleRadiansPerMilliSec = 0;
     mCurrentAngleDirection = AngleDirection::None;
 }
 

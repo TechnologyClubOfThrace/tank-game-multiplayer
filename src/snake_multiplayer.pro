@@ -25,7 +25,8 @@ HEADERS += \
     collider2d.h \
     box_collider2d.h \
     polygon_collider2d.h \
-    tank.h
+    tank.h \
+    transform.h
 
 SOURCES += \
         main.cpp \
@@ -49,7 +50,8 @@ SOURCES += \
     collider2d.cpp \
     box_collider2d.cpp \
     polygon_collider2d.cpp \
-    tank.cpp
+    tank.cpp \
+    transform.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

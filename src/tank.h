@@ -60,7 +60,6 @@ public:
 
     Vector2D Velocity;
     Vector2D previousVelocity;
-    Vector2DAngle RotationVector;
 
     Level * level;
 

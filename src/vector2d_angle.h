@@ -40,7 +40,7 @@ class Vector2DAngle : public Vector2D
 {
 
 public:
-    Vector2DAngle(double angleRadiansPerMilliSec);
+    Vector2DAngle();
 
     double AngleRadiansPerMilliSec;//init from the constructor
 
