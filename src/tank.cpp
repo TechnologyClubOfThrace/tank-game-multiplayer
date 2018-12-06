@@ -198,6 +198,8 @@ void Tank::FireBullet()
         bullet->Velocity.x = -this->previousVelocity.x * 5;
         bullet->Velocity.y = -this->previousVelocity.y * 5;
         break;
+    case enumState::stopped:
+        break;//the tank cannot fire when game begins
     }
 
     bullet->RotationAngle = this->RotationVector;

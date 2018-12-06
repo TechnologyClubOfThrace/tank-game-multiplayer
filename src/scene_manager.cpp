@@ -12,7 +12,7 @@ SceneManager::SceneManager()
  */
 void SceneManager::LoadFirstScene(std::string tmxFilePath, std::string sceneLayerName)
 {
-
+    //implement a scene parser
 }
 
 /*
