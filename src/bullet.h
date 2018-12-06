@@ -1,12 +1,3 @@
-#ifndef BULLET_H
-#define BULLET_H
-
-#include <SDL.h>
-#include "texture_wrapper.h"
-#include "level.h"
-#include "vector2d.h"
-#include "vector2d_angle.h"
-#include "game_object.h"
 /* ***********************************************************************
  * Tank Game Multiplayer
  * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
@@ -26,6 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
+
+#ifndef BULLET_H
+#define BULLET_H
+
+#include <SDL.h>
+#include "texture_wrapper.h"
+#include "level.h"
+#include "vector2d.h"
+#include "vector2d_angle.h"
+#include "game_object.h"
 
 class Bullet : public GameObject
 {

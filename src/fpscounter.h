@@ -1,4 +1,3 @@
-#ifndef FPSCOUNTER_H
 /* ***********************************************************************
  * Tank Game Multiplayer
  * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
@@ -19,6 +18,7 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
+#ifndef FPSCOUNTER_H
 #define FPSCOUNTER_H
 
 //#include "iblabla.h"
