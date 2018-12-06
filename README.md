@@ -27,6 +27,6 @@ Yiannis Bourkelis - Developer
 
 Kostas Sarmidis - Developer
 
-Aris - Graphics
+Aris Triantafylloudis - Graphics
 
 Panos Doukas - Music
