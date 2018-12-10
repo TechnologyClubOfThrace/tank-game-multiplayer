@@ -25,6 +25,7 @@
 #include <iostream>
 #include <iterator>
 #include "game.h"
+#include "entity.h"
 
 GameEngine::GameEngine(int screenWidth, int screenHeight)
 {
@@ -105,6 +106,8 @@ bool GameEngine::Init()
         fpscounter.texture.WindowRenderer = WindowRenderer;
         fpscounter.LoadFont();
     }//Initialize TTF
+
+    renderSystem.renderer = WindowRenderer;
 
     Running = success;
     return success;
@@ -244,9 +247,19 @@ void GameEngine::Draw()
     //so that all other game objects are drawn on top
     level.Draw();
 
-    //Draw all other game objects
+    //Draw all game objects
     for (auto& gameObject : game::gameObjects){
         gameObject->Draw();
+    }
+
+    //Draw all entity objects
+    for (auto& entity : game::entityObjects){
+        if (entity->hasSpriteComponent){
+            //renderSystem
+            renderSystem.Render(*entity->transform_component,
+                                *entity->sprite_component,
+                                game::viewports);
+        }
     }
 
     level.DrawRadar();//todo

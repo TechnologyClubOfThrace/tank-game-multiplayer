@@ -27,6 +27,9 @@
 #include "fpscounter.h"
 #include <chrono>
 
+//systems
+#include "render_system.h"
+
 class GameEngine
 {
 public:
@@ -60,8 +63,10 @@ public:
     int ScreenWidth = 0;
     int ScreenHeight = 0;
 private:
-
     std::chrono::milliseconds::rep deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
+
+    //systems
+    RenderSystem renderSystem;
 };
 
 #endif // GAME_ENGINE_H
