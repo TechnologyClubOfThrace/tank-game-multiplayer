@@ -35,7 +35,6 @@ void GameObject::handleEvent(SDL_Event &e)
 
 void GameObject::Update(std::chrono::milliseconds::rep deltaTime)
 {
-
 }
 
 void GameObject::Draw()

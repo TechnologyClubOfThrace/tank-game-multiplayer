@@ -29,7 +29,7 @@
 
 Tank::Tank()
 {
-    //Initialize the collision box
+    //Initialize tank position in map
     transform.Position.x = 50;
     transform.Position.y = 50;
 

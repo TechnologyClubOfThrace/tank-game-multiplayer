@@ -26,10 +26,17 @@ class Vector2D
 {
 public:
     Vector2D();
+    Vector2D(double x, double y);
 
     double x = 0;
     double y = 0;
     void Rotate(const double angle);
+
+    //static functions
+    static Vector2D Up();
+    static Vector2D Down();
+    static Vector2D Left();
+    static Vector2D Right();
 };
 
 #endif // VECTOR2D_H

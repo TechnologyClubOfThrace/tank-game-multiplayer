@@ -148,7 +148,7 @@ void GameEngine::StartGameLoop()
         SDL_RenderClear(WindowRenderer);
         Draw();//draw the objects on screen
 
-        //this duration it took to process the game objects
+        //the duration it took to process the game objects
         deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
 
         //frame cap.
