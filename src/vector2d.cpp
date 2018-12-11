@@ -41,6 +41,67 @@ void Vector2D::Rotate( const double angle )
     y = yt;
 }
 
+double Vector2D::Magnitude() const
+{
+    return sqrt(x * x + y * y);
+}
+
+Vector2D Vector2D::operator*= ( const double scalar )
+{
+    Vector2D b;
+    b.x = this->x * scalar;
+    b.y = this->y * scalar;
+
+    return b;
+}
+
+Vector2D Vector2D::operator/= ( const double scalar )
+{
+    Vector2D b;
+    b.x = this->x / scalar;
+    b.y = this->y / scalar;
+
+    return b;
+}
+
+Vector2D Vector2D::operator* ( const double scalar )
+{
+    return *this *= scalar;
+}
+
+Vector2D Vector2D::operator/ ( const double scalar )
+{
+    return *this /= scalar;
+}
+
+
+Vector2D Vector2D::operator+= ( const double scalar )
+{
+    Vector2D b;
+    b.x = this->x + scalar;
+    b.y = this->y + scalar;
+
+    return b;
+}
+
+Vector2D Vector2D::operator+ ( const double scalar )
+{
+    return *this += scalar;
+}
+
+Vector2D Vector2D::operator+= ( const Vector2D &vector2d )
+{
+    this->x += vector2d.x;
+    this->y += vector2d.y;
+
+    return *this;
+}
+
+Vector2D Vector2D::operator+ ( const Vector2D &vector2d )
+{
+    return *this += vector2d;
+}
+
 Vector2D Vector2D::Up()
 {
     return Vector2D(0, -1);

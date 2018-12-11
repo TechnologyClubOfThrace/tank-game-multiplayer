@@ -30,7 +30,18 @@ public:
 
     double x = 0;
     double y = 0;
+
     void Rotate(const double angle);
+    double Magnitude() const;
+
+    Vector2D operator* ( const double scalar );
+    Vector2D operator/ ( const double scalar );
+    Vector2D operator*= ( const double scalar );
+    Vector2D operator/= ( const double scalar );
+    Vector2D operator+= ( const double scalar );
+    Vector2D operator+ ( const double scalar );
+    Vector2D operator+= ( const Vector2D &vector2d );
+    Vector2D operator+ ( const Vector2D &vector2d );
 
     //static functions
     static Vector2D Up();
