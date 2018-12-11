@@ -29,6 +29,8 @@
 
 //systems
 #include "render_system.h"
+#include "tank_input_system.h"
+#include "physics_system.h"
 
 class GameEngine
 {
@@ -67,6 +69,8 @@ private:
 
     //systems
     RenderSystem renderSystem;
+    TankInputSystem tankInputSystem;
+    PhysicsSystem physicsSystem;
 };
 
 #endif // GAME_ENGINE_H

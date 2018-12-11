@@ -7,8 +7,8 @@ RenderSystem::RenderSystem()
 
 void RenderSystem::Render(TransformComponent &transformComponent, SpriteComponent &spriteComponent, std::vector<ViewPort> &viewports)
 {
-    const SDL_Rect destinationRectangle = { static_cast<int>(round(transformComponent.Position.x - viewports[0].camera.frame.x)),
-                                            static_cast<int>(round(transformComponent.Position.y - viewports[0].camera.frame.y)),
+    const SDL_Rect destinationRectangle = { static_cast<int>(round(transformComponent.Position.x - static_cast<double>(viewports[0].camera.frame.x))),
+                                            static_cast<int>(round(transformComponent.Position.y - static_cast<double>(viewports[0].camera.frame.y))),
                                             spriteComponent.rect.w,
                                             spriteComponent.rect.h};
 

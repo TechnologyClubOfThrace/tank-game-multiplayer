@@ -203,6 +203,12 @@ void GameEngine::HandleEvents()
             gameObject->handleEvent(e);
         }
 
+        for (auto& entity : game::entityObjects){
+            if(entity->hasTankInputComponent){
+                tankInputSystem.handleEvent(e, *entity->tank_input_component);
+            }
+        }
+
         //A player might press the fire key and a new bullet game object
         //has to be created. It is placed in the gameObjects_for_addition vector
         //so that after returning fron the previous handleEvent call, it will be added to the
@@ -237,6 +243,24 @@ void GameEngine::Update()
         }else{
             ++it;
         }
+    }
+
+
+    for(auto it = game::entityObjects.begin(); it != game::entityObjects.end();)
+    {
+        //update game object
+        //Because after calling update on each object, the object might non need to exist any more
+        //it might mark itself for deletion (Exists=False), so we should remove it from the vector.
+        //To remove an item from the vector while iterating it, we should follow this method,
+        //using an iterator.
+        if((*it)->hasRigidBody2DComponent){
+            physicsSystem.Update(deltaTime,
+                                  *(*it)->transform_component,
+                                  *(*it)->tank_input_component,
+                                  *(*it)->rigid_body2d_component);
+        }
+
+        ++it;
     }
 }
 

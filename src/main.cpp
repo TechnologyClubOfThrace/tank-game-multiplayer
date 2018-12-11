@@ -111,6 +111,10 @@ int main()
     RenderSystem::CreateTextureFromFile("tank_133x50.png",
                                         game_engine.WindowRenderer,
                                         *tank_entity->sprite_component);
+    tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
+    tank_entity->hasTankInputComponent = true;
+    tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
+    tank_entity->hasRigidBody2DComponent = true;
     game::entityObjects.emplace_back(std::move(tank_entity));
 
     //start main game loop
