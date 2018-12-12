@@ -4,28 +4,22 @@ Tank game is a collaborative project by some members of the Technology Club Of T
 
 
 # Controls
-A     -> Move left
+A     -> Rotate left
 
-D     -> Move right
+D     -> Rotate right
 
-W     -> Move up
+W     -> Move forward
 
-S     -> Move down
-
-Q     -> Move forward / backwards
-
-Z     -> Stop / move
-
-M     -> Move fast
+S     -> Move backwards
 
 Space -> Fire
 
 # Development Team
-Chris - Developer
+Chris Paraskevas - Developer
 
 Yiannis Bourkelis - Developer
 
-Kostas Sarmidis - Developer
+Constantine Sarmidis - Developer
 
 Aris Triantafylloudis - Graphics
 

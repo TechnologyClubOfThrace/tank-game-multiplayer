@@ -1,6 +1,8 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
- * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
+ * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
+ * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
+ * (C) 2018 by Constantine Sarmidis   (hello@andama.org)
  *
  * This file is part of Tank Game Multiplayer.
  *
