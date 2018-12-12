@@ -34,6 +34,50 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                            RigidBody2DComponent &rigidBody2dComponent)
 {
     switch (tankInputComponent.state) {
+    case State::stopped:
+        break;
+
+    case State::stoppedRotationClockwise:
+        {
+        rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+
+        if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+            if(rigidBody2dComponent.AngularVelocityMagnitude < rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                    rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
+                    rigidBody2dComponent.isAngularAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.RotationAngleDegrees +=
+                rigidBody2dComponent.AngularVelocityMagnitude * static_cast<double>(deltaTime)
+                + 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime * deltaTime);
+        }
+        break;
+
+
+    case State::stoppedRotationCounterClockwise:
+        {
+        rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+
+        if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+            if(rigidBody2dComponent.AngularVelocityMagnitude < rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                    rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
+                    rigidBody2dComponent.isAngularAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.RotationAngleDegrees +=
+                rigidBody2dComponent.AngularVelocityMagnitude * static_cast<double>(deltaTime)
+                - 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime * deltaTime);
+        }
+        break;
+
     case State::moveForward:
     {
         if(!rigidBody2dComponent.isAccelerationfrozen){
@@ -44,13 +88,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                     rigidBody2dComponent.isAccelerationfrozen=true;
                 }
             }
-
         }
 
         transformComponent.Position += rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
-        //rigidBody2dComponent.Velocity
     }
-            break;
+    break;
 
     case State::moveBackwards:
     {
@@ -69,14 +111,139 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     }
     break;
 
-    case State::stoppedRotationClockwise:
-        double prevRotDegr = transformComponent.RotationAngleDegrees;
-        transformComponent.RotationAngleDegrees += rigidBody2dComponent.AngularVelocityMagnitude * deltaTime;
-        rigidBody2dComponent.Velocity.Rotate((transformComponent.RotationAngleDegrees - prevRotDegr) * M_PI / 180 );
-        transformComponent.Position += rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
+    case State::forwardRotationClockwise:
+    {
+        //rotation
+        rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
 
-        if(transformComponent.RotationAngleDegrees > 360){
-            transformComponent.RotationAngleDegrees -= 360;
+        if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+            if(rigidBody2dComponent.AngularVelocityMagnitude < rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                    rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
+                    rigidBody2dComponent.isAngularAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.RotationAngleDegrees +=
+                rigidBody2dComponent.AngularVelocityMagnitude * static_cast<double>(deltaTime)
+                + 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime * deltaTime);
+
+        //forward
+        if(!rigidBody2dComponent.isAccelerationfrozen){
+            if(rigidBody2dComponent.Velocity.Magnitude() < rigidBody2dComponent.MaxVelocityMagnitude){
+                rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
+                    rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
+                    rigidBody2dComponent.isAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.Position += rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
+        }
+        break;
+
+    case State::forwardRotationCounterClockwise:
+    {
+        //rotation
+        rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+
+        if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+            if(rigidBody2dComponent.AngularVelocityMagnitude < rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                    rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
+                    rigidBody2dComponent.isAngularAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.RotationAngleDegrees +=
+                rigidBody2dComponent.AngularVelocityMagnitude * static_cast<double>(deltaTime)
+                - 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime * deltaTime);
+
+        //forward
+        if(!rigidBody2dComponent.isAccelerationfrozen){
+            if(rigidBody2dComponent.Velocity.Magnitude() < rigidBody2dComponent.MaxVelocityMagnitude){
+                rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
+                    rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
+                    rigidBody2dComponent.isAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.Position += rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
+        }
+        break;
+
+    case State::backwardsRotationClockwise:
+    {
+        //rotation
+        rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+
+        if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+            if(rigidBody2dComponent.AngularVelocityMagnitude < rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                    rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
+                    rigidBody2dComponent.isAngularAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.RotationAngleDegrees +=
+                rigidBody2dComponent.AngularVelocityMagnitude * static_cast<double>(deltaTime)
+                + 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime * deltaTime);
+
+        //forward
+        if(!rigidBody2dComponent.isAccelerationfrozen){
+            if(rigidBody2dComponent.Velocity.Magnitude() < rigidBody2dComponent.MaxVelocityMagnitude){
+                rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
+                    rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
+                    rigidBody2dComponent.isAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.Position -= rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
+        }
+        break;
+
+    case State::backwardsRotationCounterClockwise:
+    {
+        //rotation
+        rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+
+        if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+            if(rigidBody2dComponent.AngularVelocityMagnitude < rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
+                    rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
+                    rigidBody2dComponent.isAngularAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.RotationAngleDegrees +=
+                rigidBody2dComponent.AngularVelocityMagnitude * static_cast<double>(deltaTime)
+                - 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * static_cast<double>(deltaTime * deltaTime);
+
+        //forward
+        if(!rigidBody2dComponent.isAccelerationfrozen){
+            if(rigidBody2dComponent.Velocity.Magnitude() < rigidBody2dComponent.MaxVelocityMagnitude){
+                rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
+                    rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
+                    rigidBody2dComponent.isAccelerationfrozen=true;
+                }
+            }
+        }
+
+        transformComponent.Position -= rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
         }
         break;
 

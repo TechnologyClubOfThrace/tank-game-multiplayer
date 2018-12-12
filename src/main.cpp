@@ -117,6 +117,7 @@ int main()
     tank_entity->hasRigidBody2DComponent = true;
     tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->Mass = 10000;
+    tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
 
     game::entityObjects.emplace_back(std::move(tank_entity));
 
