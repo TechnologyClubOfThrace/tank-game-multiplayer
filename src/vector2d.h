@@ -33,6 +33,7 @@ public:
 
     //functions
     void Rotate(const double angle);
+    void SetMagnitude(const double newMagnitudes);
     double Magnitude() const;
 
     //operators

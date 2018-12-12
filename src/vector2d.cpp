@@ -41,6 +41,13 @@ void Vector2D::Rotate( const double angle )
     y = yt;
 }
 
+void Vector2D::SetMagnitude(const double newMagnitudes)
+{
+    double mag = this->Magnitude();
+    this->x = this->x * newMagnitudes / mag;
+    this->y = this->y * newMagnitudes / mag;
+}
+
 double Vector2D::Magnitude() const
 {
     return sqrt(x * x + y * y);
