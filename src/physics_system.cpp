@@ -31,10 +31,29 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         transformComponent.Position += rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
         //rigidBody2dComponent.Velocity
     }
-        break;
+            break;
+
     case State::moveBackwards:
-        transformComponent.Position.x -= deltaTime*0.05;
-        break;
+    {
+        if(!rigidBody2dComponent.isAccelerationfrozen){
+            //transformComponent.Position.x += deltaTime*0.05;
+            Vector2D acceleration (0.000025,0); //= rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+            //double deltaSeconds =  static_cast<double>(deltaTime) / 1000;
+
+            if(rigidBody2dComponent.Velocity.Magnitude() < 0.10){
+                rigidBody2dComponent.Velocity += acceleration * static_cast<double>(deltaTime);
+                if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
+                    rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
+                    rigidBody2dComponent.isAccelerationfrozen = true;
+                }
+            }
+
+        }
+
+        transformComponent.Position -= rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
     }
+                break;
+
+    }//switch
 
 }

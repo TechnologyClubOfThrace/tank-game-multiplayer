@@ -121,6 +121,14 @@ Vector2D Vector2D::operator+(const Vector2D &vector2d) const
     return out;
 }
 
+Vector2D& Vector2D::operator-=(const Vector2D &vector2d)
+{
+    this->x -= vector2d.x;
+    this->y -= vector2d.y;
+
+    return *this;
+}
+
 Vector2D Vector2D::Up()
 {
     return Vector2D(0, -1);
