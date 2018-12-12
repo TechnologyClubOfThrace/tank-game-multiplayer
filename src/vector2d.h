@@ -31,17 +31,19 @@ public:
     double x = 0;
     double y = 0;
 
+    //functions
     void Rotate(const double angle);
     double Magnitude() const;
 
-    Vector2D operator* ( const double scalar );
-    Vector2D operator/ ( const double scalar );
-    Vector2D operator*= ( const double scalar );
-    Vector2D operator/= ( const double scalar );
-    Vector2D operator+= ( const double scalar );
-    Vector2D operator+ ( const double scalar );
-    Vector2D operator+= ( const Vector2D &vector2d );
-    Vector2D operator+ ( const Vector2D &vector2d );
+    //operators
+    Vector2D& operator*= (const double scalar);
+    Vector2D operator* (const double scalar) const;
+    Vector2D& operator/= (const double scalar);
+    Vector2D operator/ (const double scalar) const;
+    Vector2D& operator+= (const double scalar);
+    Vector2D operator+ (const double scalar) const;
+    Vector2D& operator+= (const Vector2D &vector2d);
+    Vector2D operator+ (const Vector2D &vector2d) const;
 
     //static functions
     static Vector2D Up();

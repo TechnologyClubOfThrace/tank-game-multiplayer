@@ -46,50 +46,58 @@ double Vector2D::Magnitude() const
     return sqrt(x * x + y * y);
 }
 
-Vector2D Vector2D::operator*= ( const double scalar )
+Vector2D& Vector2D::operator*=(const double scalar)
 {
-    Vector2D b;
-    b.x = this->x * scalar;
-    b.y = this->y * scalar;
+    this->x *= scalar;
+    this->y *= scalar;
 
-    return b;
+    return *this;
 }
 
-Vector2D Vector2D::operator/= ( const double scalar )
+Vector2D Vector2D::operator*(const double scalar) const
 {
-    Vector2D b;
-    b.x = this->x / scalar;
-    b.y = this->y / scalar;
-
-    return b;
+    Vector2D out;
+    out.x = this->x * scalar;
+    out.y = this->y * scalar;
+    return out;
 }
 
-Vector2D Vector2D::operator* ( const double scalar )
+Vector2D& Vector2D::operator/=(const double scalar)
 {
-    return *this *= scalar;
-}
+    this->x /= scalar;
+    this->y /= scalar;
 
-Vector2D Vector2D::operator/ ( const double scalar )
-{
-    return *this /= scalar;
+    return *this;
 }
 
 
-Vector2D Vector2D::operator+= ( const double scalar )
+Vector2D Vector2D::operator/(const double scalar) const
 {
-    Vector2D b;
-    b.x = this->x + scalar;
-    b.y = this->y + scalar;
-
-    return b;
+    Vector2D out;
+    out.x = this->x / scalar;
+    out.y = this->y / scalar;
+    return out;
 }
 
-Vector2D Vector2D::operator+ ( const double scalar )
+
+Vector2D& Vector2D::operator+=(const double scalar)
 {
-    return *this += scalar;
+    this->x += scalar;
+    this->y += scalar;
+
+    return *this;
 }
 
-Vector2D Vector2D::operator+= ( const Vector2D &vector2d )
+Vector2D Vector2D::operator+(const double scalar) const
+{
+    Vector2D out;
+    out.x = this->x + scalar;
+    out.y = this->y + scalar;
+
+    return out;
+}
+
+Vector2D& Vector2D::operator+=(const Vector2D &vector2d)
 {
     this->x += vector2d.x;
     this->y += vector2d.y;
@@ -97,9 +105,13 @@ Vector2D Vector2D::operator+= ( const Vector2D &vector2d )
     return *this;
 }
 
-Vector2D Vector2D::operator+ ( const Vector2D &vector2d )
+Vector2D Vector2D::operator+(const Vector2D &vector2d) const
 {
-    return *this += vector2d;
+    Vector2D out;
+    out.x = this->x + vector2d.x;
+    out.y = this->y + vector2d.y;
+
+    return out;
 }
 
 Vector2D Vector2D::Up()
