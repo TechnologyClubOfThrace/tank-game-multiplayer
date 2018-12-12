@@ -33,6 +33,7 @@ public:
     TankInputSystem();
 
     void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
+    void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
 };
 
 #endif // TANK_INPUT_SYSTEM_H

@@ -31,7 +31,9 @@ public:
     RigidBody2DComponent();
 
     Vector2D Velocity{0,0};
-    double MaxVelocityMagnitude = 50;
+    double AngularVelocityMagnitude {0.06}; // degrees/ms
+    Vector2D Acceleration {0.0003,0}; // pixels/ms^2
+    double MaxVelocityMagnitude = 0.10; // pixels/ms
     Vector2D Force;
 
     bool isAccelerationfrozen = false;

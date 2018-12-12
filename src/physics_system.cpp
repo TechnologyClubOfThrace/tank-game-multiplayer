@@ -21,6 +21,7 @@
  * ***********************************************************************/
 
 #include "physics_system.h"
+#include <math.h>
 
 PhysicsSystem::PhysicsSystem()
 {
@@ -36,12 +37,8 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     case State::moveForward:
     {
         if(!rigidBody2dComponent.isAccelerationfrozen){
-            //transformComponent.Position.x += deltaTime*0.05;
-            Vector2D acceleration (0.000025,0); //= rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
-            //double deltaSeconds =  static_cast<double>(deltaTime) / 1000;
-
-            if(rigidBody2dComponent.Velocity.Magnitude() < 0.10){
-                rigidBody2dComponent.Velocity += acceleration * static_cast<double>(deltaTime);
+            if(rigidBody2dComponent.Velocity.Magnitude() < rigidBody2dComponent.MaxVelocityMagnitude){
+                rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
                 if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
                     rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
                     rigidBody2dComponent.isAccelerationfrozen=true;
@@ -58,12 +55,8 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     case State::moveBackwards:
     {
         if(!rigidBody2dComponent.isAccelerationfrozen){
-            //transformComponent.Position.x += deltaTime*0.05;
-            Vector2D acceleration (0.000025,0); //= rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
-            //double deltaSeconds =  static_cast<double>(deltaTime) / 1000;
-
-            if(rigidBody2dComponent.Velocity.Magnitude() < 0.10){
-                rigidBody2dComponent.Velocity += acceleration * static_cast<double>(deltaTime);
+            if(rigidBody2dComponent.Velocity.Magnitude() < rigidBody2dComponent.MaxVelocityMagnitude){
+                rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
                 if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
                     rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
                     rigidBody2dComponent.isAccelerationfrozen = true;
@@ -74,7 +67,18 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
 
         transformComponent.Position -= rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
     }
-                break;
+    break;
+
+    case State::stoppedRotationClockwise:
+        double prevRotDegr = transformComponent.RotationAngleDegrees;
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.AngularVelocityMagnitude * deltaTime;
+        rigidBody2dComponent.Velocity.Rotate((transformComponent.RotationAngleDegrees - prevRotDegr) * M_PI / 180 );
+        transformComponent.Position += rigidBody2dComponent.Velocity * static_cast<double>(deltaTime);
+
+        if(transformComponent.RotationAngleDegrees > 360){
+            transformComponent.RotationAngleDegrees -= 360;
+        }
+        break;
 
     }//switch
 

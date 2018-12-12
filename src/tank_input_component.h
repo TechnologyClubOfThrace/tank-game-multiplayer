@@ -27,7 +27,8 @@ enum class State
 {
     stopped,
     moveForward,
-    moveBackwards
+    moveBackwards,
+    stoppedRotationClockwise
 };
 
 class TankInputComponent

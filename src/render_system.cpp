@@ -38,7 +38,7 @@ void RenderSystem::Render(TransformComponent &transformComponent, SpriteComponen
                      spriteComponent.texture,
                      &spriteComponent.rect,//source rectangle
                      &destinationRectangle,//destination rectangle
-                     0,//angle
+                     transformComponent.RotationAngleDegrees,//angle
                      nullptr,//center
                      SDL_RendererFlip::SDL_FLIP_NONE
                 );

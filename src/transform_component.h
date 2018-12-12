@@ -33,7 +33,7 @@ public:
 
     Vector2D Position;
     Vector2D Scale;
-    double RotationAngle;
+    double RotationAngleDegrees = 0;
 };
 
 #endif // TRANSFORM_COMPONENT_H
