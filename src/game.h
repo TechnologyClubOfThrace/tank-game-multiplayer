@@ -25,6 +25,8 @@
 #include "game_object.h"
 #include "viewport.h"
 
+#include "entity.h"
+
 class game
 {
 public:
@@ -32,6 +34,7 @@ public:
 
     //vector of all game objects
     static std::vector<std::unique_ptr<GameObject>> gameObjects;
+    static std::vector<std::unique_ptr<Entity>> entityObjects;
 
     //vector of any objects that should be added to the gameObjects vector
     //like bullets fired etc

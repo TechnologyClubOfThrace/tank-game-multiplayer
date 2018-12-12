@@ -23,6 +23,8 @@
 #include "game_engine.h"
 #include "game.h"
 
+#include "tank_entity.h"
+
 using namespace std;
 
 #undef main
@@ -99,6 +101,23 @@ int main()
     tank->level = &game_engine.level;
     game::gameObjects.emplace_back(std::move(tank));
 
+    auto tank_entity = std::make_unique<TankEntity>();
+    tank_entity->transform_component = std::make_unique<TransformComponent>();
+    tank_entity->transform_component->Position.x = 100;
+    tank_entity->transform_component->Position.y = 100;
+    tank_entity->hasTransformComponent = true;
+    tank_entity->sprite_component = std::make_unique<SpriteComponent>();
+    tank_entity->hasSpriteComponent = true;
+    RenderSystem::CreateTextureFromFile("tank_133x50.png",
+                                        game_engine.WindowRenderer,
+                                        *tank_entity->sprite_component);
+    tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
+    tank_entity->hasTankInputComponent = true;
+    tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
+    tank_entity->hasRigidBody2DComponent = true;
+    tank_entity->rigid_body2d_component->Mass = 10000;
+
+    game::entityObjects.emplace_back(std::move(tank_entity));
 
     //start main game loop
     game_engine.StartGameLoop();

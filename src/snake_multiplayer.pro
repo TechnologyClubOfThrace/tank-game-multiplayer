@@ -26,7 +26,17 @@ HEADERS += \
     box_collider2d.h \
     polygon_collider2d.h \
     tank.h \
-    transform.h
+    transform.h \
+    entity.h \
+    component.h \
+    transform_component.h \
+    tank_entity.h \
+    sprite_component.h \
+    render_system.h \
+    tank_input_component.h \
+    tank_input_system.h \
+    rigid_body2d_component.h \
+    physics_system.h
 
 SOURCES += \
         main.cpp \
@@ -51,7 +61,17 @@ SOURCES += \
     box_collider2d.cpp \
     polygon_collider2d.cpp \
     tank.cpp \
-    transform.cpp
+    transform.cpp \
+    entity.cpp \
+    component.cpp \
+    transform_component.cpp \
+    tank_entity.cpp \
+    sprite_component.cpp \
+    render_system.cpp \
+    tank_input_component.cpp \
+    tank_input_system.cpp \
+    rigid_body2d_component.cpp \
+    physics_system.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
@@ -98,12 +118,12 @@ windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4\\include
 }
 
 
-mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.8/lib -lSDL2
+mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.9/lib -lSDL2
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_image/2.0.4/lib -lSDL2_image
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
 #mac: LIBS += -L$$/usr/local/Cellar/sdl2_mixer/2.0.4/lib -lSDL2_mixer
 
-mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.8/include/SDL2
+mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.9/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_ttf/2.0.14/include/SDL2
 #INCLUDEPATH += /usr/local/Cellar/sdl2_mixer/2.0.4/include/SDL2
