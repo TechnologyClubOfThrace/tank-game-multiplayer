@@ -105,16 +105,12 @@ int main()
     tank_entity->transform_component = std::make_unique<TransformComponent>();
     tank_entity->transform_component->Position.x = 100;
     tank_entity->transform_component->Position.y = 100;
-    tank_entity->hasTransformComponent = true;
     tank_entity->sprite_component = std::make_unique<SpriteComponent>();
-    tank_entity->hasSpriteComponent = true;
     RenderSystem::CreateTextureFromFile("tank_133x50.png",
                                         game_engine.WindowRenderer,
                                         *tank_entity->sprite_component);
     tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
-    tank_entity->hasTankInputComponent = true;
     tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
-    tank_entity->hasRigidBody2DComponent = true;
     tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->Mass = 10000;
     tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;

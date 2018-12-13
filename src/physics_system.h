@@ -37,6 +37,8 @@ public:
                 TransformComponent &transformComponent,
                 const TankInputComponent &tankInputComponent,
                 RigidBody2DComponent &rigidBody2dComponent);
+    void UpdateRotation(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
+    void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
 };
 
 #endif // PHYSICS_SYSTEM_H

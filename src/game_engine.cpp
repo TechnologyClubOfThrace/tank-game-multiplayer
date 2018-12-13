@@ -206,7 +206,7 @@ void GameEngine::HandleEvents()
         }
 
         for (auto& entity : game::entityObjects){
-            if(entity->hasTankInputComponent){
+            if(entity->tank_input_component){
                 tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component);
             }
         }
@@ -255,7 +255,7 @@ void GameEngine::Update()
         //it might mark itself for deletion (Exists=False), so we should remove it from the vector.
         //To remove an item from the vector while iterating it, we should follow this method,
         //using an iterator.
-        if((*it)->hasRigidBody2DComponent){
+        if((*it)->rigid_body2d_component){
             physicsSystem.Update(deltaTime,
                                   *(*it)->transform_component,
                                   *(*it)->tank_input_component,
@@ -280,7 +280,7 @@ void GameEngine::Draw()
 
     //Draw all entity objects
     for (auto& entity : game::entityObjects){
-        if (entity->hasSpriteComponent){
+        if (entity->sprite_component){
             //renderSystem
             renderSystem.Render(*entity->transform_component,
                                 *entity->sprite_component,

@@ -36,10 +36,10 @@ public:
     ~Entity();
 
     //component flags
-    bool hasTransformComponent = false;
-    bool hasSpriteComponent = false;
-    bool hasTankInputComponent = false;
-    bool hasRigidBody2DComponent = false;
+    //bool hasTransformComponent = false;
+    //bool hasSpriteComponent = false;
+    //bool hasTankInputComponent = false;
+    //bool hasRigidBody2DComponent = false;
 
     //components
     std::unique_ptr<TransformComponent> transform_component;
