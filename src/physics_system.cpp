@@ -112,6 +112,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         //forward
         UpdatePosition(deltaTime, rigidBody2dComponent);
 
+        rigidBody2dComponent.Velocity.Rotate(transformComponent.RotationAngleDegrees * M_PI / 180);
         transformComponent.Position += rigidBody2dComponent.Velocity * deltaTime;
         }
         break;
