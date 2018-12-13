@@ -23,7 +23,12 @@
 #ifndef PHYSICS_SYSTEM_H
 #define PHYSICS_SYSTEM_H
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES
+#endif
+
 #include <chrono>
+#include <cmath>
 #include "rigid_body2d_component.h"
 #include "transform_component.h"
 #include "tank_input_component.h"
@@ -37,7 +42,7 @@ public:
                 TransformComponent &transformComponent,
                 const TankInputComponent &tankInputComponent,
                 RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateRotation(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
+    void UpdateRotation(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
     void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
 };
 
