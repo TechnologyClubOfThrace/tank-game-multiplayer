@@ -84,6 +84,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             tankInputComponent.state = State::stopped;
         }
         break;
+        case SDLK_a:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+            rigidBody2dComponent.isAccelerationfrozen = false;
+            tankInputComponent.state = State::stoppedRotationCounterClockwise;
+        }
+        break;
         }
         break;
 
@@ -100,6 +106,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
             rigidBody2dComponent.isAccelerationfrozen = false;
             tankInputComponent.state = State::backwardsRotationCounterClockwise;
+        }
+        break;
+        case SDLK_d:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+            rigidBody2dComponent.isAccelerationfrozen = false;
+            tankInputComponent.state = State::stoppedRotationClockwise;
         }
         break;
         case SDLK_a:

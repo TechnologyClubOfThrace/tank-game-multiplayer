@@ -21,7 +21,7 @@
  * ***********************************************************************/
 
 #include "vector2d.h"
-#include <math.h>
+#include <cmath>
 
 Vector2D::Vector2D()
 {
@@ -58,7 +58,7 @@ void Vector2D::SetMagnitude(const double newMagnitudes)
 
 double Vector2D::Magnitude() const
 {
-    return sqrt(x * x + y * y);
+    return sqrt(std::pow(x, 2) + std::pow(y, 2));
 }
 
 Vector2D& Vector2D::operator*=(const double scalar)
