@@ -116,7 +116,7 @@ bool GameEngine::Init()
 }
 
 //loads the game map
-bool GameEngine::LoadMap(TileMap tile_map, Spritesheet spritesheet)
+bool GameEngine::LoadMap(const TileMap &tile_map, Spritesheet &spritesheet)
 {
     //set the renderer used to draw map sprites
     level.spritesheet_texture.WindowRenderer = WindowRenderer;
@@ -260,6 +260,10 @@ void GameEngine::Update()
                                   *(*it)->transform_component,
                                   *(*it)->tank_input_component,
                                   *(*it)->rigid_body2d_component);
+
+            game::viewports[0].camera.followEntityObject( *(*it)->transform_component,
+                                                          *(*it)->sprite_component,
+                                                          864, 608);
         }
 
         ++it;

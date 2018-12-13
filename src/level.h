@@ -32,7 +32,7 @@ class Level : public GameObject
 public:
     Level();
 
-    int LoadMapTiles(TileMap _tile_map, Spritesheet spritesheet);
+    int LoadMapTiles(const TileMap &_tile_map, Spritesheet &spritesheet);
 
     void handleEvent(SDL_Event &e);
     void Draw();

@@ -36,7 +36,8 @@ HEADERS += \
     tank_input_component.h \
     tank_input_system.h \
     rigid_body2d_component.h \
-    physics_system.h
+    physics_system.h \
+    shared_sprite_component.h
 
 SOURCES += \
         main.cpp \
@@ -71,7 +72,8 @@ SOURCES += \
     tank_input_component.cpp \
     tank_input_system.cpp \
     rigid_body2d_component.cpp \
-    physics_system.cpp
+    physics_system.cpp \
+    shared_sprite_component.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

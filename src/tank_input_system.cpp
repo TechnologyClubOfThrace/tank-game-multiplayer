@@ -134,6 +134,11 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             tankInputComponent.state = State::stopped;
         }
         break;
+        case SDLK_s:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+            tankInputComponent.state = State::moveBackwards;
+        }
+        break;
         case SDLK_d:
         if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
             tankInputComponent.state = State::forwardRotationClockwise;
@@ -155,6 +160,11 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             rigidBody2dComponent.Velocity.setZeroMagnitude();
             rigidBody2dComponent.AngularVelocityMagnitude = 0;
             tankInputComponent.state = State::stopped;
+        }
+        break;
+        case SDLK_w:
+        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+            tankInputComponent.state = State::moveForward;
         }
         break;
         case SDLK_d:
