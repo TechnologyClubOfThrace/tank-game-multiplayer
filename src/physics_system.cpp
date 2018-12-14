@@ -46,9 +46,10 @@ void PhysicsSystem::UpdateRotation(const std::chrono::milliseconds::rep &deltaTi
 void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {
     if(!rigidBody2dComponent.isAccelerationfrozen){
-        rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * deltaTime;
+        rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
 
         if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
+            std::cout << "will call rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude)" << std::endl;
             rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude);
             rigidBody2dComponent.isAccelerationfrozen = true;
         }
@@ -68,11 +69,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         {
         UpdateRotation(deltaTime, rigidBody2dComponent);
 
-        transformComponent.deltaRotationAngleeDegrees =
+        rigidBody2dComponent.deltaRotationAngleeDegrees =
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-        transformComponent.RotationAngleDegrees += transformComponent.deltaRotationAngleeDegrees;
-        rigidBody2dComponent.Velocity.Rotate(transformComponent.deltaRotationAngleeDegrees * M_PI / 180);
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+        rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
         }
         break;
 
@@ -81,11 +82,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         {
         UpdateRotation(deltaTime, rigidBody2dComponent);
 
-        transformComponent.deltaRotationAngleeDegrees =
+        rigidBody2dComponent.deltaRotationAngleeDegrees =
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime -
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-        transformComponent.RotationAngleDegrees += transformComponent.deltaRotationAngleeDegrees;
-        rigidBody2dComponent.Velocity.Rotate(transformComponent.deltaRotationAngleeDegrees * M_PI / 180);
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+        rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
         }
         break;
 
@@ -93,6 +94,8 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     {
         UpdatePosition(deltaTime, rigidBody2dComponent);
         transformComponent.Position += rigidBody2dComponent.Velocity * deltaTime;
+        std::cout << "x: " << transformComponent.Position.x << ", y: " << transformComponent.Position.y << std::endl;
+        std::cout << "velocity x: " << rigidBody2dComponent.Velocity.x << ", velocity y: " << rigidBody2dComponent.Velocity.y << std::endl;
     }
     break;
 
@@ -108,11 +111,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         //rotation
         UpdateRotation(deltaTime, rigidBody2dComponent);
 
-        transformComponent.deltaRotationAngleeDegrees =
+        rigidBody2dComponent.deltaRotationAngleeDegrees =
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-        transformComponent.RotationAngleDegrees += transformComponent.deltaRotationAngleeDegrees;
-        rigidBody2dComponent.Velocity.Rotate(transformComponent.deltaRotationAngleeDegrees * M_PI / 180);
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+        rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
 
         //forward
         UpdatePosition(deltaTime, rigidBody2dComponent);
@@ -126,11 +129,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         //rotation
         UpdateRotation(deltaTime, rigidBody2dComponent);
 
-        transformComponent.deltaRotationAngleeDegrees =
+        rigidBody2dComponent.deltaRotationAngleeDegrees =
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime -
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-        transformComponent.RotationAngleDegrees += transformComponent.deltaRotationAngleeDegrees;
-        rigidBody2dComponent.Velocity.Rotate(transformComponent.deltaRotationAngleeDegrees * M_PI / 180);
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+        rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
 
         //forward
         UpdatePosition(deltaTime, rigidBody2dComponent);
@@ -144,11 +147,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         //rotation
         UpdateRotation(deltaTime, rigidBody2dComponent);
 
-        transformComponent.deltaRotationAngleeDegrees =
+        rigidBody2dComponent.deltaRotationAngleeDegrees =
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-        transformComponent.RotationAngleDegrees += transformComponent.deltaRotationAngleeDegrees;
-        rigidBody2dComponent.Velocity.Rotate(transformComponent.deltaRotationAngleeDegrees * M_PI / 180);
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+        rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
 
         //forward
         UpdatePosition(deltaTime, rigidBody2dComponent);
@@ -162,11 +165,11 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         //rotation
         UpdateRotation(deltaTime, rigidBody2dComponent);
 
-        transformComponent.deltaRotationAngleeDegrees =
+        rigidBody2dComponent.deltaRotationAngleeDegrees =
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime -
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-        transformComponent.RotationAngleDegrees += transformComponent.deltaRotationAngleeDegrees;
-        rigidBody2dComponent.Velocity.Rotate(transformComponent.deltaRotationAngleeDegrees * M_PI / 180);
+        transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+        rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
 
         //forward
         UpdatePosition(deltaTime, rigidBody2dComponent);

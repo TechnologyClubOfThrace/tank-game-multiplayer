@@ -29,6 +29,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <iostream>
 #include "rigid_body2d_component.h"
 #include "transform_component.h"
 #include "tank_input_component.h"

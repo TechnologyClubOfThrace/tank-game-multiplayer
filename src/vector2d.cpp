@@ -51,9 +51,9 @@ void Vector2D::setZeroMagnitude()
 
 void Vector2D::SetMagnitude(const double newMagnitudes)
 {
-    double mag = this->Magnitude();
-    this->x = this->x * newMagnitudes / mag;
-    this->y = this->y * newMagnitudes / mag;
+    double mag = newMagnitudes / this->Magnitude();
+    this->x = this->x * mag;
+    this->y = this->y * mag;
 }
 
 double Vector2D::Magnitude() const

@@ -37,6 +37,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
             rigidBody2dComponent.isAccelerationfrozen = false;
             rigidBody2dComponent.AngularVelocityMagnitude = 0;
+            //rigidBody2dComponent.deltaRotationAngleeDegrees = 0;
             tankInputComponent.state = State::moveForward;
         }
         break;

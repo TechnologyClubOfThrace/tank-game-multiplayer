@@ -34,7 +34,6 @@ public:
     Vector2D Position;
     Vector2D Scale;
     double RotationAngleDegrees = 0;
-    double deltaRotationAngleeDegrees = 0; //the most recent rotation degrees that increased the RotationAngleDegrees
 };
 
 #endif // TRANSFORM_COMPONENT_H

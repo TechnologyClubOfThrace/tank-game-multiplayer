@@ -39,6 +39,7 @@ public:
     Vector2D Acceleration {0.0003,0}; // pixels/ms^2
     double MaxVelocityMagnitude = 0.10; // pixels/ms
     Vector2D Force;
+    double deltaRotationAngleeDegrees = 0; //the most recent rotation degrees that increased the RotationAngleDegrees
 
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
