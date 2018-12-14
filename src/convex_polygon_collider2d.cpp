@@ -1,6 +1,8 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
- * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
+ * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
+ * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
+ * (C) 2018 by Constantine Sarmidis
  *
  * This file is part of Tank Game Multiplayer.
  *
@@ -18,9 +20,8 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
-#include "box_collider2d.h"
+#include "convex_polygon_collider2d.h"
 
-BoxCollider2D::BoxCollider2D()
+ConvexPolygonCollider2D::ConvexPolygonCollider2D() : Collider2D(Collider2DType::ConvexPolygonColider2D)
 {
-
 }

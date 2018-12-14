@@ -1,6 +1,8 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
- * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
+ * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
+ * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
+ * (C) 2018 by Constantine Sarmidis
  *
  * This file is part of Tank Game Multiplayer.
  *
@@ -18,14 +20,19 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
-#include "polygon_collider2d.h"
+#ifndef COLLIDER2D_COLLECTION_COMPONENT_H
+#define COLLIDER2D_COLLECTION_COMPONENT_H
 
-PolygonCollider2D::PolygonCollider2D()
+#include <vector>
+#include "component.h"
+#include "collider2d.h"
+
+class Collider2DCollectionComponent : public Component
 {
+public:
+    Collider2DCollectionComponent();
 
-}
+    std::vector<Collider2D> colliders;
+};
 
-bool PolygonCollider2D::isTouching(Collider2D collider)
-{
-    return false;
-}
+#endif // COLLIDER2D_COLLECTION_COMPONENT_H

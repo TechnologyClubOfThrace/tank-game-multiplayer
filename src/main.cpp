@@ -1,6 +1,8 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
- * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
+ * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
+ * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
+ * (C) 2018 by Constantine Sarmidis
  *
  * This file is part of Tank Game Multiplayer.
  *
@@ -114,6 +116,8 @@ int main()
     tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->Mass = 10000;
     tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
+    tank_entity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();
+
 
     game::entityObjects.emplace_back(std::move(tank_entity));
 

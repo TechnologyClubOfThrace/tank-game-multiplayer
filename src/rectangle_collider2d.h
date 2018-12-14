@@ -20,18 +20,15 @@
  * along with Tank Game Multiplayer.  If not, see <http://www.gnu.org/licenses/>.
  * ***********************************************************************/
 
+#ifndef RECTANGLE_COLLIDER2D_H
+#define RECTANGLE_COLLIDER2D_H
+
 #include "collider2d.h"
 
-Collider2D::Collider2D() : collider2DType(Collider2DType::BaseClass)
+class RectangleCollider2D : public Collider2D
 {
-}
+public:
+    RectangleCollider2D();
+};
 
-Collider2D::Collider2D(const Collider2DType collider2DType) : collider2DType(collider2DType)
-{
-}
-
-Collider2D::~Collider2D()
-{
-}
-
-
+#endif // RECTANGLE_COLLIDER2D_H

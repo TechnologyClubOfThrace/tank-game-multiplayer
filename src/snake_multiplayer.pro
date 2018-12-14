@@ -23,8 +23,6 @@ HEADERS += \
     viewport.h \
     scene_manager.h \
     collider2d.h \
-    box_collider2d.h \
-    polygon_collider2d.h \
     tank.h \
     transform.h \
     entity.h \
@@ -37,7 +35,10 @@ HEADERS += \
     tank_input_system.h \
     rigid_body2d_component.h \
     physics_system.h \
-    shared_sprite_component.h
+    shared_sprite_component.h \
+    rectangle_collider2d.h \
+    convex_polygon_collider2d.h \
+    collider2d_collection_component.h
 
 SOURCES += \
         main.cpp \
@@ -59,8 +60,6 @@ SOURCES += \
     viewport.cpp \
     scene_manager.cpp \
     collider2d.cpp \
-    box_collider2d.cpp \
-    polygon_collider2d.cpp \
     tank.cpp \
     transform.cpp \
     entity.cpp \
@@ -73,7 +72,10 @@ SOURCES += \
     tank_input_system.cpp \
     rigid_body2d_component.cpp \
     physics_system.cpp \
-    shared_sprite_component.cpp
+    shared_sprite_component.cpp \
+    rectangle_collider2d.cpp \
+    convex_polygon_collider2d.cpp \
+    collider2d_collection_component.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
