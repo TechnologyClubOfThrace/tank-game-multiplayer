@@ -44,8 +44,6 @@ public:
     Vector2D operator* (const double scalar) const;
     Vector2D& operator/= (const double scalar);
     Vector2D operator/ (const double scalar) const;
-    Vector2D& operator+= (const double scalar);
-    Vector2D operator+ (const double scalar) const;
     Vector2D& operator+= (const Vector2D &vector2d);
     Vector2D operator+ (const Vector2D &vector2d) const;
     Vector2D& operator-= (const Vector2D &vector2d);

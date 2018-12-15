@@ -32,18 +32,18 @@ public:
 
     Vector2D Velocity{0,0};
     double AngularVelocityMagnitude {0.0}; // degrees/ms
-    double AngularVelocityMaximumMagnitude {0.06}; // degrees/ms
+    double AngularVelocityMaximumMagnitude ; // degrees/ms
     double AngularAccelerationMagnitude {0.0}; // degrees/ms^2
-    double TorqueMagnitude {100}; // torque units
+    double TorqueMagnitude ; // torque units
     double MoI {0};
-    Vector2D Acceleration {0.0003,0}; // pixels/ms^2
+    Vector2D Acceleration {0,0}; // pixels/ms^2
     double MaxVelocityMagnitude = 0.10; // pixels/ms
-    Vector2D Force;
+    Vector2D Force{70000,0};
     double deltaRotationAngleeDegrees = 0; //the most recent rotation degrees that increased the RotationAngleDegrees
 
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
-    double Mass = 0;
+    double Mass = 10000;
 };
 
 #endif // RIGID_BODY_COMPONENT_H

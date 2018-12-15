@@ -94,24 +94,6 @@ Vector2D Vector2D::operator/(const double scalar) const
     return out;
 }
 
-
-Vector2D& Vector2D::operator+=(const double scalar)
-{
-    this->x += scalar;
-    this->y += scalar;
-
-    return *this;
-}
-
-Vector2D Vector2D::operator+(const double scalar) const
-{
-    Vector2D out;
-    out.x = this->x + scalar;
-    out.y = this->y + scalar;
-
-    return out;
-}
-
 Vector2D& Vector2D::operator+=(const Vector2D &vector2d)
 {
     this->x += vector2d.x;
