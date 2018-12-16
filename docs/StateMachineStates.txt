@@ -1,3 +1,7 @@
+//These are the states of the vehicle. RC stands for RotationClockwise, RCC for RotationCounterClockwise.
+//fw = forward, bw = backwards.
+//The functions calculate what is necessary for every state.
+
 stopped
 
 stoppedRC
