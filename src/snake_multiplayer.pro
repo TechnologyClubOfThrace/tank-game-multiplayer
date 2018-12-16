@@ -38,7 +38,10 @@ HEADERS += \
     shared_sprite_component.h \
     rectangle_collider2d.h \
     convex_polygon_collider2d.h \
-    collider2d_collection_component.h
+    collider2d_collection_component.h \
+    static_level_entity.h \
+    tileset.h \
+    tile_entity.h
 
 SOURCES += \
         main.cpp \
@@ -75,7 +78,10 @@ SOURCES += \
     shared_sprite_component.cpp \
     rectangle_collider2d.cpp \
     convex_polygon_collider2d.cpp \
-    collider2d_collection_component.cpp
+    collider2d_collection_component.cpp \
+    static_level_entity.cpp \
+    tileset.cpp \
+    tile_entity.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
@@ -125,9 +131,11 @@ windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4\\include
 mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.9/lib -lSDL2
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_image/2.0.4/lib -lSDL2_image
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
+mac: LIBS += -L$$/usr/local/Cellar/pugixml/1.9/lib/pugixml-1.9 -lpugixml
 #mac: LIBS += -L$$/usr/local/Cellar/sdl2_mixer/2.0.4/lib -lSDL2_mixer
 
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.9/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_ttf/2.0.14/include/SDL2
+mac:INCLUDEPATH += /usr/local/Cellar/pugixml/1.9/include/pugixml-1.9
 #INCLUDEPATH += /usr/local/Cellar/sdl2_mixer/2.0.4/include/SDL2

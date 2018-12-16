@@ -86,6 +86,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                 rigidBody2dComponent.AngularVelocityMagnitude * deltaTime -
                 0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
         transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
+
         rigidBody2dComponent.Velocity.Rotate(rigidBody2dComponent.deltaRotationAngleeDegrees * M_PI / 180);
         }
         break;

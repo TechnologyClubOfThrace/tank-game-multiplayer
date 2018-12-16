@@ -26,6 +26,7 @@
 #include "game.h"
 
 #include "tank_entity.h"
+#include "scene_manager.h"
 
 using namespace std;
 
@@ -40,6 +41,12 @@ int main()
         printf( "Failed to initialize!\n" );
         return 0;
     }
+
+    //load scene
+    SceneManager sceneManager;
+    sceneManager.WindowRenderer = game_engine.WindowRenderer;
+    sceneManager.LoadFirstScene("tank_tiled_map.tmx");
+
 
     //game viewports configuration
     //The tank game has 2 viewports;
@@ -74,10 +81,10 @@ int main()
 
     //Object with information about the game map
     TileMap tile_map;
-    tile_map.level_width = 864;  //640; // <<<<<<<<<<< //Level width
-    tile_map.level_height = 608;  //480;
+    tile_map.level_width = sceneManager.levelWidth;  //640; // <<<<<<<<<<< //Level width
+    tile_map.level_height = sceneManager.levelHeight;  //480;
     tile_map.file_name = "map96.txt"; //The file that contains the map
-    tile_map.total_tiles = 513;  //300; // <<<<<<<<<<< //The total number of tiles inside the map
+    tile_map.total_tiles = 2000;  //300; // <<<<<<<<<<< //The total number of tiles inside the map
 
 
     //Object that holds info about the spritesheet containing

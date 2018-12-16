@@ -31,7 +31,8 @@ class SpriteComponent : Component
 {
 public:
     SpriteComponent();
-    ~SpriteComponent();
+    virtual ~SpriteComponent();
+    virtual void FreeTextureMemory();
 
     SDL_Rect rect;
     SDL_Texture * texture = nullptr;

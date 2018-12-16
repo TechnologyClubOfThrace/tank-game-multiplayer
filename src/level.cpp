@@ -51,9 +51,6 @@ int Level::LoadMapTiles(const TileMap &_tile_map, Spritesheet &spritesheet)
     }
     else
     {
-        //.clear();
-        //Tiles.reserve(map_info.total_tiles);
-
         //Initialize the tiles
         for( int i = 0; i < tileMap.total_tiles; ++i )
         {

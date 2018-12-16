@@ -7,7 +7,9 @@ class SharedSpriteComponent : public SpriteComponent
 {
 public:
     SharedSpriteComponent();
-    static SDL_Texture * shared_texture;
+    ~SharedSpriteComponent();
+
+    virtual void FreeTextureMemory();
 };
 
 #endif // SHARED_SPRITE_COMPONENT_H
