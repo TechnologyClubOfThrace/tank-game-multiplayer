@@ -34,8 +34,19 @@ Vector2D::Vector2D(double x, double y) : x(x), y(y)
 //-----------------------------------------------------------------------------
 // Purpose: Rotate a vector
 //-----------------------------------------------------------------------------
-void Vector2D::Rotate( const double angle )
+void Vector2D::RotateArcs( const double angleArcs )
 {
+    double xt = (x * cos(angleArcs)) - (y * sin(angleArcs));
+    double yt = (y * cos(angleArcs)) + (x * sin(angleArcs));
+
+    x = xt;
+    y = yt;
+}
+
+void Vector2D::RotateDegrees(double angle)
+{
+    angle = angle * M_PI / 180;
+
     double xt = (x * cos(angle)) - (y * sin(angle));
     double yt = (y * cos(angle)) + (x * sin(angle));
 

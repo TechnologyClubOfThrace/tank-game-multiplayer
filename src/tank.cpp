@@ -44,6 +44,8 @@ Tank::Tank()
 
 void Tank::handleEvent( SDL_Event& e )
 {
+    return;
+
     switch (state) {
     case enumState::stopped:
         switch( e.key.keysym.sym )

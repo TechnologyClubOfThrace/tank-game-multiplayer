@@ -34,7 +34,8 @@ public:
     double y = 0;
 
     //functions
-    void Rotate(const double angle);
+    void RotateArcs(const double angle);
+    void RotateDegrees(double angle);
     void setZeroMagnitude();
     void SetMagnitude(const double newMagnitudes);
     double Magnitude() const;

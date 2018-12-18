@@ -66,6 +66,7 @@ void Vector2DAngle::RemoveAngleDirection(AngleDirection angleDirection)
 //is considered to going straight down
 void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::rep deltaTime)
 {
+    /*
     if (mCurrentAngleDirection != AngleDirection::None){
 
         //std::cout << velocity_vector.x << " y:" << velocity_vector.y << std::endl;
@@ -203,4 +204,5 @@ void Vector2DAngle::Apply(Vector2D &velocity_vector, std::chrono::milliseconds::
         }
 
     }
+    */
 }
