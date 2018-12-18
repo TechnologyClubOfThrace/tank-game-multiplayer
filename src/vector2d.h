@@ -30,6 +30,7 @@ public:
     Vector2D();
     Vector2D(double x, double y);
 
+    //variables
     double x = 0;
     double y = 0;
 

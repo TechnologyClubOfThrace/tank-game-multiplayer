@@ -1,8 +1,17 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
+ * =======================================================================
+ *
+ * DEVELOPERS
  * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
  * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
  * (C) 2018 by Constantine Sarmidis
+ *
+ * GRAPHICS
+ * (C) 2018 by Aris
+ *
+ * SOUND
+ * (C) 2018 by Panos Doukas
  *
  * This file is part of Tank Game Multiplayer.
  *
@@ -24,6 +33,7 @@
 #include <memory>
 #include "game_engine.h"
 #include "game.h"
+#include "render_utils.h"
 
 #include "tank_entity.h"
 #include "scene_manager.h"
@@ -34,7 +44,7 @@ using namespace std;
 
 int main()
 {
-    GameEngine game_engine(400,400);
+    GameEngine game_engine(1400,800);
     //Start up SDL and create window
     if( !game_engine.Init())
     {
@@ -43,9 +53,8 @@ int main()
     }
 
     //load scene
-    SceneManager sceneManager;
-    sceneManager.WindowRenderer = game_engine.WindowRenderer;
-    sceneManager.LoadFirstScene("tank_tiled_map.tmx");
+    //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
+    game_engine.sceneManager.LoadFirstScene("aris-first-map.tmx");
 
 
     //game viewports configuration
@@ -53,7 +62,7 @@ int main()
     //1. One viewport of the main game window with a camera that follows the player tank
     //2. One viewport on the bottom right corner that displays the game map, the player tank position
     //within the map and other game objects that will be added if needed.
-    //Viewport 1:
+    //Viewport 0:
     ViewPort viewport;
     viewport.frame.x = 0;
     viewport.frame.y = 0;
@@ -61,15 +70,14 @@ int main()
     viewport.frame.h = game_engine.ScreenHeight;
     viewport.camera.frame = viewport.frame;
     game::viewports.emplace_back(viewport);
-    //Viewport 2:
+    //Viewport 1:
     ViewPort viewport_radar;
-    viewport_radar.frame.x = 290;
-    viewport_radar.frame.y = 290;
-    viewport_radar.frame.w = 86;
-    viewport_radar.frame.h = 61;
-    viewport_radar.camera.frame = viewport_radar.frame;
+    viewport_radar.frame.w = 150;
+    viewport_radar.frame.h = 0;
+    viewport_radar.frame.x = 0;
+    viewport_radar.frame.y = 0;
     game::viewports.emplace_back(viewport_radar);
-    //Viewport 3:
+    //Viewport 2:
     ViewPort viewport_radar2;
     viewport_radar2.frame.x = 20;
     viewport_radar2.frame.y = 290;
@@ -79,52 +87,22 @@ int main()
     game::viewports.emplace_back(viewport_radar2);
     //end of viewport configuration
 
-    //Object with information about the game map
-    TileMap tile_map;
-    tile_map.level_width = sceneManager.levelWidth;  //640; // <<<<<<<<<<< //Level width
-    tile_map.level_height = sceneManager.levelHeight;  //480;
-    tile_map.file_name = "map96.txt"; //The file that contains the map
-    tile_map.total_tiles = 2000;  //300; // <<<<<<<<<<< //The total number of tiles inside the map
-
-
-    //Object that holds info about the spritesheet containing
-    //the sprites that we use to design the level base on the previous tile map
-    Spritesheet spritesheet;
-    spritesheet.file_name = "snake-tileset_no_trans.png";
-    spritesheet.sprite_height = 32;
-    spritesheet.sprite_width = 32;
-    spritesheet.total_sprites = 9;//how many sprites the image contains
-    //sprites are organized inside the image file in columns and rows.
-    //that way we can later calculate the exact position to draw each sprite based on the lacation it has inside the tile map.
-    spritesheet.columns = 3;
-    spritesheet.rows = 3;
-
-    //load the game map
-    game_engine.LoadMap(tile_map, spritesheet);
-
-    //load the tank object in our level
-    auto tank =  std::make_unique<Tank>();
-    tank->texture.WindowRenderer = game_engine.WindowRenderer;
-    //snake->snakeTexture.loadFromFile("snake_32x32.png");
-    tank->texture.loadFromFile("tank_133x50.png");
-    tank->level = &game_engine.level;
-    game::gameObjects.emplace_back(std::move(tank));
-
+    //tank entity configuration
     auto tank_entity = std::make_unique<TankEntity>();
-    tank_entity->transform_component = std::make_unique<TransformComponent>();
     tank_entity->transform_component->Position.x = 100;
     tank_entity->transform_component->Position.y = 100;
-    tank_entity->sprite_component = std::make_unique<SpriteComponent>();
-    RenderSystem::CreateTextureFromFile("tank_133x50.png",
-                                        game_engine.WindowRenderer,
-                                        *tank_entity->sprite_component);
-    tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
-    tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
+    RenderUtils::LoadTextureFromFile("tank_133x50.png", *tank_entity->sprite_component);
     tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->Mass = 10000;
     tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
-    tank_entity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();
-
+    tank_entity->viewport_component->entityScale.x =  game::viewports[tank_entity->viewport_component->viewportID].frame.w / static_cast<double>(game_engine.ScreenWidth);
+    tank_entity->viewport_component->entityScale.y = tank_entity->viewport_component->entityScale.x;
+    game::viewports[tank_entity->viewport_component->viewportID].frame.h = static_cast<int>(std::round(tank_entity->viewport_component->entityScale.y * game_engine.ScreenHeight));
+    game::viewports[tank_entity->viewport_component->viewportID].frame.x = game_engine.ScreenWidth - game::viewports[tank_entity->viewport_component->viewportID].frame.w - 100;
+    game::viewports[tank_entity->viewport_component->viewportID].frame.y = game_engine.ScreenHeight - game::viewports[tank_entity->viewport_component->viewportID].frame.h - 100;
+    game::viewports[tank_entity->viewport_component->viewportID].camera.frame = game::viewports[tank_entity->viewport_component->viewportID].frame;
+    tank_entity->viewport_component->destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * tank_entity->viewport_component->entityScale.x));
+    tank_entity->viewport_component->destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * tank_entity->viewport_component->entityScale.y));
 
     game::entityObjects.emplace_back(std::move(tank_entity));
 

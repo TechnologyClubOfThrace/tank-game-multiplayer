@@ -28,6 +28,7 @@
 #include "tileset.h"
 #include "tile_entity.h"
 #include "game.h"
+#include "render_utils.h"
 
 class SceneManager
 {
@@ -38,7 +39,6 @@ public:
 
     double levelWidth;
     double levelHeight;
-    SDL_Renderer* WindowRenderer = nullptr;
 
     bool LoadFirstScene(const std::string &tmxFilePath);
     bool LoadTileset();

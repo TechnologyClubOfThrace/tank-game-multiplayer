@@ -3,7 +3,6 @@
 
 #include <string>
 #include <SDL.h>
-#include "texture_wrapper.h"
 
 class TileSet
 {
@@ -17,7 +16,7 @@ public:
     int tileWidth {};
     int tileHeight {};
     int spacing {};
-    TextureWrapper textureWrapper {};
+    SDL_Texture * texture = nullptr;
 };
 
 #endif // TILESET_H

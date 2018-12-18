@@ -6,27 +6,13 @@ CONFIG += exceptions_off #disable c++ exceptions handling to gain memory, speed 
 
 HEADERS += \
     game_engine.h \
-    texture_wrapper.h \
-    tile.h \
-    sprite_sheet.h \
-    tile_map.h \
-    sprite.h \
-    level.h \
     vector2d.h \
-    vector2d_angle.h \
-    bullet.h \
-    fpscounter.h \
-    keystate.h \
-    game_object.h \
     camera.h \
     game.h \
     viewport.h \
     scene_manager.h \
     collider2d.h \
-    tank.h \
-    transform.h \
     entity.h \
-    component.h \
     transform_component.h \
     tank_entity.h \
     sprite_component.h \
@@ -39,34 +25,24 @@ HEADERS += \
     rectangle_collider2d.h \
     convex_polygon_collider2d.h \
     collider2d_collection_component.h \
-    static_level_entity.h \
     tileset.h \
-    tile_entity.h
+    tile_entity.h \
+    fps_entity.h \
+    fps_system.h \
+    fps_component.h \
+    viewport_component.h \
+    render_utils.h
 
 SOURCES += \
         main.cpp \
     game_engine.cpp \
-    texture_wrapper.cpp \
-    tile.cpp \
-    sprite_sheet.cpp \
-    tile_map.cpp \
-    sprite.cpp \
-    level.cpp \
     vector2d.cpp \
-    vector2d_angle.cpp \
-    bullet.cpp \
-    fpscounter.cpp \
-    keystate.cpp \
-    game_object.cpp \
     camera.cpp \
     game.cpp \
     viewport.cpp \
     scene_manager.cpp \
     collider2d.cpp \
-    tank.cpp \
-    transform.cpp \
     entity.cpp \
-    component.cpp \
     transform_component.cpp \
     tank_entity.cpp \
     sprite_component.cpp \
@@ -79,9 +55,13 @@ SOURCES += \
     rectangle_collider2d.cpp \
     convex_polygon_collider2d.cpp \
     collider2d_collection_component.cpp \
-    static_level_entity.cpp \
     tileset.cpp \
-    tile_entity.cpp
+    tile_entity.cpp \
+    fps_entity.cpp \
+    fps_system.cpp \
+    fps_component.cpp \
+    viewport_component.cpp \
+    render_utils.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

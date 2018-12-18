@@ -71,8 +71,8 @@ bool GameEngine::Init()
         {
             //Create renderer for window
             //WindowRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_SOFTWARE );
-            WindowRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-            if( WindowRenderer == nullptr )
+            RenderUtils::windowRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
+            if(RenderUtils::windowRenderer == nullptr )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
                 success = false;
@@ -80,14 +80,14 @@ bool GameEngine::Init()
             else
             {
                 //Initialize renderer color
-                SDL_SetRenderDrawColor( WindowRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+                SDL_SetRenderDrawColor(RenderUtils::windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
             }
         } //SDL_CreateWindow
 
     } //Initialize SDL
 
     //set drawing alpha transparency support (eg. SDL_RenderFillRect)
-    SDL_SetRenderDrawBlendMode(WindowRenderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(RenderUtils::windowRenderer, SDL_BLENDMODE_BLEND);
 
     // (STEP 2 / 3)
     //Initialize PNG loading
@@ -105,26 +105,14 @@ bool GameEngine::Init()
         printf( "TTF could not initialize! Error: %s\n", TTF_GetError());
         success = false;
     } else {
-        fpscounter.texture.WindowRenderer = WindowRenderer;
-        fpscounter.LoadFont();
+        fpsEntity.fps_component = std::make_unique<FpsComponent>();
+        fpsEntity.transform_component->Position.x = 0;
+        fpsEntity.transform_component->Position.y = 0;
     }//Initialize TTF
-
-    renderSystem.renderer = WindowRenderer;
 
     Running = success;
     return success;
 }
-
-//loads the game map
-bool GameEngine::LoadMap(const TileMap &tile_map, Spritesheet &spritesheet)
-{
-    //set the renderer used to draw map sprites
-    level.spritesheet_texture.WindowRenderer = WindowRenderer;
-    int ret = level.LoadMapTiles(tile_map, spritesheet);
-
-    return ret > 0;
-}
-
 
 //main game loop
 void GameEngine::StartGameLoop()
@@ -150,7 +138,7 @@ void GameEngine::StartGameLoop()
 
         HandleEvents();//process user input from keyboard/mouse/game controlers etc
         Update();//update game objects position, collitions etc
-        SDL_RenderClear(WindowRenderer);
+        SDL_RenderClear(RenderUtils::windowRenderer);
         Draw();//draw the objects on screen
 
         //the duration it took to process the game objects
@@ -166,22 +154,16 @@ void GameEngine::StartGameLoop()
        //End of frame cap
 
        //display the fps counter if needed
-       if (fpscounter.DisplayFpsCounter){
+       if (fpsEntity.fps_component->displayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-           fpscounter.Update(deltaTime);
-           fpscounter.Draw();
+           fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+           renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
 
        //display everything in screen
 
-       SDL_RenderPresent(WindowRenderer);
-
-       /*
-       const SDL_Rect r2{50,10,50,50};
-       SDL_RenderSetViewport(WindowRenderer, &r2);
-       SDL_RenderPresent(WindowRenderer);
-       */
+       SDL_RenderPresent(RenderUtils::windowRenderer);
 
        deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
     }
@@ -200,12 +182,7 @@ void GameEngine::HandleEvents()
              Running = false;
         }
 
-        //call the handleEvent on each game object
-        for (auto& gameObject : game::gameObjects){
-            gameObject->handleEvent(e);
-        }
-
-        for (auto& entity : game::entityObjects){
+        for (const auto& entity : game::entityObjects){
             if(entity->tank_input_component){
                 tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component);
             }
@@ -215,9 +192,9 @@ void GameEngine::HandleEvents()
         //has to be created. It is placed in the gameObjects_for_addition vector
         //so that after returning fron the previous handleEvent call, it will be added to the
         //gameObjects vector.
-        if (game::gameObjects_for_addition.size() > 0){
-            std::move(game::gameObjects_for_addition.begin(), game::gameObjects_for_addition.end(), std::back_inserter(game::gameObjects));  // ##
-            game::gameObjects_for_addition.clear();
+        if (game::entityObjects_for_addition.size() > 0){
+            std::move(game::entityObjects_for_addition.begin(), game::entityObjects_for_addition.end(), std::back_inserter(game::entityObjects));  // ##
+            game::entityObjects_for_addition.clear();
         }
 
     }
@@ -231,23 +208,6 @@ void GameEngine::Update()
     //the game object is removed from the gameObjects vector and its destructor is called
     //because it is a std::unique_ptr.
     //TODO: check if there is a more efficient method using remove instead of erase.
-    for(auto it = game::gameObjects.begin(); it != game::gameObjects.end();)
-    {
-        //update game object
-        //Because after calling update on each object, the object might non need to exist any more
-        //it might mark itself for deletion (Exists=False), so we should remove it from the vector.
-        //To remove an item from the vector while iterating it, we should follow this method,
-        //using an iterator.
-        (*it)->Update(deltaTime);
-        if((*it)->Exists == false){
-            //remove the game object if it is required
-            it = game::gameObjects.erase(it);
-        }else{
-            ++it;
-        }
-    }
-
-
     for(auto it = game::entityObjects.begin(); it != game::entityObjects.end();)
     {
         //update game object
@@ -261,9 +221,7 @@ void GameEngine::Update()
                                   *(*it)->tank_input_component,
                                   *(*it)->rigid_body2d_component);
 
-            game::viewports[0].camera.followEntityObject( *(*it)->transform_component,
-                                                          *(*it)->sprite_component,
-                                                          864, 608);
+            game::viewports[0].FollowEntity(*(*it)->transform_component, *(*it)->sprite_component, this->sceneManager.levelWidth, this->sceneManager.levelHeight);
         }
 
         ++it;
@@ -273,17 +231,8 @@ void GameEngine::Update()
 //draws the game objects
 void GameEngine::Draw()
 {
-    //first of all draw the level as the last game object in the z-order
-    //so that all other game objects are drawn on top
-    level.Draw();
-
-    //Draw all game objects
-    for (auto& gameObject : game::gameObjects){
-        gameObject->Draw();
-    }
-
     //Draw all entity objects
-    for (auto& entity : game::entityObjects){
+    for (const auto& entity : game::entityObjects){
         if (entity->sprite_component){
             //renderSystem
             renderSystem.Render(*entity->transform_component,
@@ -292,13 +241,19 @@ void GameEngine::Draw()
         }
     }
 
-    level.DrawRadar();//todo
 
     //if there are more than one viewports, call the draw oveload
     //on each game object with the viewport index.
     for (size_t viewPortIndex = 1; viewPortIndex <= game::viewports.size(); viewPortIndex++){
-        for (auto& gameObject : game::gameObjects){
-            gameObject->Draw(viewPortIndex);
+        for (const auto& entity : game::entityObjects){
+            if(entity->viewport_component){
+                if(entity->viewport_component->viewportID == viewPortIndex){
+                    renderSystem.RenderInViewport(*entity->transform_component,
+                                                  *entity->sprite_component,
+                                                  *entity->viewport_component,
+                                                  game::viewports[viewPortIndex]);
+                }
+            }
         }
     }
 }

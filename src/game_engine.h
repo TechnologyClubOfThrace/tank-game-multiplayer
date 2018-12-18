@@ -21,49 +21,56 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
-#include "tile_map.h"
-#include "sprite_sheet.h"
-#include "tank.h"
-#include "fpscounter.h"
+#include <SDL.h>
 #include <chrono>
+
+#include "scene_manager.h"
+#include "render_utils.h"
+
+//entities
+#include "fps_entity.h"
 
 //systems
 #include "render_system.h"
 #include "tank_input_system.h"
 #include "physics_system.h"
+#include "fps_system.h"
+
 
 class GameEngine
 {
 public:
-    bool Running = false;
+    GameEngine(int screenWidth, int screenHeight);
 
     //public variables
-    //The window we'll be rendering to
-    SDL_Window* gWindow = nullptr;
-    //The window renderer
-    SDL_Renderer* WindowRenderer = nullptr;
-    Level level;
-
-    FpsCounter fpscounter;
-
+    //========================
+    bool Running = false;
+    //Screen dimensions
+    int ScreenWidth = 0;
+    int ScreenHeight = 0;
     //Event handler
     SDL_Event e;
 
 
-    GameEngine(int screenWidth, int screenHeight);
-    bool Init();
-    bool LoadMap(const TileMap &tile_map, Spritesheet &spritesheet);
+    //public pointers
+    //========================
+    //The window we'll be rendering to
+    SDL_Window* gWindow = nullptr;
 
+    //public class variables
+    //========================
+    SceneManager sceneManager;
+    FpsEntity fpsEntity;
+
+
+    //public methods
+    //========================
+    bool Init();
+    void StartGameLoop();
     void HandleEvents();
     void Update();
     void Draw();
 
-
-    void StartGameLoop();
-
-    //Screen dimension constants
-    int ScreenWidth = 0;
-    int ScreenHeight = 0;
 private:
     std::chrono::milliseconds::rep deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
 
@@ -71,6 +78,7 @@ private:
     RenderSystem renderSystem;
     TankInputSystem tankInputSystem;
     PhysicsSystem physicsSystem;
+    FpsSystem fpsSystem;
 };
 
 #endif // GAME_ENGINE_H

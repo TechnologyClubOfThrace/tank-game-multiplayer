@@ -29,16 +29,16 @@
 #include <vector>
 #include "transform_component.h"
 #include "sprite_component.h"
+#include "viewport_component.h"
 #include "viewport.h"
+#include "render_utils.h"
 
 class RenderSystem
 {
 public:
     RenderSystem();
     void Render(TransformComponent &transformComponent, SpriteComponent &spriteComponent, std::vector<ViewPort> &viewports);
-    static bool CreateTextureFromFile(std::string path, SDL_Renderer *renderer, SpriteComponent &spriteComponent);
-
-    SDL_Renderer * renderer;
+    void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportComponent &viewportComponent, ViewPort &viewport);
 };
 
 #endif // RENDER_SYSTEM_H

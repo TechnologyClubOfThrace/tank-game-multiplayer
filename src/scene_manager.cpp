@@ -82,8 +82,7 @@ bool SceneManager::LoadTileset()
     tileSet.columns = doc.child("tileset").attribute("columns").as_int();
     tileSet.image_fileName = doc.child("tileset").child("image").attribute("source").as_string();
 
-    tileSet.textureWrapper.WindowRenderer = WindowRenderer;
-    return tileSet.textureWrapper.loadFromFile(tileSet.image_fileName);
+    return RenderUtils::LoadTextureFromFile(tileSet.image_fileName, tileSet.texture);
 }
 
 bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::string &tmxFilePath)
@@ -112,7 +111,7 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     int tile_index_number = std::stoi(tile_index);
                     auto tileEntity = std::make_unique<TileEntity>();
 
-                    tileEntity->sprite_component->texture = tileSet.textureWrapper.mTexture;
+                    tileEntity->sprite_component->texture = tileSet.texture;
                     SpriteRectFromTileIndex(tile_index_number, tileEntity->sprite_component);
                     tileEntity->transform_component->Position.x = row * tileSet.tileWidth;
                     tileEntity->transform_component->Position.y = col * tileSet.tileHeight;
@@ -132,10 +131,11 @@ void SceneManager::SpriteRectFromTileIndex(int tile_index, std::unique_ptr<Sprit
 {
     auto res = std::div(tile_index-1, tileSet.columns);
 
-    spriteComponent->rect.x = tileSet.spacing + res.rem * tileSet.tileWidth + (res.rem * tileSet.spacing);
-    spriteComponent->rect.y = tileSet.spacing + res.quot * tileSet.tileHeight + (res.quot * tileSet.spacing);
-    spriteComponent->rect.w = tileSet.tileWidth;
-    spriteComponent->rect.h = tileSet.tileHeight;
+    spriteComponent->sourceRectangle.x = tileSet.spacing + res.rem * tileSet.tileWidth + (res.rem * tileSet.spacing);
+    spriteComponent->sourceRectangle.y = tileSet.spacing + res.quot * tileSet.tileHeight + (res.quot * tileSet.spacing);
+    spriteComponent->sourceRectangle.w = tileSet.tileWidth;
+    spriteComponent->sourceRectangle.h = tileSet.tileHeight;
+    spriteComponent->destinationRectangle = spriteComponent->sourceRectangle;
 }
 
 /*
