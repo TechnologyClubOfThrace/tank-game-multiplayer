@@ -27,62 +27,223 @@ TankInputSystem::TankInputSystem()
 
 }
 
-void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent)
+void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
 {
     switch (tankInputComponent.state) {
     case State::stopped:
-        HandleUserInput(e, tankInputComponent, rigidBody2dComponent);
-        break;
-    case State::moveForward:
-         HandleUserInput(e, tankInputComponent, rigidBody2dComponent);
-         break;
-    case State::moveBackwards:
-         HandleUserInput(e, tankInputComponent, rigidBody2dComponent);
-         break;
-    case State::stoppedRotationClockwise:
-         HandleUserInput(e, tankInputComponent, rigidBody2dComponent);
-         break;
-    }
-}
+        switch( e.key.keysym.sym )
+        {
+        case SDLK_w:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //move forward
+                rigidBody2dComponent.isAccelerationfrozen = false;
+                rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
+                rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
+                rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+                tankInputComponent.state = State::forward;
+            }
+            break;
 
-void TankInputSystem::HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent)
-{
-    switch( e.key.keysym.sym )
-    {
-    case SDLK_w:
-        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
-            tankInputComponent.state = State::moveForward;
-            rigidBody2dComponent.isAccelerationfrozen = false;
-            rigidBody2dComponent.Velocity.x = 0;
-            rigidBody2dComponent.Velocity.y = 0;
-        } else if (e.type == SDL_KEYUP && e.key.repeat == 0 ){
-            tankInputComponent.state = State::stopped;
-            rigidBody2dComponent.isAccelerationfrozen = true;
-            rigidBody2dComponent.Velocity.x = 0;
-            rigidBody2dComponent.Velocity.y = 0;
+        case SDLK_s:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //move backwards
+                rigidBody2dComponent.isAccelerationfrozen = false;
+                rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
+                rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
+                rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+                tankInputComponent.state = State::backwards;
+            }
+            break;
+
+        case SDLK_d:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //rotate cw
+                rigidBody2dComponent.isAngularAccelerationfrozen = false;
+                tankInputComponent.state = State::stoppedRotationClockwise;
+            }
+            break;
+
+        case SDLK_a:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //rotate ccw
+                rigidBody2dComponent.isAngularAccelerationfrozen = false;
+                tankInputComponent.state = State::stoppedRotationCounterClockwise;
+            }
+            break;
+        }
+
+        break;//State::stopped:
+
+    case State::forward:
+        switch( e.key.keysym.sym ){
+        case SDLK_w:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::stopped;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+            break;
+        case SDLK_s:
+
+             if( e.type == SDL_KEYDOWN){
+                 tankInputComponent.state = State::backwards;
+                 rigidBody2dComponent.isAccelerationfrozen = false;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+
+            break;
+        case SDLK_d:
+             if( e.type == SDL_KEYDOWN){
+                 tankInputComponent.state = State::forwardRotationClockwise;
+                 rigidBody2dComponent.isAngularAccelerationfrozen = false;
+             }
+            break;
+        case SDLK_a:
+             if( e.type == SDL_KEYDOWN){
+                 tankInputComponent.state = State::forwardRotationCounterClockwise;
+                 rigidBody2dComponent.isAngularAccelerationfrozen = false;
+             }
+            break;
         }
         break;
-    case SDLK_s:
-        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
-            tankInputComponent.state = State::moveBackwards;
-            rigidBody2dComponent.isAccelerationfrozen = false;
-            rigidBody2dComponent.Velocity.x = 0;
-            rigidBody2dComponent.Velocity.y = 0;
-        } else if (e.type == SDL_KEYUP && e.key.repeat == 0 ){
-            tankInputComponent.state = State::stopped;
-            rigidBody2dComponent.isAccelerationfrozen = true;
-            rigidBody2dComponent.Velocity.x = 0;
-            rigidBody2dComponent.Velocity.y = 0;
+
+    case State::backwards:
+        switch( e.key.keysym.sym ){
+        case SDLK_s:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::stopped;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+            break;
+        case SDLK_w:
+
+             if( e.type == SDL_KEYDOWN){
+                 rigidBody2dComponent.isAccelerationfrozen = false;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+                 tankInputComponent.state = State::forward;
+             }
+            break;
+        case SDLK_d:
+             if( e.type == SDL_KEYDOWN){
+                 tankInputComponent.state = State::backwardsRotationClockwise;
+                 rigidBody2dComponent.isAngularAccelerationfrozen = false;
+             }
+            break;
+        case SDLK_a:
+             if( e.type == SDL_KEYDOWN){
+                 tankInputComponent.state = State::backwardsRotationCounterClockwise;
+                 rigidBody2dComponent.isAngularAccelerationfrozen = false;
+             }
+            break;
         }
         break;
-    case SDLK_d: //clockwise rotation
-        if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
-            tankInputComponent.state = State::stoppedRotationClockwise;
-        } else if ( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
-            tankInputComponent.state = State::stoppedRotationClockwise;
+
+    case State::stoppedRotationClockwise:
+        switch( e.key.keysym.sym ){
+        case SDLK_d:
+             if( e.type == SDL_KEYUP){
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+                 tankInputComponent.state = State::stopped;
+             }
+             break;
+        case SDLK_a:
+             if( e.type == SDL_KEYDOWN){
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+                 rigidBody2dComponent.isAngularAccelerationfrozen = false;
+                 tankInputComponent.state = State::stoppedRotationCounterClockwise;
+             }
+             break;
         }
         break;
-    case SDLK_a:
+
+    case State::stoppedRotationCounterClockwise:
+        switch( e.key.keysym.sym ){
+        case SDLK_a:
+             if( e.type == SDL_KEYUP){
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+                 tankInputComponent.state = State::stopped;
+             }
+            break;
+        case SDLK_d:
+             if( e.type == SDL_KEYDOWN){
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+                 rigidBody2dComponent.isAngularAccelerationfrozen = false;
+                 tankInputComponent.state = State::stoppedRotationClockwise;
+             }
+            break;
+        }
         break;
-    }
-}
+
+    case State::forwardRotationClockwise:
+        switch( e.key.keysym.sym ){
+        case SDLK_d:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::forward;
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+             }
+            break;
+        case SDLK_w:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::stoppedRotationClockwise;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+
+            break;
+        }
+        break;
+
+    case State::forwardRotationCounterClockwise:
+        switch( e.key.keysym.sym ){
+        case SDLK_a:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::forward;
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+             }
+            break;
+        case SDLK_w:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::stoppedRotationCounterClockwise;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+
+            break;
+        }
+        break;
+
+    case State::backwardsRotationClockwise:
+        switch( e.key.keysym.sym ){
+        case SDLK_d:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::backwards;
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+             }
+            break;
+        case SDLK_s:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::stoppedRotationClockwise;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+
+            break;
+        }
+        break;
+
+    case State::backwardsRotationCounterClockwise:
+        switch( e.key.keysym.sym ){
+        case SDLK_a:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::backwards;
+                 rigidBody2dComponent.AngularVelocityMagnitude = 0;
+             }
+            break;
+        case SDLK_s:
+             if( e.type == SDL_KEYUP){
+                 tankInputComponent.state = State::stoppedRotationCounterClockwise;
+                 rigidBody2dComponent.Velocity.setZeroMagnitude();
+             }
+
+            break;
+        }
+        break;
+
+    }//switch
+}//TankInputSystem::handleEvent

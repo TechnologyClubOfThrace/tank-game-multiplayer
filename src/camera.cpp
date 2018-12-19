@@ -56,3 +56,27 @@ void Camera::followGameObject(GameObject &gameObject, int levelWidth, int levelH
             this->frame.y = levelHeight - this->frame.h;
         }
 }
+
+void Camera::followEntityObject(TransformComponent &transformComponent, SpriteComponent &spriteComponent, int levelWidth, int levelHeight)
+{
+        this->frame.x = static_cast<int>(round((transformComponent.Position.x + spriteComponent.rect.w / 2 ) - (this->frame.w / 2)));
+        this->frame.y = static_cast<int>(round((transformComponent.Position.y + spriteComponent.rect.h / 2 ) - (this->frame.h / 2)));
+
+        //Keep the camera in bounds
+        if( this->frame.x < 0 )
+        {
+            this->frame.x = 0;
+        }
+        if( this->frame.y < 0 )
+        {
+            this->frame.y = 0;
+        }
+        if( this->frame.x > levelWidth - this->frame.w )
+        {
+            this->frame.x = levelWidth - this->frame.w;
+        }
+        if( this->frame.y > levelHeight - this->frame.h )
+        {
+            this->frame.y = levelHeight - this->frame.h;
+        }
+}

@@ -1,0 +1,48 @@
+//This is a transitions map for the states of the vehicle. Corresponds to the events from the input events
+//Information in brackets {} are functions that are used for proper initialization of the new state.
+
+stopped   VelSetMagZero AngVelSetMagZero
+down w:: fw {updateForce, UpdateAccel}
+down s:: bw {updateForce, UpdateAccel}
+down d:: stoppedRC
+down a:: stoppedRCC
+down w+d ?
+down w+a ?
+down s+a ?
+down s+d ?
+
+stoppedRC VelSetMagZero
+down w:: fwRC
+down s:: bwRC
+up d:: stopped {AngVelSetMagZero}
+
+stoppedRCC VelSetMagZero
+down w:: fwRCC 
+down s:: bwRCC 
+up a:: stopped {AngVelSetMagZero}
+
+fw AngVelSetMagZero
+down d:: fwRC 
+down a:: fwRCC 
+up w:: stopped {VelSetMagZero}
+
+fwRC
+up d:: fw {AngVelSetMagZero} 
+up w:: stoppedRC {VelSetMagZero} 
+
+fwRCC
+up a:: fw {AngVelSetMagZero}
+up w:: stoppedRCC {VelSetMagZero}
+
+bw AngVelSetMagZero
+down d:: bwRC
+down a:: bwRCC
+up s:: stopped {VelSetMagZero}
+
+bwRC
+up s:: stoppedRC {VelSetMagZero}
+up d:: bw {AngVelSetMagZero}
+
+bwRCC
+up s:: stoppedRCC {VelSetMagZero}
+up a:: bw {AngVelSetMagZero}

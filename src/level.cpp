@@ -27,7 +27,7 @@ Level::Level()
 }
 
 //loads the map tiles
-int Level::LoadMapTiles(TileMap _tile_map, Spritesheet spritesheet)
+int Level::LoadMapTiles(const TileMap &_tile_map, Spritesheet &spritesheet)
 {
     tileMap = _tile_map;
 

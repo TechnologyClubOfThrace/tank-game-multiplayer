@@ -24,6 +24,8 @@
 #include <SDL.h>
 #include <math.h>
 #include "game_object.h"
+#include "transform_component.h"
+#include "sprite_component.h"
 
 class Camera
 {
@@ -33,6 +35,7 @@ public:
     SDL_Rect frame;//the location and size of the camera inside the level
 
     void followGameObject(GameObject& gameObject, int levelWidth, int levelHeight);//Center the camera over the game object
+    void followEntityObject(TransformComponent &transformComponent, SpriteComponent &spriteComponent, int levelWidth, int levelHeight);
 };
 
 #endif // CAMERA_H

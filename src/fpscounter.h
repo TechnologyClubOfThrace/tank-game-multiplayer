@@ -37,7 +37,7 @@ public:
     void Draw();
     void Update(std::chrono::milliseconds::rep deltaTime);
 
-    void LoadFont(std::string font_file_name = "Roboto-Regular.ttf", int ptsize = 16);
+    void LoadFont(const std::string &font_file_name = "Roboto-Regular.ttf", int ptsize = 16);
 
     bool DisplayFpsCounter = true;
     int fps = 0;

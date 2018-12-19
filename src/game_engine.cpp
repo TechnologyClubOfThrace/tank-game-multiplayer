@@ -116,7 +116,7 @@ bool GameEngine::Init()
 }
 
 //loads the game map
-bool GameEngine::LoadMap(TileMap tile_map, Spritesheet spritesheet)
+bool GameEngine::LoadMap(const TileMap &tile_map, Spritesheet &spritesheet)
 {
     //set the renderer used to draw map sprites
     level.spritesheet_texture.WindowRenderer = WindowRenderer;
@@ -206,8 +206,8 @@ void GameEngine::HandleEvents()
         }
 
         for (auto& entity : game::entityObjects){
-            if(entity->hasTankInputComponent){
-                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component);
+            if(entity->tank_input_component){
+                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component, *entity->transform_component);
             }
         }
 
@@ -255,11 +255,15 @@ void GameEngine::Update()
         //it might mark itself for deletion (Exists=False), so we should remove it from the vector.
         //To remove an item from the vector while iterating it, we should follow this method,
         //using an iterator.
-        if((*it)->hasRigidBody2DComponent){
+        if((*it)->rigid_body2d_component){
             physicsSystem.Update(deltaTime,
                                   *(*it)->transform_component,
                                   *(*it)->tank_input_component,
                                   *(*it)->rigid_body2d_component);
+
+            game::viewports[0].camera.followEntityObject( *(*it)->transform_component,
+                                                          *(*it)->sprite_component,
+                                                          864, 608);
         }
 
         ++it;
@@ -280,7 +284,7 @@ void GameEngine::Draw()
 
     //Draw all entity objects
     for (auto& entity : game::entityObjects){
-        if (entity->hasSpriteComponent){
+        if (entity->sprite_component){
             //renderSystem
             renderSystem.Render(*entity->transform_component,
                                 *entity->sprite_component,

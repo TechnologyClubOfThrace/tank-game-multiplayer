@@ -1,6 +1,8 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
- * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
+ * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
+ * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
+ * (C) 2018 by Constantine Sarmidis
  *
  * This file is part of Tank Game Multiplayer.
  *
@@ -20,12 +22,16 @@
 
 #include "collider2d.h"
 
-Collider2D::Collider2D()
+Collider2D::Collider2D() : collider2DType(Collider2DType::BaseClass)
 {
-
 }
 
-bool Collider2D::isTouching(Collider2D collider)
+Collider2D::Collider2D(const Collider2DType collider2DType) : collider2DType(collider2DType)
 {
-    return false;
 }
+
+Collider2D::~Collider2D()
+{
+}
+
+

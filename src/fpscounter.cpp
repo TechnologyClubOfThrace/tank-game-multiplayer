@@ -55,7 +55,7 @@ void FpsCounter::Update(std::chrono::milliseconds::rep deltaTime)
     fps = static_cast<int>(deltaTime > 0 ? round(1000/deltaTime) : 0);
 }
 
-void FpsCounter::LoadFont(std::string font_file_name, int ptsize )
+void FpsCounter::LoadFont(const std::string &font_file_name, int ptsize )
 {
     texture.font = TTF_OpenFont(font_file_name.c_str(), ptsize);
 }

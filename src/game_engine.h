@@ -52,7 +52,7 @@ public:
 
     GameEngine(int screenWidth, int screenHeight);
     bool Init();
-    bool LoadMap(TileMap tile_map, Spritesheet spritesheet);
+    bool LoadMap(const TileMap &tile_map, Spritesheet &spritesheet);
 
     void HandleEvents();
     void Update();

@@ -44,6 +44,8 @@ Tank::Tank()
 
 void Tank::handleEvent( SDL_Event& e )
 {
+    return;
+
     switch (state) {
     case enumState::stopped:
         switch( e.key.keysym.sym )
@@ -172,7 +174,7 @@ void Tank::Update(std::chrono::milliseconds::rep deltaTime)
         }
     }
 
-    game::viewports[0].camera.followGameObject(*this, level->tileMap.level_width, level->tileMap.level_height);
+    //game::viewports[0].camera.followGameObject(*this, level->tileMap.level_width, level->tileMap.level_height);
 }
 
 

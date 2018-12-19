@@ -21,7 +21,7 @@
  * ***********************************************************************/
 
 #include "vector2d.h"
-#include <math.h>
+#include <cmath>
 
 Vector2D::Vector2D()
 {
@@ -34,8 +34,19 @@ Vector2D::Vector2D(double x, double y) : x(x), y(y)
 //-----------------------------------------------------------------------------
 // Purpose: Rotate a vector
 //-----------------------------------------------------------------------------
-void Vector2D::Rotate( const double angle )
+void Vector2D::RotateArcs( const double angleArcs )
 {
+    double xt = (x * cos(angleArcs)) - (y * sin(angleArcs));
+    double yt = (y * cos(angleArcs)) + (x * sin(angleArcs));
+
+    x = xt;
+    y = yt;
+}
+
+void Vector2D::RotateDegrees(double angle)
+{
+    angle = angle * M_PI / 180;
+
     double xt = (x * cos(angle)) - (y * sin(angle));
     double yt = (y * cos(angle)) + (x * sin(angle));
 
@@ -43,16 +54,22 @@ void Vector2D::Rotate( const double angle )
     y = yt;
 }
 
+void Vector2D::setZeroMagnitude()
+{
+    this->x = 0;
+    this->y = 0;
+}
+
 void Vector2D::SetMagnitude(const double newMagnitudes)
 {
-    double mag = this->Magnitude();
-    this->x = this->x * newMagnitudes / mag;
-    this->y = this->y * newMagnitudes / mag;
+    double mag = newMagnitudes / this->Magnitude();
+    this->x = this->x * mag;
+    this->y = this->y * mag;
 }
 
 double Vector2D::Magnitude() const
 {
-    return sqrt(x * x + y * y);
+    return sqrt(std::pow(x, 2) + std::pow(y, 2));
 }
 
 Vector2D& Vector2D::operator*=(const double scalar)
@@ -85,24 +102,6 @@ Vector2D Vector2D::operator/(const double scalar) const
     Vector2D out;
     out.x = this->x / scalar;
     out.y = this->y / scalar;
-    return out;
-}
-
-
-Vector2D& Vector2D::operator+=(const double scalar)
-{
-    this->x += scalar;
-    this->y += scalar;
-
-    return *this;
-}
-
-Vector2D Vector2D::operator+(const double scalar) const
-{
-    Vector2D out;
-    out.x = this->x + scalar;
-    out.y = this->y + scalar;
-
     return out;
 }
 

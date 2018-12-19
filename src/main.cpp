@@ -1,6 +1,8 @@
 /* ***********************************************************************
  * Tank Game Multiplayer
- * (C) 2018 by Yiannis Bourkelis (hello@andama.org)
+ * (C) 2018 by Yiannis     Bourkelis  (hello@andama.org)
+ * (C) 2018 by Christos    Paraskevas (cparaskevas91@gmail.com)
+ * (C) 2018 by Constantine Sarmidis
  *
  * This file is part of Tank Game Multiplayer.
  *
@@ -93,6 +95,7 @@ int main()
     //load the game map
     game_engine.LoadMap(tile_map, spritesheet);
 
+    /*
     //load the tank object in our level
     auto tank =  std::make_unique<Tank>();
     tank->texture.WindowRenderer = game_engine.WindowRenderer;
@@ -100,23 +103,32 @@ int main()
     tank->texture.loadFromFile("tank_133x50.png");
     tank->level = &game_engine.level;
     game::gameObjects.emplace_back(std::move(tank));
+    */
 
     auto tank_entity = std::make_unique<TankEntity>();
     tank_entity->transform_component = std::make_unique<TransformComponent>();
     tank_entity->transform_component->Position.x = 100;
     tank_entity->transform_component->Position.y = 100;
-    tank_entity->hasTransformComponent = true;
+    tank_entity->transform_component->RotationAngleDegrees = 0;
     tank_entity->sprite_component = std::make_unique<SpriteComponent>();
-    tank_entity->hasSpriteComponent = true;
     RenderSystem::CreateTextureFromFile("tank_133x50.png",
                                         game_engine.WindowRenderer,
                                         *tank_entity->sprite_component);
     tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
-    tank_entity->hasTankInputComponent = true;
     tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
-    tank_entity->hasRigidBody2DComponent = true;
-    tank_entity->rigid_body2d_component->Force = {0.25,0};
+    tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
+    tank_entity->rigid_body2d_component->DirectionalForce = {3, 0};
+    tank_entity->rigid_body2d_component->TorqueMagnitude = 100;
     tank_entity->rigid_body2d_component->Mass = 10000;
+    tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
+    tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
+    tank_entity->rigid_body2d_component->MaxVelocityMagnitude = 0.10;
+    tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
+    tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
+    tank_entity->rigid_body2d_component->isAccelerationfrozen = false;
+    tank_entity->rigid_body2d_component->isAngularAccelerationfrozen = false;
+    tank_entity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();
+
 
     game::entityObjects.emplace_back(std::move(tank_entity));
 

@@ -26,13 +26,14 @@
 #include <SDL.h>
 #include "tank_input_component.h"
 #include "rigid_body2d_component.h"
+#include "transform_component.h"
 
 class TankInputSystem
 {
 public:
     TankInputSystem();
 
-    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
+    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
     void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
 };
 
