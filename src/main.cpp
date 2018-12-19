@@ -44,7 +44,7 @@ using namespace std;
 
 int main()
 {
-    GameEngine game_engine(1400,800);
+    GameEngine game_engine(700,600);
     //Start up SDL and create window
     if( !game_engine.Init())
     {
@@ -95,9 +95,7 @@ int main()
     tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->transform_component->RotationAngleDegrees = 0;
     tank_entity->sprite_component = std::make_unique<SpriteComponent>();
-    RenderSystem::CreateTextureFromFile("tank_133x50.png",
-                                        game_engine.WindowRenderer,
-                                        *tank_entity->sprite_component);
+    RenderUtils::LoadTextureFromFile("tank_133x50.png", *tank_entity->sprite_component);
     tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
     tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
     tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
