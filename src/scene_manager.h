@@ -22,12 +22,28 @@
 #define SCENE_MANAGER_H
 
 #include <string>
+#include <iostream>
+#include <sstream>
+#include "pugixml.hpp"
+#include "tileset.h"
+#include "tile_entity.h"
+#include "game.h"
+#include "render_utils.h"
 
 class SceneManager
 {
 public:
     SceneManager();
-    void LoadFirstScene(std::string tmxFilePath, std::string sceneLayerName);
+
+    TileSet tileSet;
+
+    double levelWidth;
+    double levelHeight;
+
+    bool LoadFirstScene(const std::string &tmxFilePath);
+    bool LoadTileset();
+    bool LoadSceneEntities(pugi::xml_document &tmx_doc, const std::string &tmxFilePath);
+    void SpriteRectFromTileIndex(int tile_index, std::unique_ptr<SpriteComponent> &spriteComponent);
 };
 
 #endif // SCENE_MANAGER_H

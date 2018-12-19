@@ -107,6 +107,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                            RigidBody2DComponent &rigidBody2dComponent)
 {
     switch (tankInputComponent.state) {
+
     case State::forward:
         UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
         UpdatePositionForward(deltaTime, rigidBody2dComponent, transformComponent);

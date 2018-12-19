@@ -29,6 +29,11 @@ SpriteComponent::SpriteComponent()
 
 SpriteComponent::~SpriteComponent()
 {
+    FreeTextureMemory();
+}
+
+void SpriteComponent::FreeTextureMemory()
+{
     if( texture != nullptr )
     {
         SDL_DestroyTexture(texture);

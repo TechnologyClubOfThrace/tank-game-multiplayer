@@ -29,8 +29,12 @@ class ViewPort
 public:
     ViewPort();
 
+    //variables
     SDL_Rect frame;//the location of the viewport
     Camera camera;//the camera of the viewport
+
+    //methods
+    void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, double levelWidth, double levelHeight); //Center the camera over the game object
 };
 
 #endif // VIEWPORT_H

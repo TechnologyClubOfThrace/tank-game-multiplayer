@@ -1,8 +1,16 @@
 #include "shared_sprite_component.h"
 
-//static variables
-SDL_Texture * SharedSpriteComponent::shared_texture = nullptr;
-
 SharedSpriteComponent::SharedSpriteComponent()
 {
+}
+
+SharedSpriteComponent::~SharedSpriteComponent()
+{
+
+}
+
+void SharedSpriteComponent::FreeTextureMemory()
+{
+    //should not delete the texture from memory
+    //because it is used in other textures too
 }

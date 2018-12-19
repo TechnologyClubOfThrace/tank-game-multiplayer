@@ -6,25 +6,13 @@ CONFIG += exceptions_off #disable c++ exceptions handling to gain memory, speed 
 
 HEADERS += \
     game_engine.h \
-    texture_wrapper.h \
-    tile.h \
-    sprite_sheet.h \
-    tile_map.h \
-    sprite.h \
-    level.h \
     vector2d.h \
-    bullet.h \
-    fpscounter.h \
-    keystate.h \
-    game_object.h \
     camera.h \
     game.h \
     viewport.h \
     scene_manager.h \
     collider2d.h \
-    transform.h \
     entity.h \
-    component.h \
     transform_component.h \
     tank_entity.h \
     sprite_component.h \
@@ -36,30 +24,25 @@ HEADERS += \
     shared_sprite_component.h \
     rectangle_collider2d.h \
     convex_polygon_collider2d.h \
-    collider2d_collection_component.h
+    collider2d_collection_component.h \
+    tileset.h \
+    tile_entity.h \
+    fps_entity.h \
+    fps_system.h \
+    fps_component.h \
+    viewport_component.h \
+    render_utils.h
 
 SOURCES += \
         main.cpp \
     game_engine.cpp \
-    texture_wrapper.cpp \
-    tile.cpp \
-    sprite_sheet.cpp \
-    tile_map.cpp \
-    sprite.cpp \
-    level.cpp \
     vector2d.cpp \
-    bullet.cpp \
-    fpscounter.cpp \
-    keystate.cpp \
-    game_object.cpp \
     camera.cpp \
     game.cpp \
     viewport.cpp \
     scene_manager.cpp \
     collider2d.cpp \
-    transform.cpp \
     entity.cpp \
-    component.cpp \
     transform_component.cpp \
     tank_entity.cpp \
     sprite_component.cpp \
@@ -71,7 +54,14 @@ SOURCES += \
     shared_sprite_component.cpp \
     rectangle_collider2d.cpp \
     convex_polygon_collider2d.cpp \
-    collider2d_collection_component.cpp
+    collider2d_collection_component.cpp \
+    tileset.cpp \
+    tile_entity.cpp \
+    fps_entity.cpp \
+    fps_system.cpp \
+    fps_component.cpp \
+    viewport_component.cpp \
+    render_utils.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
@@ -121,9 +111,11 @@ windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4\\include
 mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.9/lib -lSDL2
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_image/2.0.4/lib -lSDL2_image
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
+mac: LIBS += -L$$/usr/local/Cellar/pugixml/1.9/lib/pugixml-1.9 -lpugixml
 #mac: LIBS += -L$$/usr/local/Cellar/sdl2_mixer/2.0.4/lib -lSDL2_mixer
 
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.9/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_ttf/2.0.14/include/SDL2
+mac:INCLUDEPATH += /usr/local/Cellar/pugixml/1.9/include/pugixml-1.9
 #INCLUDEPATH += /usr/local/Cellar/sdl2_mixer/2.0.4/include/SDL2

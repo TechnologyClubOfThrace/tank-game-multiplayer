@@ -22,9 +22,7 @@
 #define GAME_H
 
 #include <vector>
-#include "game_object.h"
 #include "viewport.h"
-
 #include "entity.h"
 
 class game
@@ -33,12 +31,11 @@ public:
     game();
 
     //vector of all game objects
-    static std::vector<std::unique_ptr<GameObject>> gameObjects;
     static std::vector<std::unique_ptr<Entity>> entityObjects;
 
     //vector of any objects that should be added to the gameObjects vector
     //like bullets fired etc
-    static std::vector<std::unique_ptr<GameObject>> gameObjects_for_addition;
+    static std::vector<std::unique_ptr<Entity>> entityObjects_for_addition;
 
     static std::vector<ViewPort> viewports;//the related viewports of the level. At least there should be one.
 };

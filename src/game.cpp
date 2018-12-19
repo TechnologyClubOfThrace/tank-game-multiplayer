@@ -20,9 +20,8 @@
 
 #include "game.h"
 
-std::vector<std::unique_ptr<GameObject>> game::gameObjects;
 std::vector<std::unique_ptr<Entity>> game::entityObjects;
-std::vector<std::unique_ptr<GameObject>> game::gameObjects_for_addition;
+std::vector<std::unique_ptr<Entity>> game::entityObjects_for_addition;
 std::vector<ViewPort> game::viewports;
 
 game::game()

@@ -23,10 +23,9 @@
 #ifndef TRANSFORM_COMPONENT_H
 #define TRANSFORM_COMPONENT_H
 
-#include "component.h"
 #include "vector2d.h"
 
-class TransformComponent : Component
+class TransformComponent
 {
 public:
     TransformComponent();

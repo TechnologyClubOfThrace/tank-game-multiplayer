@@ -24,10 +24,9 @@
 #define COLLIDER2D_COLLECTION_COMPONENT_H
 
 #include <vector>
-#include "component.h"
 #include "collider2d.h"
 
-class Collider2DCollectionComponent : public Component
+class Collider2DCollectionComponent
 {
 public:
     Collider2DCollectionComponent();
