@@ -164,5 +164,8 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         UpdateRotationDegreesCounterClockwise(deltaTime, rigidBody2dComponent, transformComponent);
         break;
 
+    case State::stopped:
+        break;
+
     }//switch
 }

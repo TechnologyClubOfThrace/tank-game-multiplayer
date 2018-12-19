@@ -42,21 +42,8 @@ using namespace std;
 
 #undef main
 
-int main()
+void configureViewports(GameEngine &game_engine)
 {
-    GameEngine game_engine(700,600);
-    //Start up SDL and create window
-    if( !game_engine.Init())
-    {
-        printf( "Failed to initialize!\n" );
-        return 0;
-    }
-
-    //load scene
-    //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
-    game_engine.sceneManager.LoadFirstScene("aris-first-map.tmx");
-
-
     //game viewports configuration
     //The tank game has 2 viewports;
     //1. One viewport of the main game window with a camera that follows the player tank
@@ -77,36 +64,25 @@ int main()
     viewport_radar.frame.x = 0;
     viewport_radar.frame.y = 0;
     game::viewports.emplace_back(viewport_radar);
-    //Viewport 2:
-    ViewPort viewport_radar2;
-    viewport_radar2.frame.x = 20;
-    viewport_radar2.frame.y = 290;
-    viewport_radar2.frame.w = 86;
-    viewport_radar2.frame.h = 61;
-    viewport_radar2.camera.frame = viewport_radar2.frame;
-    game::viewports.emplace_back(viewport_radar2);
     //end of viewport configuration
+}
 
+void configureTankEntity(GameEngine &game_engine)
+{
     //tank entity configuration
+
+    //first of all setup initial position and
+    //sprite that includes the tank image
     auto tank_entity = std::make_unique<TankEntity>();
     tank_entity->transform_component->Position.x = 100;
     tank_entity->transform_component->Position.y = 100;
     RenderUtils::LoadTextureFromFile("tank_133x50.png", *tank_entity->sprite_component);
-    tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->transform_component->RotationAngleDegrees = 0;
-    tank_entity->sprite_component = std::make_unique<SpriteComponent>();
-    RenderUtils::LoadTextureFromFile("tank_133x50.png", *tank_entity->sprite_component);
-    tank_entity->tank_input_component = std::make_unique<TankInputComponent>();
-    tank_entity->rigid_body2d_component = std::make_unique<RigidBody2DComponent>();
-    tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
-    tank_entity->rigid_body2d_component->DirectionalForce = {3, 0};
-    tank_entity->rigid_body2d_component->TorqueMagnitude = 100;
-    tank_entity->rigid_body2d_component->Mass = 10000;
-    tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
-    tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
-    tank_entity->rigid_body2d_component->MaxVelocityMagnitude = 0.10;
-    tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
 
+    //configuration of the radar viewport
+    //The viewport dimensions (width,height) are relative to the
+    //level dimensions, scaled down.
+    //Everything drawn inside the viewport is scaled down.
     tank_entity->viewport_component->entityScale.x =  game::viewports[tank_entity->viewport_component->viewportID].frame.w / static_cast<double>(game_engine.ScreenWidth);
     tank_entity->viewport_component->entityScale.y = tank_entity->viewport_component->entityScale.x;
     game::viewports[tank_entity->viewport_component->viewportID].frame.h = static_cast<int>(std::round(tank_entity->viewport_component->entityScale.y * game_engine.ScreenHeight));
@@ -115,12 +91,47 @@ int main()
     game::viewports[tank_entity->viewport_component->viewportID].camera.frame = game::viewports[tank_entity->viewport_component->viewportID].frame;
     tank_entity->viewport_component->destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * tank_entity->viewport_component->entityScale.x));
     tank_entity->viewport_component->destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * tank_entity->viewport_component->entityScale.y));
+
+    //initial values for tank entity physics
+    tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
+    tank_entity->rigid_body2d_component->DirectionalForce = {3, 0};
+    tank_entity->rigid_body2d_component->TorqueMagnitude = 100;
+    tank_entity->rigid_body2d_component->Mass = 10000;
+    tank_entity->rigid_body2d_component->Force = {0.25,0};
+    tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
+    tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
+    tank_entity->rigid_body2d_component->MaxVelocityMagnitude = 0.10;
+    tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
     tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
     tank_entity->rigid_body2d_component->isAccelerationfrozen = false;
     tank_entity->rigid_body2d_component->isAngularAccelerationfrozen = false;
-    tank_entity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();
 
     game::entityObjects.emplace_back(std::move(tank_entity));
+}
+
+int main()
+{
+    GameEngine game_engine(700,600);
+    //Start up SDL and create window
+    if( !game_engine.Init())
+    {
+        //if game engine fails to init, quit the application
+        printf( "Failed to initialize!\n" );
+        return 0;
+    }
+
+    //load the first level of the game from the tilemap file
+    //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
+    game_engine.sceneManager.LoadFirstScene("aris-first-map.tmx");
+
+    //view ports configuration
+    //The game has 2 viewports:
+    //(1) the main view port and
+    //(2) the radar viewport on the bottom right
+    configureViewports(game_engine);
+
+    //tank entity configuration
+    configureTankEntity(game_engine);
 
     //start main game loop
     game_engine.StartGameLoop();

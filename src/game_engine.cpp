@@ -254,6 +254,6 @@ void GameEngine::Draw()
                                                   game::viewports[viewPortIndex]);
                 }
             }
-        }
-    }
-}
+        }//for (const auto& entity
+    }//for (size_t
+}//Draw
