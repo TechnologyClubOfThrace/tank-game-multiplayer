@@ -23,7 +23,6 @@
 
 #include "tile_map.h"
 #include "sprite_sheet.h"
-#include "tank.h"
 #include "fpscounter.h"
 #include <chrono>
 
