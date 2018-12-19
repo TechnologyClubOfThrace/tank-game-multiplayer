@@ -13,7 +13,6 @@ HEADERS += \
     sprite.h \
     level.h \
     vector2d.h \
-    vector2d_angle.h \
     bullet.h \
     fpscounter.h \
     keystate.h \
@@ -23,7 +22,6 @@ HEADERS += \
     viewport.h \
     scene_manager.h \
     collider2d.h \
-    tank.h \
     transform.h \
     entity.h \
     component.h \
@@ -50,7 +48,6 @@ SOURCES += \
     sprite.cpp \
     level.cpp \
     vector2d.cpp \
-    vector2d_angle.cpp \
     bullet.cpp \
     fpscounter.cpp \
     keystate.cpp \
@@ -60,7 +57,6 @@ SOURCES += \
     viewport.cpp \
     scene_manager.cpp \
     collider2d.cpp \
-    tank.cpp \
     transform.cpp \
     entity.cpp \
     component.cpp \
