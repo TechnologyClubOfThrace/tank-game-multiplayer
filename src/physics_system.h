@@ -43,8 +43,14 @@ public:
                 TransformComponent &transformComponent,
                 const TankInputComponent &tankInputComponent,
                 RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateRotation(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
-    void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
+    void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
+    void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, const TankInputComponent &tankInputComponent);
+    void UpdatePositionForward(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void UpdatePositionBackwards(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void UpdateRotationDegreesClockwise(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void UpdateRotationDegreesCounterClockwise(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void UpdateForce(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void UpdateAcceleration(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
 };
 
 #endif // PHYSICS_SYSTEM_H

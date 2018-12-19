@@ -26,8 +26,8 @@
 enum class State
 {
     stopped,
-    moveForward,
-    moveBackwards,
+    forward,
+    backwards,
     stoppedRotationClockwise,
     stoppedRotationCounterClockwise,
     forwardRotationClockwise,

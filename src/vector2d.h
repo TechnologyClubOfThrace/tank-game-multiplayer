@@ -35,7 +35,8 @@ public:
     double y = 0;
 
     //functions
-    void Rotate(const double angle);
+    void RotateArcs(const double angle);
+    void RotateDegrees(double angle);
     void setZeroMagnitude();
     void SetMagnitude(const double newMagnitudes);
     double Magnitude() const;
@@ -45,8 +46,6 @@ public:
     Vector2D operator* (const double scalar) const;
     Vector2D& operator/= (const double scalar);
     Vector2D operator/ (const double scalar) const;
-    Vector2D& operator+= (const double scalar);
-    Vector2D operator+ (const double scalar) const;
     Vector2D& operator+= (const Vector2D &vector2d);
     Vector2D operator+ (const Vector2D &vector2d) const;
     Vector2D& operator-= (const Vector2D &vector2d);

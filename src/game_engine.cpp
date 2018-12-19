@@ -184,7 +184,7 @@ void GameEngine::HandleEvents()
 
         for (const auto& entity : game::entityObjects){
             if(entity->tank_input_component){
-                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component);
+                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component, *entity->transform_component);
             }
         }
 

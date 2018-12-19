@@ -1,0 +1,29 @@
+//These are the states of the vehicle. RC stands for RotationClockwise, RCC for RotationCounterClockwise.
+//fw = forward, bw = backwards.
+//The functions calculate what is necessary for every state.
+
+stopped
+
+stoppedRC
+updateDegC, updateAngVeloc,
+
+stoppedRCC
+updateDegCC, updateAngVeloc,
+
+fw
+updateVelocity, updatePosition
+
+fwRC
+updateDegC, updateAngVeloc, updateForce, updateAccel, updateVelocity, updatePosition
+
+fwRCC
+updateDegCC, updateAngVeloc, updateForce, updateAccel, updateVelocity, updatePosition
+
+bw
+updateVelocity, updatePosition
+
+bwRC
+updateDegC, updateAngVeloc, updateForce, updateAccel, updateVelocity, updatePosition
+
+bwRCC
+updateDegCC, updateAngVeloc, updateForce, updateAccel, updateVelocity, updatePosition

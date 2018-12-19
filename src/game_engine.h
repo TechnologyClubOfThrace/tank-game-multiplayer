@@ -22,6 +22,7 @@
 #define GAME_ENGINE_H
 
 #include <SDL.h>
+
 #include <chrono>
 
 #include "scene_manager.h"
