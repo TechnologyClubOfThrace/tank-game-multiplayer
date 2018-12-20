@@ -23,6 +23,10 @@
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 
+#ifdef WIN32
+#define _USE_MATH_DEFINES
+#endif
+#include <cmath>
 
 class Vector2D
 {
