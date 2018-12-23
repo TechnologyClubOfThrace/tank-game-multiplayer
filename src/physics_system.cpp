@@ -107,13 +107,6 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                            const TankInputComponent &tankInputComponent,
                            RigidBody2DComponent &rigidBody2dComponent)
 {
-    float deggg = fmod(transformComponent.RotationAngleDegrees,360);
-    std::cout << deggg << std::endl;
-    rigidBody2dComponent.forcetemp=rigidBody2dComponent.DirectionalForce;
-    rigidBody2dComponent.forcetemp.RotateDegrees(transformComponent.RotationAngleDegrees);
-    if (rigidBody2dComponent.forcetemp.x !=rigidBody2dComponent.Force.x || rigidBody2dComponent.forcetemp.y != rigidBody2dComponent.Force.y)
-        std::cout << "lathos" << std::endl;
-
     switch (tankInputComponent.state) {
 
     case State::forward:
