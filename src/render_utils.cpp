@@ -10,6 +10,7 @@ RenderUtils::RenderUtils()
 //loads a texture from an image file
 bool RenderUtils::LoadTextureFromFile(std::string path, SDL_Texture*& texture)
 {
+    std::cout << "[ENTERED] LoadTextureFromFile" << std::endl;
     //Get rid of preexisting texture
     if(texture != nullptr){
         SDL_DestroyTexture(texture);
@@ -17,21 +18,24 @@ bool RenderUtils::LoadTextureFromFile(std::string path, SDL_Texture*& texture)
     }
 
     //Load image at specified path
+    std::cout << "[WILL] SDL_Surface* loadedSurface = IMG_Load( path.c_str() ); PATH: " << path << std::endl;
     SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
     if( loadedSurface == nullptr )
     {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+        std::cout << "Unable to load image: " << path.c_str() << " ! SDL_image Error: " << IMG_GetError() << std::endl;
     }
     else
     {
+        std::cout << "[OK] SDL_Surface* loadedSurface = IMG_Load( path.c_str() );" << std::endl;
         //Color key image
         //SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
         //Create texture from surface pixels
+        std::cout << "[WILL]  texture = SDL_CreateTextureFromSurface(RenderUtils::windowRenderer, loadedSurface );" << std::endl;
         texture = SDL_CreateTextureFromSurface(RenderUtils::windowRenderer, loadedSurface );
         if( texture == nullptr )
         {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+            std::cout << "Unable to create texture from " << path.c_str() << "! SDL Error: " << SDL_GetError() << std::endl;
         }
         else
         {
@@ -39,6 +43,7 @@ bool RenderUtils::LoadTextureFromFile(std::string path, SDL_Texture*& texture)
             //mWidth = loadedSurface->w;
             //mHeight = loadedSurface->h;
         }
+        std::cout << "[OK]  texture = SDL_CreateTextureFromSurface(RenderUtils::windowRenderer, loadedSurface );" << std::endl;
 
         //Get rid of old loaded surface
         SDL_FreeSurface( loadedSurface );

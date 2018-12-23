@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <iostream>
 #include <string>
 #include "sprite_component.h"
 

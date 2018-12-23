@@ -4,6 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += exceptions_off #disable c++ exceptions handling to gain memory, speed and code simplicity. http://doc.qt.io/qt-5/qmake-variable-reference.html
 
+DEFINES += PUGIXML_NO_EXCEPTIONS
+
 HEADERS += \
     game_engine.h \
     vector2d.h \
@@ -31,9 +33,7 @@ HEADERS += \
     fps_system.h \
     fps_component.h \
     viewport_component.h \
-    render_utils.h \
-    pugiconfig.hpp \
-    pugixml.hpp
+    render_utils.h
 
 SOURCES += \
         main.cpp \
@@ -63,8 +63,7 @@ SOURCES += \
     fps_system.cpp \
     fps_component.cpp \
     viewport_component.cpp \
-    render_utils.cpp \
-    pugixml.cpp
+    render_utils.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
