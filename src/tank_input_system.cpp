@@ -152,6 +152,28 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
                  tankInputComponent.state = State::stoppedRotationCounterClockwise;
              }
              break;
+        case SDLK_w:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //move forward
+                rigidBody2dComponent.isAccelerationfrozen = false;
+                rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
+                rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
+                rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+                tankInputComponent.state = State::forwardRotationClockwise;
+            }
+            break;
+
+        case SDLK_s:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //move backwards
+                rigidBody2dComponent.isAccelerationfrozen = false;
+                rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
+                rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
+                rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+                tankInputComponent.state = State::backwardsRotationClockwise;
+            }
+            break;
+
         }
         break;
 
@@ -170,6 +192,29 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
                  tankInputComponent.state = State::stoppedRotationClockwise;
              }
             break;
+        case SDLK_w:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //move forward
+                rigidBody2dComponent.isAccelerationfrozen = false;
+                rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
+                rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
+                rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+                tankInputComponent.state = State::forwardRotationCounterClockwise;
+            }
+            break;
+
+        case SDLK_s:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //move backwards
+                rigidBody2dComponent.isAccelerationfrozen = false;
+                rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
+                rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
+                rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+                tankInputComponent.state = State::backwardsRotationCounterClockwise;
+            }
+            break;
+
+
         }
         break;
 
