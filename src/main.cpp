@@ -100,7 +100,7 @@ void configureTankEntity(GameEngine &game_engine)
     tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
     tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
-    tank_entity->rigid_body2d_component->MaxVelocityMagnitude = 0.10;
+    tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.10;
     tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
     tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
     tank_entity->rigid_body2d_component->isAccelerationfrozen = false;

@@ -87,6 +87,7 @@ Vector2D Vector2D::operator*(const double scalar) const
     return out;
 }
 
+
 Vector2D& Vector2D::operator/=(const double scalar)
 {
     this->x /= scalar;
@@ -128,6 +129,21 @@ Vector2D& Vector2D::operator-=(const Vector2D &vector2d)
 
     return *this;
 }
+
+double Vector2D::Dot(const Vector2D &vector2d_1, const Vector2D &vector2d_2)
+{
+    return (vector2d_1.x*vector2d_2.x)+(vector2d_1.y*vector2d_2.y);
+}
+
+double Vector2D::Cross(const Vector2D &vector2d_1, const Vector2D &vector2d_2)
+{
+    return (vector2d_1.x*vector2d_2.y)-(vector2d_1.y*vector2d_2.x);
+}
+
+
+
+
+
 
 Vector2D Vector2D::Up()
 {
