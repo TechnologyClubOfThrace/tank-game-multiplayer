@@ -32,9 +32,9 @@ class TankInputSystem
 {
 public:
     TankInputSystem();
-    void TankInputSystem::SetDeltaRotDegZero(RigidBody2DComponent &rigidBody2dComponent);
-    void TankInputSystem::UpdateForce(RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
-    void TankInputSystem::UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent);
+    void SetDeltaRotDegZero(RigidBody2DComponent &rigidBody2dComponent);
+    void UpdateForce(RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent);
     void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
     void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
 };
