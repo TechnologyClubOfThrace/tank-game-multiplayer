@@ -59,7 +59,7 @@ void PhysicsSystem::UpdateRotationDegreesClockwise(const std::chrono::millisecon
     rigidBody2dComponent.deltaRotationAngleeDegrees = rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
     0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
     transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
-    std::cout << rigidBody2dComponent.deltaRotationAngleeDegrees << std::endl;
+    //std::cout << rigidBody2dComponent.deltaRotationAngleeDegrees << std::endl;
 }
 
 void PhysicsSystem::UpdateRotationDegreesCounterClockwise(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
@@ -67,12 +67,13 @@ void PhysicsSystem::UpdateRotationDegreesCounterClockwise(const std::chrono::mil
     rigidBody2dComponent.deltaRotationAngleeDegrees = -rigidBody2dComponent.AngularVelocityMagnitude * deltaTime -
     0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
     transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
-    std::cout << rigidBody2dComponent.deltaRotationAngleeDegrees << std::endl;
+    //std::cout << rigidBody2dComponent.deltaRotationAngleeDegrees << std::endl;
 }
 
 void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, const TankInputComponent &tankInputComponent)
 {    
     if(!rigidBody2dComponent.isAccelerationfrozen){
+        rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
         rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
 
         if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.MaxVelocityMagnitude){
@@ -111,6 +112,8 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     case State::forward:
         UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
         UpdatePositionForward(deltaTime, rigidBody2dComponent, transformComponent);
+
+
         break;
 
     case State::forwardRotationClockwise:
