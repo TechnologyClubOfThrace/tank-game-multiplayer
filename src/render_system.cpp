@@ -30,9 +30,14 @@ RenderSystem::RenderSystem()
 void RenderSystem::Render(TransformComponent &transformComponent, SpriteComponent &spriteComponent, std::vector<ViewPort> &viewports)
 {
     if (!spriteComponent.renderPositionRelatedToCamera){
-        spriteComponent.destinationRectangle.x = static_cast<int>(round(transformComponent.Position.x - static_cast<double>(viewports[0].camera.frame.x)));
-        spriteComponent.destinationRectangle.y = static_cast<int>(round(transformComponent.Position.y - static_cast<double>(viewports[0].camera.frame.y)));
+        //spriteComponent.destinationRectangle.x = static_cast<int>(round(transformComponent.Position.x - static_cast<double>(viewports[0].camera.frame.x)));
+        //spriteComponent.destinationRectangle.y = static_cast<int>(round(transformComponent.Position.y - static_cast<double>(viewports[0].camera.frame.y)));
+        spriteComponent.destinationRectangle.x = static_cast<int>((transformComponent.Position.x - (viewports[0].camera.frame.x)));
+        spriteComponent.destinationRectangle.y = static_cast<int>((transformComponent.Position.y - (viewports[0].camera.frame.y)));
     }
+
+    //std::cout << "render x: " << spriteComponent.destinationRectangle.x << " , render y: " << spriteComponent.destinationRectangle.y << std::endl;
+    //SDL_SetTextureBlendMode(spriteComponent.texture, SDL_BLENDMODE_BLEND);
 
     SDL_RenderCopyEx(RenderUtils::windowRenderer,
                      spriteComponent.texture,
@@ -48,8 +53,11 @@ void RenderSystem::Render(TransformComponent &transformComponent, SpriteComponen
 
 void RenderSystem::RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportComponent &viewportComponent,  ViewPort &viewport)
 {
-    viewportComponent.destinationRectangle.x = static_cast<int>(round((transformComponent.Position.x * viewportComponent.entityScale.x) + static_cast<double>(viewport.camera.frame.x)));
-    viewportComponent.destinationRectangle.y = static_cast<int>(round((transformComponent.Position.y * viewportComponent.entityScale.y) + static_cast<double>(viewport.camera.frame.y)));
+    //viewportComponent.destinationRectangle.x = static_cast<int>(round((transformComponent.Position.x * viewportComponent.entityScale.x) + static_cast<double>(viewport.camera.frame.x)));
+    //viewportComponent.destinationRectangle.y = static_cast<int>(round((transformComponent.Position.y * viewportComponent.entityScale.y) + static_cast<double>(viewport.camera.frame.y)));
+    viewportComponent.destinationRectangle.x = static_cast<int>(((transformComponent.Position.x * viewportComponent.entityScale.x) + static_cast<double>(viewport.camera.frame.x)));
+    viewportComponent.destinationRectangle.y = static_cast<int>(((transformComponent.Position.y * viewportComponent.entityScale.y) + static_cast<double>(viewport.camera.frame.y)));
+
 
     SDL_RenderCopyEx(RenderUtils::windowRenderer,
                      spriteComponent.texture,

@@ -27,24 +27,28 @@ ViewPort::ViewPort()
 
 void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, double levelWidth, double levelHeight)
 {
-        this->camera.frame.x = static_cast<int>(round((transformComponent.Position.x + spriteComponent.sourceRectangle.w / 2 ) - (this->camera.frame.w / 2)));
-        this->camera.frame.y = static_cast<int>(round((transformComponent.Position.y + spriteComponent.sourceRectangle.h / 2 ) - (this->camera.frame.h / 2)));
+    //calculations do not need rounding because it causes the entity on camera to shake
+    this->camera.frame.x = static_cast<int>(round((transformComponent.Position.x + static_cast<double>(spriteComponent.sourceRectangle.w) / 2.0 ) - (static_cast<double>(this->camera.frame.w) / 2.0)));
+    this->camera.frame.y = static_cast<int>(round((transformComponent.Position.y + static_cast<double>(spriteComponent.sourceRectangle.h) / 2.0 ) - (static_cast<double>(this->camera.frame.h) / 2.0)));
 
-        //Keep the camera in bounds
-        if( this->camera.frame.x < 0 )
-        {
-            this->camera.frame.x = 0;
-        }
-        if( this->camera.frame.y < 0 )
-        {
-            this->camera.frame.y = 0;
-        }
-        if( this->camera.frame.x > levelWidth - this->camera.frame.w )
-        {
-            this->camera.frame.x = levelWidth - this->camera.frame.w;
-        }
-        if( this->camera.frame.y > levelHeight - this->camera.frame.h )
-        {
-            this->camera.frame.y = levelHeight - this->camera.frame.h;
-        }
+    //this->camera.frame.x = (transformComponent.Position.x + spriteComponent.sourceRectangle.w / 2.0 ) - (this->camera.frame.w / 2.0);
+    //this->camera.frame.y = (transformComponent.Position.y + spriteComponent.sourceRectangle.h / 2.0 ) - (this->camera.frame.h / 2.0);
+
+    //Keep the camera in bounds
+    if( this->camera.frame.x < 0 )
+    {
+        this->camera.frame.x = 0;
+    }
+    if( this->camera.frame.y < 0 )
+    {
+        this->camera.frame.y = 0;
+    }
+    if( this->camera.frame.x > levelWidth - this->camera.frame.w )
+    {
+        this->camera.frame.x = levelWidth - this->camera.frame.w;
+    }
+    if( this->camera.frame.y > levelHeight - this->camera.frame.h )
+    {
+        this->camera.frame.y = levelHeight - this->camera.frame.h;
+    }
 }

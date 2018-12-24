@@ -75,6 +75,7 @@ public:
     static void Draw();
     static void game_engine_one_iteration();
     static void game_engine_infinite_loop();
+    static void game_engine_infinite_loop2();
 
 private:
     //systems
