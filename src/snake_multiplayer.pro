@@ -94,12 +94,15 @@ win32-msvc*:contains(QMAKE_HOST.arch, x86_64) {
 windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x64 -lSDL2
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x64 -lSDL2_ttf
 windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x64 -lSDL2_image
+CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Debug -lpugixml
+CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Release -lpugixml
 } else {
 #32bit msvc selected kit
 windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x86 -lSDL2
-
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x86 -lSDL2_ttf
 windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x86 -lSDL2_image
+CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Debug_x86 -lpugixml
+CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Release_x86 -lpugixml
 }
 
 win32-msvc*{
@@ -107,6 +110,7 @@ win32-msvc*{
 windows: INCLUDEPATH += C:\\libs\\SDL2-2.0.9\\include
 windows: INCLUDEPATH += C:\\libs\\SDL2_ttf-2.0.14\\include
 windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4\\include
+windows: INCLUDEPATH += C:\\libs\\pugixml-1.9\\src
 }
 
 
