@@ -204,7 +204,7 @@ void GameEngine::game_engine_infinite_loop()
        }
        //End of frame cap
 
-       /*
+
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
@@ -212,7 +212,7 @@ void GameEngine::game_engine_infinite_loop()
            renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
-       */
+
 
        //display everything in screen
 

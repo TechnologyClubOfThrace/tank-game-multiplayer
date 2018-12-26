@@ -23,6 +23,8 @@
 #ifndef TRANSFORM_COMPONENT_H
 #define TRANSFORM_COMPONENT_H
 
+#include <memory>
+#include <vector>
 #include "vector2d.h"
 
 class TransformComponent
@@ -33,6 +35,8 @@ public:
     Vector2D Position;
     Vector2D Scale;
     double RotationAngleDegrees = 0;
+
+    std::unique_ptr<std::vector<std::unique_ptr<TransformComponent>>> children = nullptr;
 };
 
 #endif // TRANSFORM_COMPONENT_H
