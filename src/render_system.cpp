@@ -70,3 +70,17 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
 
    // std::cout << "res: " << res << " ,sprite w: " << spriteComponent.rect.w << std::endl;
 }
+
+void RenderSystem::RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport)
+{
+    SDL_RenderCopyEx(RenderUtils::windowRenderer,
+                     spriteComponent.texture,
+                     &spriteComponent.sourceRectangle,//source rectangle
+                     &viewport.frame,//destination rectangle
+                     0,//angle
+                     nullptr,//center
+                     SDL_RendererFlip::SDL_FLIP_NONE
+                );
+
+   // std::cout << "res: " << res << " ,sprite w: " << spriteComponent.rect.w << std::endl;
+}

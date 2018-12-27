@@ -386,7 +386,15 @@ void GameEngine::Draw()
 
     //if there are more than one viewports, call the draw oveload
     //on each game object with the viewport index.
-    for (size_t viewPortIndex = 1; viewPortIndex <= game::viewports.size(); viewPortIndex++){
+    for (size_t viewPortIndex = 1; viewPortIndex < game::viewports.size(); viewPortIndex++){
+
+        //render viewport background if exists
+        if (game::viewports[viewPortIndex].background_sprite_component) {
+            renderSystem.RenderViewportSprite(*game::viewports[viewPortIndex].background_sprite_component,
+                                              game::viewports[viewPortIndex]);
+        }
+
+        //render entities inside the viewport
         for (const auto& entity : game::entityObjects){
             if(entity->viewport_component){
                 if(entity->viewport_component->viewportID == viewPortIndex){

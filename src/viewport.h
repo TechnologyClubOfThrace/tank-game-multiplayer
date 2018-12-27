@@ -22,16 +22,22 @@
 #define VIEWPORT_H
 
 #include <SDL.h>
+#include <memory>
 #include "camera.h"
+#include "sprite_component.h"
+#include "transform_component.h"
 
 class ViewPort
 {
 public:
     ViewPort();
+    ~ViewPort();
 
     //variables
     SDL_Rect frame;//the location of the viewport
     Camera camera;//the camera of the viewport
+    std::shared_ptr<SpriteComponent> background_sprite_component = nullptr;//todo: why cant i use a unique_ptr here;
+    //SpriteComponent background_sprite_component;
 
     //methods
     void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, double levelWidth, double levelHeight); //Center the camera over the game object

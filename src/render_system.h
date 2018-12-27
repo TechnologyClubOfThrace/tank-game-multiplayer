@@ -39,6 +39,7 @@ public:
     RenderSystem();
     void Render(TransformComponent &transformComponent, SpriteComponent &spriteComponent, std::vector<ViewPort> &viewports);
     void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportComponent &viewportComponent, ViewPort &viewport);
+    void RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport);
 };
 
 #endif // RENDER_SYSTEM_H
