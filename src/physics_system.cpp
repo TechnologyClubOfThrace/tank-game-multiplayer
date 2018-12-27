@@ -29,11 +29,14 @@ PhysicsSystem::PhysicsSystem()
 
 }
 
-void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateAngularAcceleration (RigidBody2DComponent &rigidBody2dComponent)
 {
     rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+}
 
-    if(!rigidBody2dComponent.isAngularAccelerationfrozen){
+void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+{
+       if(!rigidBody2dComponent.isAngularAccelerationfrozen){
         rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * deltaTime;
 
         if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
@@ -43,76 +46,64 @@ void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &
     }
 }
 
-void PhysicsSystem::UpdateForce(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
+
+void PhysicsSystem::UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
-   // rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
-    rigidBody2dComponent.Force.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
+    rigidBody2dComponent.deltaRotationAngleeDegrees = rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
+    0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
+
+   }
+
+void PhysicsSystem::UpdateForce(RigidBody2DComponent &rigidBody2dComponent)
+{
+   rigidBody2dComponent.Force.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
 }
 
-void PhysicsSystem::UpdateAcceleration(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent)
 {
     rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
 }
 
-void PhysicsSystem::UpdateRotationDegreesClockwise(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
-{
-    rigidBody2dComponent.deltaRotationAngleeDegrees = rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
-    0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-    transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
-    //std::cout << rigidBody2dComponent.deltaRotationAngleeDegrees << std::endl;
-}
 
-void PhysicsSystem::UpdateRotationDegreesCounterClockwise(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
-{
-    rigidBody2dComponent.deltaRotationAngleeDegrees = -rigidBody2dComponent.AngularVelocityMagnitude * deltaTime -
-    0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
-    transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
-    //std::cout << rigidBody2dComponent.deltaRotationAngleeDegrees << std::endl;
-}
-
-void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, const TankInputComponent &tankInputComponent)
+void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {    
     if(!rigidBody2dComponent.isAccelerationfrozen){
-        rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
+        //rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
         rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
 
         if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.VelocityMaximumMagnitude){
             //std::cout << "will call rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude)" << std::endl;
             rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.VelocityMaximumMagnitude);
             rigidBody2dComponent.isAccelerationfrozen = true;
+
+        //this loop is problematic, while in max acceleration it never rotates the speed! I have to fix it.
         }
-    } else if(rigidBody2dComponent.isAngularAccelerationfrozen){
-        if ( (tankInputComponent.state == State::forwardRotationClockwise) ||
-            (tankInputComponent.state == State::forwardRotationCounterClockwise) ||
-            (tankInputComponent.state == State::backwardsRotationClockwise) ||
-            (tankInputComponent.state == State::backwardsRotationCounterClockwise)) {
-            rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
-        }
+
+
     }
 
 }
 
-void PhysicsSystem::UpdatePositionForward(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
+
+void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {
-    transformComponent.Position += rigidBody2dComponent.Velocity * deltaTime;
+    rigidBody2dComponent.Position += rigidBody2dComponent.Velocity * deltaTime;
 }
 
-void PhysicsSystem::UpdatePositionBackwards(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
-{
-    transformComponent.Position -= rigidBody2dComponent.Velocity * deltaTime;
-}
 
 void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                            TransformComponent &transformComponent,
                            const TankInputComponent &tankInputComponent,
                            RigidBody2DComponent &rigidBody2dComponent)
 {
-    switch (tankInputComponent.state) {
+
+
+
+/*    switch (tankInputComponent.state) {
 
     case State::forward:
         UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePositionForward(deltaTime, rigidBody2dComponent, transformComponent);
+        UpdatePosition(deltaTime, rigidBody2dComponent, transformComponent);
 
 
         break;
@@ -123,7 +114,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         UpdateForce(deltaTime, rigidBody2dComponent, transformComponent);
         UpdateAcceleration(deltaTime, rigidBody2dComponent);
         UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePositionForward(deltaTime, rigidBody2dComponent, transformComponent);
+        UpdatePosition(deltaTime, rigidBody2dComponent, transformComponent);
         break;
 
     case State::forwardRotationCounterClockwise:
@@ -132,7 +123,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
         UpdateForce(deltaTime, rigidBody2dComponent, transformComponent);
         UpdateAcceleration(deltaTime, rigidBody2dComponent);
         UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePositionForward(deltaTime, rigidBody2dComponent, transformComponent);
+        UpdatePosition(deltaTime, rigidBody2dComponent, transformComponent);
         break;
 
     case State::backwardsRotationCounterClockwise:
@@ -171,5 +162,5 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     case State::stopped:
         break;
 
-    }//switch
+    }//switch */
 }

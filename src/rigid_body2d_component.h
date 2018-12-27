@@ -38,10 +38,11 @@ public:
     double MoI {};
     Vector2D Acceleration {}; // pixels/ms^2
     double VelocityMaximumMagnitude {}; // pixels/ms
-    Vector2D Force{};
+    Vector2D Force{}; //nowhere used, probably needs delete.
     Vector2D DirectionalForce {};
     double deltaRotationAngleeDegrees {}; //the most recent rotation degrees that increased the RotationAngleDegrees
     double Mass {};
+    Vector2D Position {}; //position used in physics calculations
 
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
