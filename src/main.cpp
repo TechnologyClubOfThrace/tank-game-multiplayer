@@ -49,6 +49,7 @@ void configureViewports()
     //2. One viewport on the bottom right corner that displays the game map, the player tank position
     //within the map and other game objects that will be added if needed.
     //Viewport 0:
+
     ViewPort viewport;
     viewport.frame.x = 0;
     viewport.frame.y = 0;
@@ -56,6 +57,7 @@ void configureViewports()
     viewport.frame.h = GameEngine::ScreenHeight;
     viewport.camera.frame = viewport.frame;
     game::viewports.emplace_back(std::move(viewport));
+
     //Viewport 1:
     ViewPort viewport_radar;
     viewport_radar.frame.w = 150;
