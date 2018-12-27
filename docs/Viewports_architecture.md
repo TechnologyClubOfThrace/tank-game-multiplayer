@@ -20,11 +20,11 @@
 
 table markdown using https://www.tablesgenerator.com/markdown_tables
 
-| Entity                | Κάτω από                                    | Πάνω από                                          | Θέση στο entires array                 | Viewport id |
-|-----------------------|---------------------------------------------|---------------------------------------------------|----------------------------------------|-------------|
-| Level Background [LB] | every other entity                          |                                                   | 0-LB_count                             | 0 [default] |
-| Player tank           | turret, tank explosion,  wall cover,  radar | LB,  Tank trace                                   | after LB_count                         | 0 [default] |
-| Turret                | tank explosion,  radar                      | LB,  parent Player tank,  tank trace,  wall cover | after LB_count                         |             |
-| Tank trace            | Player tank,  turret,                       | LB,  older tank trace                             | after LB_count, after older tank trace |             |
-|                       |                                             |                                                   |                                        |             |
-|                       |                                             |                                                   |                                        |             |
+| Entity                | Κάτω από                                                                             | Πάνω από                                          | Θέση στο entires array                 | Viewport id                            |
+|-----------------------|--------------------------------------------------------------------------------------|---------------------------------------------------|----------------------------------------|----------------------------------------|
+| Level Background [LB] | every other entity                                                                   |                                                   | 0-LB_count                             | 0 [default]                            |
+| Player tank           | turret, tank explosion,  wall cover,  radar                                          | LB,  Tank trace                                   | after LB_count                         | 0 [default]                            |
+| Turret                | tank explosion,  radar                                                               | LB,  parent Player tank,  tank trace,  wall cover | after LB_count                         |                                        |
+| Tank trace            | Player tank,  turret,  tank bomb,  health-ammo,  tank explosion, tank trace,   radar | LB,  older tank trace                             | after LB_count, after older tank trace | before health-ammo,  before tank trace |
+| Tank bomb             |                                                                                      |                                                   |                                        |                                        |
+|                       |                                                                                      |                                                   |                                        |                                        |
