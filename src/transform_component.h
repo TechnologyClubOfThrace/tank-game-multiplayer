@@ -32,8 +32,8 @@ class TransformComponent
 public:
     TransformComponent();
 
-    Vector2D Position;
-    Vector2D Scale;
+    Vector2D Position {0,0};
+    Vector2D Scale {0,0};
     double RotationAngleDegrees = 0;
 
     std::unique_ptr<std::vector<std::unique_ptr<TransformComponent>>> children = nullptr;

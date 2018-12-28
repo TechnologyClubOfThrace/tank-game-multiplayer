@@ -22,10 +22,6 @@
 
 #include "vector2d.h"
 
-Vector2D::Vector2D()
-{
-}
-
 Vector2D::Vector2D(double x, double y) : x(x), y(y)
 {
 }
@@ -81,10 +77,7 @@ Vector2D& Vector2D::operator*=(const double scalar)
 
 Vector2D Vector2D::operator*(const double scalar) const
 {
-    Vector2D out;
-    out.x = this->x * scalar;
-    out.y = this->y * scalar;
-    return out;
+    return Vector2D {this->x * scalar, this->y * scalar};
 }
 
 Vector2D& Vector2D::operator/=(const double scalar)
@@ -98,10 +91,7 @@ Vector2D& Vector2D::operator/=(const double scalar)
 
 Vector2D Vector2D::operator/(const double scalar) const
 {
-    Vector2D out;
-    out.x = this->x / scalar;
-    out.y = this->y / scalar;
-    return out;
+    return Vector2D {this->x / scalar, this->y / scalar};
 }
 
 Vector2D& Vector2D::operator+=(const Vector2D &vector2d)
@@ -114,11 +104,7 @@ Vector2D& Vector2D::operator+=(const Vector2D &vector2d)
 
 Vector2D Vector2D::operator+(const Vector2D &vector2d) const
 {
-    Vector2D out;
-    out.x = this->x + vector2d.x;
-    out.y = this->y + vector2d.y;
-
-    return out;
+    return Vector2D {this->x + vector2d.x, this->y + vector2d.y};
 }
 
 Vector2D& Vector2D::operator-=(const Vector2D &vector2d)
