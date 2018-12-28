@@ -29,16 +29,15 @@
 #include <vector>
 #include "transform_component.h"
 #include "sprite_component.h"
-#include "viewport_component.h"
 #include "viewport.h"
 #include "render_utils.h"
+#include "viewport_target.h"
 
 class RenderSystem
 {
 public:
     RenderSystem();
-    void Render(TransformComponent &transformComponent, SpriteComponent &spriteComponent, std::vector<ViewPort> &viewports);
-    void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportComponent &viewportComponent, ViewPort &viewport);
+    void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort &viewport);
     void RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport);
 };
 

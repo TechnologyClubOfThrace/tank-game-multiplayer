@@ -88,14 +88,16 @@ void configureTankEntity()
     //The viewport dimensions (width,height) are relative to the
     //level dimensions, scaled down.
     //Everything drawn inside the viewport is scaled down.
-    tank_entity->viewport_component->entityScale.x =  game::viewports[tank_entity->viewport_component->viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
-    tank_entity->viewport_component->entityScale.y = tank_entity->viewport_component->entityScale.x;
-    game::viewports[tank_entity->viewport_component->viewportID].frame.h = static_cast<int>(std::round(tank_entity->viewport_component->entityScale.y * GameEngine::sceneManager.levelHeight));
-    game::viewports[tank_entity->viewport_component->viewportID].frame.x = GameEngine::ScreenWidth - game::viewports[tank_entity->viewport_component->viewportID].frame.w - 20;
-    game::viewports[tank_entity->viewport_component->viewportID].frame.y = GameEngine::ScreenHeight - game::viewports[tank_entity->viewport_component->viewportID].frame.h - 20;
-    game::viewports[tank_entity->viewport_component->viewportID].camera.frame = game::viewports[tank_entity->viewport_component->viewportID].frame;
-    tank_entity->viewport_component->destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * tank_entity->viewport_component->entityScale.x));
-    tank_entity->viewport_component->destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * tank_entity->viewport_component->entityScale.y));
+    ViewportTarget viewportTarget(1);
+    viewportTarget.entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
+    viewportTarget.entityScale.y = viewportTarget.entityScale.x;
+    game::viewports[viewportTarget.viewportID].frame.h = static_cast<int>(std::round(viewportTarget.entityScale.y * GameEngine::sceneManager.levelHeight));
+    game::viewports[viewportTarget.viewportID].frame.x = GameEngine::ScreenWidth - game::viewports[viewportTarget.viewportID].frame.w - 20;
+    game::viewports[viewportTarget.viewportID].frame.y = GameEngine::ScreenHeight - game::viewports[viewportTarget.viewportID].frame.h - 20;
+    game::viewports[viewportTarget.viewportID].camera.frame = game::viewports[viewportTarget.viewportID].frame;
+    viewportTarget.destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * viewportTarget.entityScale.x));
+    viewportTarget.destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * viewportTarget.entityScale.y));
+    tank_entity->viewport_component->viewports.emplace_back(viewportTarget);
 
     //initial values for tank entity physics
     tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;

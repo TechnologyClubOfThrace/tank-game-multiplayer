@@ -1,18 +1,15 @@
 #ifndef VIEWPORT_COMPONENT_H
 #define VIEWPORT_COMPONENT_H
 
-#include <cstring>
-#include <SDL.h>
-#include "vector2d.h"
+#include <vector>
+#include "viewport_target.h"
 
 class ViewportComponent
 {
 public:
-    ViewportComponent();
+    ViewportComponent(size_t viewportID);
 
-    size_t viewportID {};//the vieport id where the related entity sprite will be drawn
-    Vector2D entityScale {};//the scale at witch the entity sprite will be rendered inside the viewport
-    SDL_Rect destinationRectangle {};//the desired position and size of the rendered sprite. x and y is calculated inside render system
+    std::vector<ViewportTarget> viewports;
 };
 
 #endif // VIEWPORT_COMPONENT_H

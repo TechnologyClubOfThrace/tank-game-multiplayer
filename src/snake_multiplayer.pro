@@ -33,7 +33,8 @@ HEADERS += \
     fps_system.h \
     fps_component.h \
     viewport_component.h \
-    render_utils.h
+    render_utils.h \
+    viewport_target.h
 
 SOURCES += \
         main.cpp \
@@ -63,7 +64,8 @@ SOURCES += \
     fps_system.cpp \
     fps_component.cpp \
     viewport_component.cpp \
-    render_utils.cpp
+    render_utils.cpp \
+    viewport_target.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

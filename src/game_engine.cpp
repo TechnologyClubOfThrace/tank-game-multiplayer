@@ -209,7 +209,7 @@ void GameEngine::game_engine_infinite_loop()
        if (fpsEntity.fps_component->displayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
            fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
-           renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
+           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
 
@@ -260,7 +260,8 @@ void GameEngine::game_engine_infinite_loop2()
 
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
-           renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
+           //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
+           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
        }
 
        //display everything in screen
@@ -299,7 +300,8 @@ void GameEngine::game_engine_one_iteration()
     if (fpsEntity.fps_component->displayFpsCounter){
         deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
         fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
-        renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
+        //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
+        renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
     }
 
 
@@ -373,20 +375,10 @@ void GameEngine::Update()
 //draws the game objects
 void GameEngine::Draw()
 {
-    //Draw all entity objects
-    for (const auto& entity : game::entityObjects){
-        if (entity->sprite_component){
-            //renderSystem
-            renderSystem.Render(*entity->transform_component,
-                                *entity->sprite_component,
-                                game::viewports);
-        }
-    }
-
-
-    //if there are more than one viewports, call the draw oveload
-    //on each game object with the viewport index.
-    for (size_t viewPortIndex = 1; viewPortIndex < game::viewports.size(); viewPortIndex++){
+    //all entities can have zero or more viewport targets.
+    //Loop through all game viewports and if an entity wants to be rendered
+    //in a viewport with the same viewPortIndex then render it
+    for (size_t viewPortIndex = 0; viewPortIndex < game::viewports.size(); viewPortIndex++){
 
         //render viewport background if exists
         if (game::viewports[viewPortIndex].background_sprite_component) {
@@ -396,14 +388,20 @@ void GameEngine::Draw()
 
         //render entities inside the viewport
         for (const auto& entity : game::entityObjects){
-            if(entity->viewport_component){
-                if(entity->viewport_component->viewportID == viewPortIndex){
-                    renderSystem.RenderInViewport(*entity->transform_component,
-                                                  *entity->sprite_component,
-                                                  *entity->viewport_component,
-                                                  game::viewports[viewPortIndex]);
-                }
+            if (entity->viewport_component){
+                //if an entity has a viewport component then loop through all
+                //viewport targets it contains if one maches the current viewPortIndex
+                for (auto& viewport : entity->viewport_component->viewports){
+                    if (viewport.viewportID == viewPortIndex){
+                        renderSystem.RenderInViewport(*entity->transform_component,
+                                                      *entity->sprite_component,
+                                                      viewport,
+                                                      game::viewports[viewPortIndex]);
+                        break;
+                    }
+                } // for (auto& viewport ... entity viewport targets loop
             }
-        }//for (const auto& entity
-    }//for (size_t
+        }//for (const auto& entity ... entities loop
+
+    }//for (size_t ... viewports loop
 }//Draw
