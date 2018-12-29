@@ -94,6 +94,7 @@ bool GameEngine::Init()
 
         //Create window
         gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+
         if( GameEngine::gWindow == nullptr )
         {
             printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -120,7 +121,6 @@ bool GameEngine::Init()
 
     //set drawing alpha transparency support (eg. SDL_RenderFillRect)
     SDL_SetRenderDrawBlendMode(RenderUtils::windowRenderer, SDL_BLENDMODE_BLEND);
-
 
     #ifndef __EMSCRIPTEN__
     // (STEP 2 / 3)
@@ -195,6 +195,8 @@ void GameEngine::game_engine_infinite_loop()
         //the duration it took to process the game objects
         deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
 
+        std::cout << "gameloop exec time: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count() << std::endl;
+
         //frame cap.
         //If frame finished early wait for the remaining time
        if (deltaTime < frame_delay_for_stable_fps){
@@ -212,7 +214,6 @@ void GameEngine::game_engine_infinite_loop()
            renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
-
 
        //display everything in screen
 
