@@ -94,7 +94,7 @@ void configureTankEntity(GameEngine &game_engine)
 
     //initial values for tank entity physics
     tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
-    tank_entity->rigid_body2d_component->DirectionalForce = {3, 0};
+    tank_entity->rigid_body2d_component->Force = {3, 0};
     tank_entity->rigid_body2d_component->TorqueMagnitude = 100;
     tank_entity->rigid_body2d_component->Mass = 10000;
     tank_entity->rigid_body2d_component->Force = {0.25,0};

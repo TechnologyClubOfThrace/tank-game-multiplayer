@@ -47,9 +47,11 @@ public:
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
 
+    /*
     bool AppliedForwardForce = false;
     bool AppliedBackwardsForce = false;
     bool AppliedTorque = false;
+    */
 
 };
 
