@@ -22,12 +22,19 @@
 
 
 #include "physics_system.h"
+#include <cmath>
 
 
 PhysicsSystem::PhysicsSystem()
 {
 
 }
+
+
+/*
+Torque MUST take positive and negative values in order to rotate clockwise or counterclockwise respectively AND
+increase /decrease the angular velocity
+*/
 
 void PhysicsSystem::UpdateAngularAcceleration (RigidBody2DComponent &rigidBody2dComponent)
 {
@@ -54,6 +61,9 @@ void PhysicsSystem::UpdateDeltaRotationDegrees(const std::chrono::milliseconds::
 
    }
 
+
+// UpdateForce rotates the Force vector and maintains the same length
+
 void PhysicsSystem::UpdateForce(RigidBody2DComponent &rigidBody2dComponent)
 {
    rigidBody2dComponent.Force.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
@@ -64,19 +74,18 @@ void PhysicsSystem::UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponen
     rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
 }
 
-
+//this function updates the velocity magnitude ONLY. Velocity needs rotation just like the Force() does!!!
 void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {    
     if(!rigidBody2dComponent.isAccelerationfrozen){
-        //rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
-        rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+         rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
 
         if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.VelocityMaximumMagnitude){
             //std::cout << "will call rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude)" << std::endl;
             rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.VelocityMaximumMagnitude);
             rigidBody2dComponent.isAccelerationfrozen = true;
 
-        //this loop is problematic, while in max acceleration it never rotates the speed! I have to fix it.
+
         }
 
 
@@ -84,6 +93,12 @@ void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTi
 
 }
 
+
+void PhysicsSystem::UpdateVelocityDegrees(RigidBody2DComponent &rigidBody2dComponent)
+{
+    rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
+
+}
 
 void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {
@@ -93,74 +108,19 @@ void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTi
 
 void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                            TransformComponent &transformComponent,
-                           const TankInputComponent &tankInputComponent,
                            RigidBody2DComponent &rigidBody2dComponent)
 {
+    UpdateAngularAcceleration (rigidBody2dComponent);
+    UpdateAngularVelocity(deltaTime,rigidBody2dComponent);
+    UpdateDeltaRotationDegrees(deltaTime,rigidBody2dComponent);
+    UpdateForce(rigidBody2dComponent);
+    UpdateAcceleration(rigidBody2dComponent);
+    UpdateVelocity(deltaTime,rigidBody2dComponent);
+    UpdateVelocityDegrees(rigidBody2dComponent);
+    UpdatePosition(deltaTime,rigidBody2dComponent);
+
+    transformComponent.Position = rigidBody2dComponent.Position;
+    transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
 
 
-
-/*    switch (tankInputComponent.state) {
-
-    case State::forward:
-        UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePosition(deltaTime, rigidBody2dComponent, transformComponent);
-
-
-        break;
-
-    case State::forwardRotationClockwise:
-        UpdateRotationDegreesClockwise(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAngularVelocity(deltaTime, rigidBody2dComponent);
-        UpdateForce(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAcceleration(deltaTime, rigidBody2dComponent);
-        UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePosition(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::forwardRotationCounterClockwise:
-        UpdateRotationDegreesCounterClockwise(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAngularVelocity(deltaTime, rigidBody2dComponent);
-        UpdateForce(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAcceleration(deltaTime, rigidBody2dComponent);
-        UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePosition(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::backwardsRotationCounterClockwise:
-        UpdateRotationDegreesCounterClockwise(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAngularVelocity(deltaTime, rigidBody2dComponent);
-        UpdateForce(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAcceleration(deltaTime, rigidBody2dComponent);
-        UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePositionBackwards(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::backwardsRotationClockwise:
-        UpdateRotationDegreesClockwise(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAngularVelocity(deltaTime, rigidBody2dComponent);
-        UpdateForce(deltaTime, rigidBody2dComponent, transformComponent);
-        UpdateAcceleration(deltaTime, rigidBody2dComponent);
-        UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePositionBackwards(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::backwards:
-        UpdateVelocity(deltaTime, rigidBody2dComponent, tankInputComponent);
-        UpdatePositionBackwards(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::stoppedRotationClockwise:
-        UpdateAngularVelocity(deltaTime, rigidBody2dComponent);
-        UpdateRotationDegreesClockwise(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::stoppedRotationCounterClockwise:
-        UpdateAngularVelocity(deltaTime, rigidBody2dComponent);
-        UpdateRotationDegreesCounterClockwise(deltaTime, rigidBody2dComponent, transformComponent);
-        break;
-
-    case State::stopped:
-        break;
-
-    }//switch */
 }

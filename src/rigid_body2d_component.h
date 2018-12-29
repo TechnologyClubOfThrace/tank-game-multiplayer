@@ -39,10 +39,10 @@ public:
     Vector2D Acceleration {}; // pixels/ms^2
     double VelocityMaximumMagnitude {}; // pixels/ms
     Vector2D Force{};
-    Vector2D DirectionalForce {}; //not used, probably needs delete.
+//    Vector2D DirectionalForce {}; //not used, probably needs delete.
     double deltaRotationAngleeDegrees {}; //the most recent rotation degrees that increased the RotationAngleDegrees
     double Mass {};
-    Vector2D Position {}; //position's representational vector used in physics calculations
+    Vector2D Position {}; //position's representational vector used in physics system calculations
 
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;

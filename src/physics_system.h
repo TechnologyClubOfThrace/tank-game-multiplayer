@@ -41,7 +41,7 @@ public:
 
     void Update(const std::chrono::milliseconds::rep &deltaTime,
                 TransformComponent &transformComponent,
-                const TankInputComponent &tankInputComponent,
+
                 RigidBody2DComponent &rigidBody2dComponent);
     void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
     void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
@@ -50,6 +50,7 @@ public:
     void UpdateAngularAcceleration (RigidBody2DComponent &rigidBody2dComponent);
     void UpdateForce(RigidBody2DComponent &rigidBody2dComponent);
     void UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent);
+    void UpdateVelocityDegrees(RigidBody2DComponent &rigidBody2dComponent);
 };
 
 #endif // PHYSICS_SYSTEM_H
