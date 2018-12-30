@@ -49,13 +49,15 @@ void configureViewports()
     //2. One viewport on the bottom right corner that displays the game map, the player tank position
     //within the map and other game objects that will be added if needed.
     //Viewport 0:
-
     ViewPort viewport;
     viewport.frame.x = 0;
     viewport.frame.y = 0;
     viewport.frame.w = GameEngine::ScreenWidth;
     viewport.frame.h = GameEngine::ScreenHeight;
-    viewport.camera.frame = viewport.frame;
+    viewport.entityScale.x = 0.4;
+    viewport.entityScale.y = viewport.entityScale.x;
+    viewport.cameraID = 0;
+    //viewport.camera.frame = viewport.frame;
     game::viewports.emplace_back(std::move(viewport));
 
     //Viewport 1:
@@ -64,12 +66,30 @@ void configureViewports()
     viewport_radar.frame.h = 0;
     viewport_radar.frame.x = 0;
     viewport_radar.frame.y = 0;
+    viewport_radar.cameraID = 1;
     viewport_radar.background_sprite_component = std::make_shared<SpriteComponent>();
     RenderUtils::LoadTextureFromFile("grey_300x200.png", *viewport_radar.background_sprite_component);
     RenderUtils::setBlendMode(viewport_radar.background_sprite_component->texture, SDL_BLENDMODE_BLEND);
     RenderUtils::setAlpha(viewport_radar.background_sprite_component->texture, 50);
     game::viewports.emplace_back(std::move(viewport_radar));
     //end of viewport configuration
+}
+
+void configureCameras()
+{
+    Camera c0;
+    c0.frame.x = 0;
+    c0.frame.y = 0;
+    c0.frame.w = game::viewports[0].frame.w;
+    c0.frame.h = game::viewports[0].frame.h;
+    ViewPort::allCameras.emplace_back(c0);
+
+    Camera c1;
+    c1.frame.x = 0;
+    c1.frame.y = 0;
+    c1.frame.w = game::viewports[1].frame.w;
+    c1.frame.h = game::viewports[1].frame.h;
+    ViewPort::allCameras.emplace_back(c1);
 }
 
 void configureTankEntity()
@@ -89,14 +109,16 @@ void configureTankEntity()
     //level dimensions, scaled down.
     //Everything drawn inside the viewport is scaled down.
     ViewportTarget viewportTarget(1);
-    viewportTarget.entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
-    viewportTarget.entityScale.y = viewportTarget.entityScale.x;
-    game::viewports[viewportTarget.viewportID].frame.h = static_cast<int>(std::round(viewportTarget.entityScale.y * GameEngine::sceneManager.levelHeight));
+    //viewportTarget.entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
+    //viewportTarget.entityScale.y = viewportTarget.entityScale.x;
+    game::viewports[viewportTarget.viewportID].entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
+    game::viewports[viewportTarget.viewportID].entityScale.y = game::viewports[viewportTarget.viewportID].entityScale.x;
+    game::viewports[viewportTarget.viewportID].frame.h = static_cast<int>(std::round(game::viewports[viewportTarget.viewportID].entityScale.y * GameEngine::sceneManager.levelHeight));
     game::viewports[viewportTarget.viewportID].frame.x = GameEngine::ScreenWidth - game::viewports[viewportTarget.viewportID].frame.w - 20;
     game::viewports[viewportTarget.viewportID].frame.y = GameEngine::ScreenHeight - game::viewports[viewportTarget.viewportID].frame.h - 20;
-    game::viewports[viewportTarget.viewportID].camera.frame = game::viewports[viewportTarget.viewportID].frame;
-    viewportTarget.destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * viewportTarget.entityScale.x));
-    viewportTarget.destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * viewportTarget.entityScale.y));
+    //game::viewports[viewportTarget.viewportID].camera.frame = game::viewports[viewportTarget.viewportID].frame;
+    viewportTarget.destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * game::viewports[viewportTarget.viewportID].entityScale.x));
+    viewportTarget.destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * game::viewports[viewportTarget.viewportID].entityScale.y));
     tank_entity->viewport_component->viewports.emplace_back(viewportTarget);
 
     //initial values for tank entity physics
@@ -144,6 +166,8 @@ int main()
     //(2) the radar viewport on the bottom right
     configureViewports();
     std::cout << "[OK] configureViewports();" << std::endl;
+
+    configureCameras();
 
     //tank entity configuration
     configureTankEntity();

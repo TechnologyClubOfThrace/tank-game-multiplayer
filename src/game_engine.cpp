@@ -366,7 +366,19 @@ void GameEngine::Update()
                                   *(*it)->tank_input_component,
                                   *(*it)->rigid_body2d_component);
 
-            game::viewports[0].FollowEntity(*(*it)->transform_component, *(*it)->sprite_component, GameEngine::sceneManager.levelWidth, GameEngine::sceneManager.levelHeight);
+            //game::viewports[0].FollowEntity(*(*it)->transform_component, *(*it)->sprite_component, GameEngine::sceneManager.levelWidth, GameEngine::sceneManager.levelHeight);
+            if ((*it)->viewport_component->movesTheCamera){
+                for (auto& viewportTarget : (*it)->viewport_component->viewports){
+                    if (viewportTarget.movesTheCamera){
+                        game::viewports[viewportTarget.viewportID].FollowEntity(
+                                    *(*it)->transform_component,
+                                    *(*it)->sprite_component,
+                                    viewportTarget,
+                                    GameEngine::sceneManager.levelWidth,
+                                    GameEngine::sceneManager.levelHeight);
+                    }
+                }
+            }
         }
 
         ++it;

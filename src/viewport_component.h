@@ -8,7 +8,7 @@ class ViewportComponent
 {
 public:
     ViewportComponent(size_t viewportID);
-
+    bool movesTheCamera = false;
     std::vector<ViewportTarget> viewports;
 };
 

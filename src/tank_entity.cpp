@@ -31,4 +31,6 @@ TankEntity::TankEntity()
     rigid_body2d_component = std::make_unique<RigidBody2DComponent>();//physics
     collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();//collision shapes
     viewport_component = std::make_unique<ViewportComponent>(0);//alternative viewport rendering
+    viewport_component->movesTheCamera = true;
+    viewport_component->viewports[0].movesTheCamera = true;
 }

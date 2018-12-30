@@ -29,6 +29,29 @@ RenderSystem::RenderSystem()
 
 void RenderSystem::RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort& viewport)
 {
+    SDL_Rect destinationRectangle {
+                static_cast<int>(round(viewport.frame.x + (transformComponent.Position.x * viewport.entityScale.x) - ViewPort::allCameras[viewport.cameraID].frame.x)),
+                static_cast<int>(round(viewport.frame.y + (transformComponent.Position.y * viewport.entityScale.y) - ViewPort::allCameras[viewport.cameraID].frame.y)),
+                static_cast<int>(round(spriteComponent.sourceRectangle.w * viewport.entityScale.x)),
+                static_cast<int>(round(spriteComponent.sourceRectangle.h * viewport.entityScale.y))
+    };
+
+    SDL_RenderSetClipRect(RenderUtils::windowRenderer, &viewport.frame);
+
+    SDL_RenderCopyEx(RenderUtils::windowRenderer,
+                     spriteComponent.texture,
+                     &spriteComponent.sourceRectangle,//source rectangle
+                     &destinationRectangle,//destination rectangle
+                     transformComponent.RotationAngleDegrees,//angle
+                     nullptr,//center
+                     SDL_RendererFlip::SDL_FLIP_NONE
+                );
+
+}
+
+/*
+void RenderSystem::RenderInViewport2(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort& viewport)
+{
     //viewportComponent.destinationRectangle.x = static_cast<int>(round((transformComponent.Position.x * viewportComponent.entityScale.x) + static_cast<double>(viewport.camera.frame.x)));
     //viewportComponent.destinationRectangle.y = static_cast<int>(round((transformComponent.Position.y * viewportComponent.entityScale.y) + static_cast<double>(viewport.camera.frame.y)));
 
@@ -65,6 +88,7 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
 
    // std::cout << "res: " << res << " ,sprite w: " << spriteComponent.rect.w << std::endl;
 }
+*/
 
 void RenderSystem::RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport)
 {

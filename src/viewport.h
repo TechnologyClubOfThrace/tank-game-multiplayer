@@ -23,9 +23,11 @@
 
 #include <SDL.h>
 #include <memory>
+#include <vector>
 #include "camera.h"
 #include "sprite_component.h"
 #include "transform_component.h"
+#include "viewport_target.h"
 
 class ViewPort
 {
@@ -35,12 +37,15 @@ public:
 
     //variables
     SDL_Rect frame;//the location of the viewport
-    Camera camera;//the camera of the viewport
+    size_t cameraID = 0;
+    Vector2D entityScale {1, 1};//the scale at whitch the entity sprite will be rendered inside the viewport
+    //Camera camera;//the camera of the viewport
     std::shared_ptr<SpriteComponent> background_sprite_component = nullptr;//todo: why cant i use a unique_ptr here;
     //SpriteComponent background_sprite_component;
+    static std::vector<Camera> allCameras;
 
     //methods
-    void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, double levelWidth, double levelHeight); //Center the camera over the game object
+    void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget& viewportTarget, double levelWidth, double levelHeight); //Center the camera over the game object
 };
 
 #endif // VIEWPORT_H

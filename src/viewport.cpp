@@ -20,6 +20,8 @@
 
 #include "viewport.h"
 
+std::vector<Camera> ViewPort::allCameras;
+
 ViewPort::ViewPort()
 {
 
@@ -30,30 +32,35 @@ ViewPort::~ViewPort()
 
 }
 
-void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, double levelWidth, double levelHeight)
+
+void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, double levelWidth, double levelHeight)
 {
+    levelWidth *= entityScale.x;
+    levelHeight *= entityScale.y;
+
     //calculations do not need rounding because it causes the entity on camera to shake
-    this->camera.frame.x = static_cast<int>(round((transformComponent.Position.x + static_cast<double>(spriteComponent.sourceRectangle.w) / 2.0 ) - (static_cast<double>(this->camera.frame.w) / 2.0)));
-    this->camera.frame.y = static_cast<int>(((transformComponent.Position.y + static_cast<double>(spriteComponent.sourceRectangle.h) / 2.0 ) - (static_cast<double>(this->camera.frame.h) / 2.0)));
+    allCameras[cameraID].frame.x = static_cast<int>(((transformComponent.Position.x + static_cast<double>(spriteComponent.sourceRectangle.w) / 2.0 ) - (static_cast<double>(allCameras[cameraID].frame.w) / 2.0)) * entityScale.x);
+    allCameras[cameraID].frame.y = static_cast<int>(((transformComponent.Position.y + static_cast<double>(spriteComponent.sourceRectangle.h) / 2.0 ) - (static_cast<double>(allCameras[cameraID].frame.h) / 2.0)) * entityScale.y);
 
     //this->camera.frame.x = (transformComponent.Position.x + spriteComponent.sourceRectangle.w / 2.0 ) - (this->camera.frame.w / 2.0);
     //this->camera.frame.y = (transformComponent.Position.y + spriteComponent.sourceRectangle.h / 2.0 ) - (this->camera.frame.h / 2.0);
 
     //Keep the camera in bounds
-    if( this->camera.frame.x < 0 )
+    if( allCameras[cameraID].frame.x < 0 )
     {
-        this->camera.frame.x = 0;
+        allCameras[cameraID].frame.x = 0;
     }
-    if( this->camera.frame.y < 0 )
+    if( allCameras[cameraID].frame.y < 0 )
     {
-        this->camera.frame.y = 0;
+        allCameras[cameraID].frame.y = 0;
     }
-    if( this->camera.frame.x > levelWidth - this->camera.frame.w )
+    if( allCameras[cameraID].frame.x > levelWidth - allCameras[cameraID].frame.w )
     {
-        this->camera.frame.x = levelWidth - this->camera.frame.w;
+        allCameras[cameraID].frame.x = levelWidth - allCameras[cameraID].frame.w;
     }
-    if( this->camera.frame.y > levelHeight - this->camera.frame.h )
+    if( allCameras[cameraID].frame.y > levelHeight - allCameras[cameraID].frame.h )
     {
-        this->camera.frame.y = levelHeight - this->camera.frame.h;
+        allCameras[cameraID].frame.y = levelHeight - allCameras[cameraID].frame.h;
     }
 }
+
