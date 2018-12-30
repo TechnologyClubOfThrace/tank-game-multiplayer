@@ -48,6 +48,7 @@
 #include <memory>
 #include "transform_component.h"
 #include "sprite_component.h"
+#include "zoom_input_component.h"
 #include "tank_input_component.h"
 #include "rigid_body2d_component.h"
 #include "collider2d_collection_component.h"
@@ -63,6 +64,7 @@ public:
     std::unique_ptr<TransformComponent> transform_component;
     std::unique_ptr<SpriteComponent> sprite_component;
     std::unique_ptr<TankInputComponent> tank_input_component;
+    std::unique_ptr<ZoomInputComponent> zoom_input_component;
     std::unique_ptr<RigidBody2DComponent> rigid_body2d_component;
     std::unique_ptr<Collider2DCollectionComponent> collider2d_collection_component;
     std::unique_ptr<ViewportComponent> viewport_component;

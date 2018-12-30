@@ -143,8 +143,8 @@ int main()
 {
     std::cout << "Begin - main()" << std::endl;
 
-    GameEngine::ScreenWidth = 500;
-    GameEngine::ScreenHeight = 500;
+    GameEngine::ScreenWidth = 700;
+    GameEngine::ScreenHeight = 700;
 
     //Start up SDL and create window
     if( !GameEngine::Init())

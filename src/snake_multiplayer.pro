@@ -34,7 +34,9 @@ HEADERS += \
     fps_component.h \
     viewport_component.h \
     render_utils.h \
-    viewport_target.h
+    viewport_target.h \
+    zoom_input_component.h \
+    zoom_input_system.h
 
 SOURCES += \
         main.cpp \
@@ -65,7 +67,9 @@ SOURCES += \
     fps_component.cpp \
     viewport_component.cpp \
     render_utils.cpp \
-    viewport_target.cpp
+    viewport_target.cpp \
+    zoom_input_component.cpp \
+    zoom_input_system.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

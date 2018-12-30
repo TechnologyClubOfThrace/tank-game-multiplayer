@@ -39,11 +39,8 @@ void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteCompon
     levelHeight *= entityScale.y;
 
     //calculations do not need rounding because it causes the entity on camera to shake
-    allCameras[cameraID].frame.x = static_cast<int>(((transformComponent.Position.x + static_cast<double>(spriteComponent.sourceRectangle.w) / 2.0 ) - (static_cast<double>(allCameras[cameraID].frame.w) / 2.0)) * entityScale.x);
-    allCameras[cameraID].frame.y = static_cast<int>(((transformComponent.Position.y + static_cast<double>(spriteComponent.sourceRectangle.h) / 2.0 ) - (static_cast<double>(allCameras[cameraID].frame.h) / 2.0)) * entityScale.y);
-
-    //this->camera.frame.x = (transformComponent.Position.x + spriteComponent.sourceRectangle.w / 2.0 ) - (this->camera.frame.w / 2.0);
-    //this->camera.frame.y = (transformComponent.Position.y + spriteComponent.sourceRectangle.h / 2.0 ) - (this->camera.frame.h / 2.0);
+    allCameras[cameraID].frame.x = static_cast<int>((transformComponent.Position.x * entityScale.x + static_cast<double>(spriteComponent.sourceRectangle.w * entityScale.x) / 2.0 ) - (static_cast<double>(allCameras[cameraID].frame.w) / 2.0));
+    allCameras[cameraID].frame.y = static_cast<int>((transformComponent.Position.y * entityScale.y + static_cast<double>(spriteComponent.sourceRectangle.h * entityScale.y) / 2.0 ) - (static_cast<double>(allCameras[cameraID].frame.h) / 2.0));
 
     //Keep the camera in bounds
     if( allCameras[cameraID].frame.x < 0 )
@@ -54,13 +51,13 @@ void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteCompon
     {
         allCameras[cameraID].frame.y = 0;
     }
-    if( allCameras[cameraID].frame.x > levelWidth - allCameras[cameraID].frame.w )
+    if( allCameras[cameraID].frame.x > levelWidth - allCameras[cameraID].frame.w * entityScale.x)
     {
-        allCameras[cameraID].frame.x = levelWidth - allCameras[cameraID].frame.w;
+        allCameras[cameraID].frame.x = levelWidth - allCameras[cameraID].frame.w * entityScale.x;
     }
-    if( allCameras[cameraID].frame.y > levelHeight - allCameras[cameraID].frame.h )
+    if( allCameras[cameraID].frame.y > levelHeight - allCameras[cameraID].frame.h * entityScale.y )
     {
-        allCameras[cameraID].frame.y = levelHeight - allCameras[cameraID].frame.h;
+        allCameras[cameraID].frame.y = levelHeight - allCameras[cameraID].frame.h * entityScale.y;
     }
 }
 

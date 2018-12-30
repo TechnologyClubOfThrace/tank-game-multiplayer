@@ -113,7 +113,7 @@ bool GameEngine::Init()
             else
             {
                 //Initialize renderer color
-                SDL_SetRenderDrawColor(RenderUtils::windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+                SDL_SetRenderDrawColor(RenderUtils::windowRenderer, 0x00, 0x00, 0x00, 0x00 );
             }
         } //SDL_CreateWindow
 
@@ -331,13 +331,16 @@ void GameEngine::HandleEvents()
             if(entity->tank_input_component){
                 tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component, *entity->transform_component);
             }
+            if (entity->zoom_input_component){
+                ZoomInputSystem::handleEvent(e, *entity);
+            }
         }
 
         //A player might press the fire key and a new bullet game object
         //has to be created. It is placed in the gameObjects_for_addition vector
         //so that after returning fron the previous handleEvent call, it will be added to the
         //gameObjects vector.
-        if (game::entityObjects_for_addition.size() > 0){
+        if (!game::entityObjects_for_addition.empty()){
             std::move(game::entityObjects_for_addition.begin(), game::entityObjects_for_addition.end(), std::back_inserter(game::entityObjects));  // ##
             game::entityObjects_for_addition.clear();
         }
@@ -379,6 +382,10 @@ void GameEngine::Update()
                     }
                 }
             }
+        } //if((*it)->rigid_body2d_component
+
+        if((*it)->zoom_input_component){
+            ZoomInputSystem::Update(deltaTime, *(*it));
         }
 
         ++it;
@@ -404,11 +411,11 @@ void GameEngine::Draw()
             if (entity->viewport_component){
                 //if an entity has a viewport component then loop through all
                 //viewport targets it contains if one maches the current viewPortIndex
-                for (auto& viewport : entity->viewport_component->viewports){
-                    if (viewport.viewportID == viewPortIndex){
+                for (auto& viewportTarget : entity->viewport_component->viewports){
+                    if (viewportTarget.viewportID == viewPortIndex){
                         renderSystem.RenderInViewport(*entity->transform_component,
                                                       *entity->sprite_component,
-                                                      viewport,
+                                                      viewportTarget,
                                                       game::viewports[viewPortIndex]);
                         break;
                     }

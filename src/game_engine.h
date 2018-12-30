@@ -33,6 +33,7 @@
 //systems
 #include "render_system.h"
 #include "tank_input_system.h"
+#include "zoom_input_system.h"
 #include "physics_system.h"
 #include "fps_system.h"
 
