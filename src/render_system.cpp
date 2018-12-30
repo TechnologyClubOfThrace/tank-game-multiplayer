@@ -30,10 +30,10 @@ RenderSystem::RenderSystem()
 void RenderSystem::RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort& viewport)
 {
     SDL_Rect destinationRectangle {
-                static_cast<int>(round(viewport.frame.x + (transformComponent.Position.x * viewport.entityScale.x) - ViewPort::allCameras[viewport.cameraID].frame.x)),
-                static_cast<int>(round(viewport.frame.y + (transformComponent.Position.y * viewport.entityScale.y) - ViewPort::allCameras[viewport.cameraID].frame.y)),
-                static_cast<int>(round(spriteComponent.sourceRectangle.w * viewport.entityScale.x)),
-                static_cast<int>(round(spriteComponent.sourceRectangle.h * viewport.entityScale.y))
+                static_cast<int>(round(static_cast<double>(viewport.frame.x) + transformComponent.Position.x * viewport.entityScale.x - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.x))),
+                static_cast<int>(round(static_cast<double>(viewport.frame.y) + transformComponent.Position.y * viewport.entityScale.y - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.y))),
+                static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.w) * viewport.entityScale.x)),
+                static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.h) * viewport.entityScale.y))
     };
 
     SDL_RenderSetClipRect(RenderUtils::windowRenderer, &viewport.frame);

@@ -54,7 +54,7 @@ void configureViewports()
     viewport.frame.y = 0;
     viewport.frame.w = GameEngine::ScreenWidth;
     viewport.frame.h = GameEngine::ScreenHeight;
-    viewport.entityScale.x = 0.4;
+    viewport.entityScale.x = 1.0;
     viewport.entityScale.y = viewport.entityScale.x;
     viewport.cameraID = 0;
     //viewport.camera.frame = viewport.frame;
