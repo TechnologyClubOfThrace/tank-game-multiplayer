@@ -38,7 +38,7 @@ public:
     void ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dComponent);
     void KillTorque(RigidBody2DComponent &rigidBody2dComponent);
     void KillForce(RigidBody2DComponent &rigidBody2dComponent);
-    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
     void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
 };
 

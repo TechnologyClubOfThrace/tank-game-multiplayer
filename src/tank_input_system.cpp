@@ -77,7 +77,7 @@ void TankInputSystem::KillForce(RigidBody2DComponent &rigidBody2dComponent)
     rigidBody2dComponent.Force.SetMagnitude(0);
 }
 
-void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent)
+void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent)
 {
     switch (tankInputComponent.state) {
     case State::stopped:
@@ -103,9 +103,11 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move backwards
                 rigidBody2dComponent.isAccelerationfrozen = false;
+                /*
                 UpdateForce(rigidBody2dComponent, transformComponent);
                 UpdateAcceleration(rigidBody2dComponent);
                 SetDeltaRotDegZero(rigidBody2dComponent);
+                */
                 tankInputComponent.state = State::backwards;
             }
             break;
@@ -212,9 +214,8 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move forward
                 rigidBody2dComponent.isAccelerationfrozen = false;
-                UpdateForce(rigidBody2dComponent, transformComponent);
-                UpdateAcceleration(rigidBody2dComponent);
-                SetDeltaRotDegZero(rigidBody2dComponent);
+
+
                 tankInputComponent.state = State::forwardRotationClockwise;
             }
             break;
@@ -223,9 +224,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move backwards
                 rigidBody2dComponent.isAccelerationfrozen = false;
-                UpdateForce(rigidBody2dComponent, transformComponent);
-                UpdateAcceleration(rigidBody2dComponent);
-                SetDeltaRotDegZero(rigidBody2dComponent);
+
                 tankInputComponent.state = State::backwardsRotationClockwise;
             }
             break;
@@ -254,9 +253,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move forward
                 rigidBody2dComponent.isAccelerationfrozen = false;
-                UpdateForce(rigidBody2dComponent, transformComponent);
-                UpdateAcceleration(rigidBody2dComponent);
-                SetDeltaRotDegZero(rigidBody2dComponent);
+
                 tankInputComponent.state = State::forwardRotationCounterClockwise;
             }
             break;
@@ -265,9 +262,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move backwards
                 rigidBody2dComponent.isAccelerationfrozen = false;
-                UpdateForce(rigidBody2dComponent, transformComponent);
-                UpdateAcceleration(rigidBody2dComponent);
-                SetDeltaRotDegZero(rigidBody2dComponent);
+
                 tankInputComponent.state = State::backwardsRotationCounterClockwise;
             }
             break;
@@ -280,7 +275,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         case SDLK_d:
              if( e.type == SDL_KEYUP){                 
                  rigidBody2dComponent.AngularVelocityMagnitude = 0;
-                 SetDeltaRotDegZero(rigidBody2dComponent);
+
                  tankInputComponent.state = State::forward;
              }
             break;
@@ -313,7 +308,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_a:
              if( e.type == SDL_KEYUP){
-                 SetDeltaRotDegZero(rigidBody2dComponent);
+
                  rigidBody2dComponent.AngularVelocityMagnitude = 0;
                  tankInputComponent.state = State::forward;
              }
@@ -349,7 +344,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_d:
              if( e.type == SDL_KEYUP){
-                 SetDeltaRotDegZero(rigidBody2dComponent);
+
                  tankInputComponent.state = State::backwards;
                  rigidBody2dComponent.AngularVelocityMagnitude = 0;
              }
@@ -385,7 +380,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_a:
              if( e.type == SDL_KEYUP){
-                 SetDeltaRotDegZero(rigidBody2dComponent);
+
                  tankInputComponent.state = State::backwards;
                  rigidBody2dComponent.AngularVelocityMagnitude = 0;
              }

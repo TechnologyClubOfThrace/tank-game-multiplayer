@@ -184,7 +184,7 @@ void GameEngine::HandleEvents()
 
         for (const auto& entity : game::entityObjects){
             if(entity->tank_input_component){
-                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component, *entity->transform_component);
+                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component);
             }
         }
 
@@ -218,7 +218,6 @@ void GameEngine::Update()
         if((*it)->rigid_body2d_component){
             physicsSystem.Update(deltaTime,
                                   *(*it)->transform_component,
-                                  *(*it)->tank_input_component,
                                   *(*it)->rigid_body2d_component);
 
             game::viewports[0].FollowEntity(*(*it)->transform_component, *(*it)->sprite_component, this->sceneManager.levelWidth, this->sceneManager.levelHeight);
