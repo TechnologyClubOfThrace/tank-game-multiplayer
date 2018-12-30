@@ -93,11 +93,10 @@ void configureTankEntity(GameEngine &game_engine)
     tank_entity->viewport_component->destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * tank_entity->viewport_component->entityScale.y));
 
     //initial values for tank entity physics
-    tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
-    tank_entity->rigid_body2d_component->Force = {3, 0};
-    tank_entity->rigid_body2d_component->TorqueMagnitude = 100;
+    tank_entity->rigid_body2d_component->Acceleration.x = 0.000;
+    tank_entity->rigid_body2d_component->Force = {0, 0};
+    tank_entity->rigid_body2d_component->TorqueMagnitude = 000;
     tank_entity->rigid_body2d_component->Mass = 10000;
-    tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
     tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
     tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.10;

@@ -70,6 +70,7 @@ void TankInputSystem::ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dCompo
 void TankInputSystem::KillTorque(RigidBody2DComponent &rigidBody2dComponent)
 {
     rigidBody2dComponent.TorqueMagnitude = 0;
+    rigidBody2dComponent.AngularVelocityMagnitude=0;
 }
 
 void TankInputSystem::KillForce(RigidBody2DComponent &rigidBody2dComponent)

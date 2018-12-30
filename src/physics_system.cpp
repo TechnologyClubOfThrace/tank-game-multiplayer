@@ -113,12 +113,13 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     UpdateAngularAcceleration (rigidBody2dComponent);
     UpdateAngularVelocity(deltaTime,rigidBody2dComponent);
     UpdateDeltaRotationDegrees(deltaTime,rigidBody2dComponent);
-    UpdateForce(rigidBody2dComponent);
+/*    UpdateForce(rigidBody2dComponent);
     UpdateAcceleration(rigidBody2dComponent);
     UpdateVelocity(deltaTime,rigidBody2dComponent);
     UpdateVelocityDegrees(rigidBody2dComponent);
-    UpdatePosition(deltaTime,rigidBody2dComponent);
 
+    UpdatePosition(deltaTime,rigidBody2dComponent);
+*/
     transformComponent.Position = rigidBody2dComponent.Position;
     transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
 
