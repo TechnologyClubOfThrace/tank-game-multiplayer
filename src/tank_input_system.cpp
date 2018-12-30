@@ -59,7 +59,9 @@ void TankInputSystem::ApplyLeftTorque(RigidBody2DComponent &rigidBody2dComponent
 
 void TankInputSystem::ApplyForwardForce(RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.Force.SetMagnitude(3);
+    rigidBody2dComponent.Force.x=3;
+    rigidBody2dComponent.Force.y=0;
+    rigidBody2dComponent.Force.RotateDegrees(rigidBody2dComponent.RotationAngleDegrees);
 }
 
 void TankInputSystem::ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dComponent)
@@ -75,7 +77,14 @@ void TankInputSystem::KillTorque(RigidBody2DComponent &rigidBody2dComponent)
 
 void TankInputSystem::KillForce(RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.Force.SetMagnitude(0);
+    rigidBody2dComponent.Force.x=0;
+    rigidBody2dComponent.Force.y=0;
+    rigidBody2dComponent.Velocity.x=0;
+    rigidBody2dComponent.Velocity.y=0;
+    rigidBody2dComponent.Acceleration.x=0;
+    rigidBody2dComponent.Acceleration.y=0;
+    rigidBody2dComponent.isAccelerationfrozen=false;
+
 }
 
 void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent)
