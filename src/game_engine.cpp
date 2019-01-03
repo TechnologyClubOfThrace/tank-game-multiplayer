@@ -93,7 +93,8 @@ bool GameEngine::Init()
         }
 
         //Create window
-        gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+        //gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+        gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN);
 
         if( GameEngine::gWindow == nullptr )
         {
@@ -211,7 +212,7 @@ void GameEngine::game_engine_infinite_loop()
        if (fpsEntity.fps_component->displayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
            fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
-           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
+           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
 
@@ -262,7 +263,7 @@ void GameEngine::game_engine_infinite_loop2()
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
            //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
-           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
+           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
        }
 
        //display everything in screen
@@ -302,7 +303,7 @@ void GameEngine::game_engine_one_iteration()
         deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
         fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
         //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
-        renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[0]);
+        renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
     }
 
 
@@ -373,10 +374,11 @@ void GameEngine::Update()
             if ((*it)->viewport_component->movesTheCamera){
                 for (auto& viewportTarget : (*it)->viewport_component->viewports){
                     if (viewportTarget.movesTheCamera){
-                        game::viewports[viewportTarget.viewportID].FollowEntity(
+                        ViewPort::FollowEntity(
                                     *(*it)->transform_component,
                                     *(*it)->sprite_component,
                                     viewportTarget,
+                                    game::viewports[viewportTarget.viewportID],
                                     GameEngine::sceneManager.levelWidth,
                                     GameEngine::sceneManager.levelHeight);
                     }

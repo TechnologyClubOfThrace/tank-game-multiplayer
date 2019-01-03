@@ -73,6 +73,17 @@ void configureViewports()
     RenderUtils::setAlpha(viewport_radar.background_sprite_component->texture, 50);
     game::viewports.emplace_back(std::move(viewport_radar));
     //end of viewport configuration
+
+    ViewPort viewport2;
+    viewport2.frame.x = 0;
+    viewport2.frame.y = 0;
+    viewport2.frame.w = GameEngine::ScreenWidth;
+    viewport2.frame.h = GameEngine::ScreenHeight;
+    viewport2.entityScale.x = 1.0;
+    viewport2.entityScale.y = viewport2.entityScale.x;
+    viewport2.cameraID = 1;
+    //viewport.camera.frame = viewport.frame;
+    game::viewports.emplace_back(std::move(viewport2));
 }
 
 void configureCameras()

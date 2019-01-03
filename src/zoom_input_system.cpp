@@ -14,13 +14,13 @@ void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, En
         break;
 
     case ZoomState::zoomIn:
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x += deltaTime * 0.0001;
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y += deltaTime * 0.0001;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x += deltaTime * 0.0002;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y += deltaTime * 0.0002;
         break;
 
     case ZoomState::zoomOut:
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x -= deltaTime * 0.0001;
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y -= deltaTime * 0.0001;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x -= deltaTime * 0.0002;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y -= deltaTime * 0.0002;
         break;
 
     case ZoomState::keepZoom:

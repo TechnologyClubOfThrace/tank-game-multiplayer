@@ -43,7 +43,7 @@ public:
     static std::vector<Camera> allCameras;
 
     //methods
-    void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget& viewportTarget, double levelWidth, double levelHeight); //Center the camera over the game object
+    static void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget& viewportTarget, ViewPort &viewport, double levelWidth, double levelHeight); //Center the camera over the game object
 };
 
 #endif // VIEWPORT_H
