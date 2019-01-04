@@ -21,6 +21,8 @@
  * ***********************************************************************/
 
 #include "tank_input_system.h"
+#include "render_utils.h"
+#include "game.h"
 
 TankInputSystem::TankInputSystem()
 {
@@ -71,17 +73,49 @@ void TankInputSystem::KillForce(RigidBody2DComponent &rigidBody2dComponent)
 
 }
 
-void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent , RigidBody2DComponent &rigidBody2dComponent)
+void TankInputSystem::fireBullet(Entity &entity)
 {
-    switch (tankInputComponent.state) {
+    //tank entity configuration
+
+    //first of all setup initial position and
+    //sprite that includes the tank image
+    auto bullet_entity = std::make_unique<BulletEntity>();
+    bullet_entity->transform_component->Position.x = entity.transform_component->Position.x;
+    bullet_entity->transform_component->Position.y = entity.transform_component->Position.y;
+    bullet_entity->transform_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
+    RenderUtils::LoadTextureFromFile("bullet_w65h20.png", *bullet_entity->sprite_component);
+    //bullet_entity->transform_component->RotationAngleDegrees = 0;
+    /*
+    //initial values for tank entity physics
+    tank_entity->rigid_body2d_component->Acceleration.x = 0.000;
+    tank_entity->rigid_body2d_component->Force = {0, 0};
+    tank_entity->rigid_body2d_component->TorqueMagnitude = 000;
+    tank_entity->rigid_body2d_component->Mass = 10000;
+    tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
+    tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
+    tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.10;
+    tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
+    tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
+    tank_entity->rigid_body2d_component->isAccelerationfrozen = false;
+    tank_entity->rigid_body2d_component->isAngularAccelerationfrozen = false;
+    */
+
+    //insert the tank entity into the entities collection
+    int sa =1 ;
+    game::entityObjects_for_addition.emplace_back(std::move(bullet_entity));
+}
+
+void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
+{
+    switch (entity.tank_input_component->state) {
     case State::stopped:
         switch( e.key.keysym.sym )
         {
         case SDLK_w:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move forward
-                ApplyForwardForce(rigidBody2dComponent);
-                tankInputComponent.state = State::forward;
+                ApplyForwardForce(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::forward;
 
             }
             break;
@@ -89,25 +123,32 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         case SDLK_s:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move backwards
-                rigidBody2dComponent.isAccelerationfrozen = false;
-                ApplyBackwardsForce(rigidBody2dComponent);
-                tankInputComponent.state = State::backwards;
+                entity.rigid_body2d_component->isAccelerationfrozen = false;
+                ApplyBackwardsForce(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::backwards;
             }
             break;
 
         case SDLK_d:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //rotate cw
-                ApplyRightTorque(rigidBody2dComponent);
-                tankInputComponent.state = State::stoppedRotationClockwise;
+                ApplyRightTorque(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::stoppedRotationClockwise;
             }
             break;
 
         case SDLK_a:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //rotate ccw
-                ApplyLeftTorque(rigidBody2dComponent);
-                tankInputComponent.state = State::stoppedRotationCounterClockwise;
+                ApplyLeftTorque(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::stoppedRotationCounterClockwise;
+            }
+            break;
+
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
             }
             break;
         }
@@ -118,30 +159,30 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_w:
              if( e.type == SDL_KEYUP){
-                 KillForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::stopped;
+                 KillForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stopped;
              }
             break;
         case SDLK_s:
 
              if( e.type == SDL_KEYDOWN){
-                 KillForce(rigidBody2dComponent);
-                 ApplyBackwardsForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwards;
+                 KillForce(*entity.rigid_body2d_component);
+                 ApplyBackwardsForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwards;
              }
 
             break;
         case SDLK_d:
              if( e.type == SDL_KEYDOWN){
 
-                 ApplyRightTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::forwardRotationClockwise;
+                 ApplyRightTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forwardRotationClockwise;
              }
             break;
         case SDLK_a:
              if( e.type == SDL_KEYDOWN){
-                 ApplyLeftTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::forwardRotationCounterClockwise;
+                 ApplyLeftTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
             break;
         }
@@ -151,28 +192,28 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_s:
              if( e.type == SDL_KEYUP){
-                 KillForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::stopped;
+                 KillForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stopped;
              }
             break;
         case SDLK_w:
 
              if( e.type == SDL_KEYDOWN){
-                 KillForce(rigidBody2dComponent);
-                 ApplyForwardForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::forward;
+                 KillForce(*entity.rigid_body2d_component);
+                 ApplyForwardForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forward;
              }
             break;
         case SDLK_d:
              if( e.type == SDL_KEYDOWN){
-                 ApplyRightTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwardsRotationClockwise;
+                 ApplyRightTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwardsRotationClockwise;
              }
             break;
         case SDLK_a:
              if( e.type == SDL_KEYDOWN){
-                 ApplyLeftTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwardsRotationCounterClockwise;
+                 ApplyLeftTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
              }
             break;
         }
@@ -182,29 +223,29 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_d:
              if( e.type == SDL_KEYUP){
-                 KillTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::stopped;
+                 KillTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stopped;
              }
              break;
         case SDLK_a:
              if( e.type == SDL_KEYDOWN){
-                 ApplyLeftTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::stoppedRotationCounterClockwise;
+                 ApplyLeftTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stoppedRotationCounterClockwise;
              }
              break;
         case SDLK_w:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move forward
-                ApplyForwardForce(rigidBody2dComponent);
-                tankInputComponent.state = State::forwardRotationClockwise;
+                ApplyForwardForce(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::forwardRotationClockwise;
             }
             break;
 
         case SDLK_s:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move backwards
-                ApplyBackwardsForce(rigidBody2dComponent);
-                tankInputComponent.state = State::backwardsRotationClockwise;
+                ApplyBackwardsForce(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::backwardsRotationClockwise;
             }
             break;
 
@@ -215,31 +256,31 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_a:
              if( e.type == SDL_KEYUP){
-                 KillTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::stopped;
+                 KillTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stopped;
              }
             break;
 
         case SDLK_d:
              if( e.type == SDL_KEYDOWN){
-                 ApplyRightTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::stoppedRotationClockwise;
+                 ApplyRightTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stoppedRotationClockwise;
              }
             break;
 
         case SDLK_w:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move forward
-                ApplyForwardForce(rigidBody2dComponent);
-                tankInputComponent.state = State::forwardRotationCounterClockwise;
+                ApplyForwardForce(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::forwardRotationCounterClockwise;
             }
             break;
 
         case SDLK_s:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //move backwards
-                ApplyBackwardsForce(rigidBody2dComponent);
-                tankInputComponent.state = State::backwardsRotationCounterClockwise;
+                ApplyBackwardsForce(*entity.rigid_body2d_component);
+                entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
             }
             break;
 
@@ -250,28 +291,28 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_d:
              if( e.type == SDL_KEYUP){                 
-                 KillTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::forward;
+                 KillTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forward;
              }
             break;
         case SDLK_w:
              if( e.type == SDL_KEYUP){
-                 KillForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::stoppedRotationClockwise;
+                 KillForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stoppedRotationClockwise;
              }
 
             break;
         case SDLK_a:
              if( e.type == SDL_KEYDOWN){
-                 ApplyLeftTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::forwardRotationCounterClockwise;
+                 ApplyLeftTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
             break;
 
         case SDLK_s:
              if( e.type == SDL_KEYDOWN){
-                 ApplyBackwardsForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwardsRotationClockwise;
+                 ApplyBackwardsForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwardsRotationClockwise;
              }
             break;
         }
@@ -281,29 +322,29 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_a:
              if( e.type == SDL_KEYUP){
-                 KillTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::forward;
+                 KillTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forward;
              }
             break;
         case SDLK_w:
              if( e.type == SDL_KEYUP){
-                 KillForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::stoppedRotationCounterClockwise;
+                 KillForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stoppedRotationCounterClockwise;
              }
 
             break;
 
         case SDLK_d:
              if( e.type == SDL_KEYDOWN){
-                 ApplyRightTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::forwardRotationClockwise;
+                 ApplyRightTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forwardRotationClockwise;
              }
             break;
 
         case SDLK_s:
              if( e.type == SDL_KEYDOWN){
-                 ApplyBackwardsForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwardsRotationCounterClockwise;
+                 ApplyBackwardsForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
              }
             break;
 
@@ -314,29 +355,29 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_d:
              if( e.type == SDL_KEYUP){
-                 KillTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwards;
+                 KillTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwards;
              }
             break;
         case SDLK_s:
              if( e.type == SDL_KEYUP){
-                 KillForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::stoppedRotationClockwise;
+                 KillForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stoppedRotationClockwise;
              }
 
             break;
 
         case SDLK_a:
              if( e.type == SDL_KEYDOWN){
-                 ApplyLeftTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwardsRotationCounterClockwise;
+                 ApplyLeftTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
              }
             break;
 
         case SDLK_w:
              if( e.type == SDL_KEYDOWN){
-                 ApplyForwardForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::forwardRotationClockwise;
+                 ApplyForwardForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forwardRotationClockwise;
              }
             break;
 
@@ -347,29 +388,29 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
         switch( e.key.keysym.sym ){
         case SDLK_a:
              if( e.type == SDL_KEYUP){
-                 KillTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwards;
+                 KillTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwards;
              }
             break;
         case SDLK_s:
              if( e.type == SDL_KEYUP){
-                 KillForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::stoppedRotationCounterClockwise;
+                 KillForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::stoppedRotationCounterClockwise;
              }
 
             break;
 
         case SDLK_d:
              if( e.type == SDL_KEYDOWN){
-                 ApplyRightTorque(rigidBody2dComponent);
-                 tankInputComponent.state = State::backwardsRotationClockwise;
+                 ApplyRightTorque(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::backwardsRotationClockwise;
              }
             break;
 
         case SDLK_w:
              if( e.type == SDL_KEYDOWN){
-                 ApplyForwardForce(rigidBody2dComponent);
-                 tankInputComponent.state = State::forwardRotationCounterClockwise;
+                 ApplyForwardForce(*entity.rigid_body2d_component);
+                 entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
             break;
         }

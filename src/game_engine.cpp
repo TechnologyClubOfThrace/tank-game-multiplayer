@@ -350,7 +350,7 @@ void GameEngine::HandleEvents()
 
         for (const auto& entity : game::entityObjects){
             if(entity->tank_input_component){
-                tankInputSystem.handleEvent(e, *entity->tank_input_component, *entity->rigid_body2d_component);
+                tankInputSystem.handleEvent(e, *entity);
             }
             if (entity->zoom_input_component){
                 ZoomInputSystem::handleEvent(e, *entity);
@@ -365,7 +365,6 @@ void GameEngine::HandleEvents()
             std::move(game::entityObjects_for_addition.begin(), game::entityObjects_for_addition.end(), std::back_inserter(game::entityObjects));  // ##
             game::entityObjects_for_addition.clear();
         }
-
     }
 }
 

@@ -27,6 +27,7 @@
 #include "tank_input_component.h"
 #include "rigid_body2d_component.h"
 #include "transform_component.h"
+#include "bullet_entity.h"
 
 class TankInputSystem
 {
@@ -38,8 +39,9 @@ public:
     void ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dComponent);
     void KillTorque(RigidBody2DComponent &rigidBody2dComponent);
     void KillForce(RigidBody2DComponent &rigidBody2dComponent);
-    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
+    void handleEvent(SDL_Event &e, Entity &entity);
     void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
+    static void fireBullet(Entity &entity);
 };
 
 #endif // TANK_INPUT_SYSTEM_H
