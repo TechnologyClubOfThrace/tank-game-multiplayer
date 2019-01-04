@@ -22,6 +22,14 @@
 
 std::vector<Camera> ViewPort::allCameras;
 
+//Screen dimensions
+int ViewPort::ScreenWidth;
+int ViewPort::ScreenHeight;
+
+//Level dimensions
+double ViewPort::levelWidth;
+double ViewPort::levelHeight;
+
 ViewPort::ViewPort()
 {
 
@@ -34,17 +42,17 @@ ViewPort::~ViewPort()
 
 
 void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, ViewPort& viewport, double levelWidth, double levelHeight)
-{
-    //levelWidth *= entityScale.x;
-    //levelHeight *= entityScale.y;
-
+{   
     auto cameraID = viewport.cameraID;
     auto entityScale = viewport.entityScale;
 
+    levelWidth *= entityScale.x;
+    levelHeight *= entityScale.y;
 
     //calculations do not need rounding because it causes the entity on camera to shake
-    allCameras[cameraID].frame.x = static_cast<int>((transformComponent.Position.x * entityScale.x + (static_cast<double>(spriteComponent.sourceRectangle.w * entityScale.x) / 2.0) ) - (static_cast<double>(allCameras[cameraID].frame.w * entityScale.x) / 2.0));
-    allCameras[cameraID].frame.y = static_cast<int>((transformComponent.Position.y * entityScale.y + (static_cast<double>(spriteComponent.sourceRectangle.h * entityScale.y) / 2.0) ) - (static_cast<double>(allCameras[cameraID].frame.h * entityScale.y) / 2.0));
+    allCameras[cameraID].frame.x = static_cast<int>((transformComponent.Position.x * entityScale.x + (static_cast<double>(spriteComponent.sourceRectangle.w * entityScale.x) / 2.0) ) - (static_cast<double>(allCameras[cameraID].frame.w) / 2.0));
+    allCameras[cameraID].frame.y = static_cast<int>((transformComponent.Position.y * entityScale.y + (static_cast<double>(spriteComponent.sourceRectangle.h * entityScale.y) / 2.0) ) - (static_cast<double>(allCameras[cameraID].frame.h) / 2.0));
+
 
     //Keep the camera in bounds
     if( allCameras[cameraID].frame.x < 0 )
@@ -55,13 +63,13 @@ void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteCompon
     {
         allCameras[cameraID].frame.y = 0;
     }
-    if( allCameras[cameraID].frame.x > (levelWidth - allCameras[cameraID].frame.w) * entityScale.x)
+    if( allCameras[cameraID].frame.x  > (levelWidth - allCameras[cameraID].frame.w))
     {
-        allCameras[cameraID].frame.x = (levelWidth - allCameras[cameraID].frame.w) * entityScale.x;
+        allCameras[cameraID].frame.x = static_cast<int>(levelWidth - allCameras[cameraID].frame.w);
     }
-    if( allCameras[cameraID].frame.y > (levelHeight - allCameras[cameraID].frame.h) * entityScale.y )
+    if( allCameras[cameraID].frame.y  > (levelHeight - allCameras[cameraID].frame.h))
     {
-        allCameras[cameraID].frame.y = (levelHeight - allCameras[cameraID].frame.h) * entityScale.y;
+        allCameras[cameraID].frame.y = static_cast<int>(levelHeight - allCameras[cameraID].frame.h);
     }
 }
 

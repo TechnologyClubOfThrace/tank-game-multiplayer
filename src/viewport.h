@@ -42,6 +42,14 @@ public:
     std::shared_ptr<SpriteComponent> background_sprite_component = nullptr;//todo: why cant i use a unique_ptr here;
     static std::vector<Camera> allCameras;
 
+    //Screen dimensions
+    static int ScreenWidth;
+    static int ScreenHeight;
+
+    //Level dimensions
+    static double levelWidth;
+    static double levelHeight;
+
     //methods
     static void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget& viewportTarget, ViewPort &viewport, double levelWidth, double levelHeight); //Center the camera over the game object
 };

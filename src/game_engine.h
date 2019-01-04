@@ -49,9 +49,7 @@ public:
     //public variables
     //========================
     static bool Running;
-    //Screen dimensions
-    static int ScreenWidth;
-    static int ScreenHeight;
+
     //Event handler
     static SDL_Event e;
 

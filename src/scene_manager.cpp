@@ -55,8 +55,8 @@ bool SceneManager::LoadFirstScene(const std::string &tmxFilePath)
     tileSet.tileHeight = tmx_doc.child("map").attribute("tileheight").as_int();
     std::cout << "[OK] read map info" << std::endl;
 
-    levelWidth = level_width_tiles_count * tileSet.tileWidth;
-    levelHeight = level_height_tiles_count * tileSet.tileHeight;
+    ViewPort::levelWidth = level_width_tiles_count * tileSet.tileWidth;
+    ViewPort::levelHeight = level_height_tiles_count * tileSet.tileHeight;
 
     //read tileset .tsx filename
     //and load tileset texture.

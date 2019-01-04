@@ -18,6 +18,8 @@ public:
     ZoomInputComponent(size_t viewportIndex);
 
     ZoomState zoomState = ZoomState::noZoom;
+    double zoomSpeed = 0.0005;
+    double zoomResetSpeed = 0.0020;
     size_t viewportIndex;
 };
 

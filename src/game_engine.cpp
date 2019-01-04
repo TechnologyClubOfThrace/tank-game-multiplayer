@@ -33,9 +33,7 @@
 //public variables
 //========================
 bool GameEngine::Running = false;
-//Screen dimensions
-int GameEngine::ScreenWidth = 0;
-int GameEngine::ScreenHeight = 0;
+
 //Event handler
 SDL_Event GameEngine::e;
 
@@ -94,7 +92,7 @@ bool GameEngine::Init()
 
         //Create window
         //gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-        gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenWidth, ScreenHeight, SDL_WINDOW_SHOWN);
+        gWindow = SDL_CreateWindow( "Tank Multiplayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ViewPort::ScreenWidth, ViewPort::ScreenHeight, SDL_WINDOW_SHOWN);
 
         if( GameEngine::gWindow == nullptr )
         {
@@ -379,8 +377,8 @@ void GameEngine::Update()
                                     *(*it)->sprite_component,
                                     viewportTarget,
                                     game::viewports[viewportTarget.viewportID],
-                                    GameEngine::sceneManager.levelWidth,
-                                    GameEngine::sceneManager.levelHeight);
+                                    ViewPort::levelWidth,
+                                    ViewPort::levelHeight);
                     }
                 }
             }

@@ -8,19 +8,21 @@ ZoomInputSystem::ZoomInputSystem()
 
 void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, Entity& entity)
 {
+    auto old_entityScale = game::viewports[entity.zoom_input_component->viewportIndex].entityScale;
+
     switch (entity.zoom_input_component->zoomState){
 
     case ZoomState::noZoom:
         break;
 
     case ZoomState::zoomIn:
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x += deltaTime * 0.0002;
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y += deltaTime * 0.0002;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x += deltaTime * entity.zoom_input_component->zoomSpeed;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y += deltaTime * entity.zoom_input_component->zoomSpeed;
         break;
 
     case ZoomState::zoomOut:
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x -= deltaTime * 0.0002;
-        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y -= deltaTime * 0.0002;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x -= deltaTime * entity.zoom_input_component->zoomSpeed;
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y -= deltaTime * entity.zoom_input_component->zoomSpeed;
         break;
 
     case ZoomState::keepZoom:
@@ -29,7 +31,7 @@ void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, En
     case ZoomState::resetZoom:
         double resetSpeed =
                 game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x < 1 ?
-                    0.001 : -0.001;
+                    entity.zoom_input_component->zoomResetSpeed : -entity.zoom_input_component->zoomResetSpeed;
         if ( ((game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x) > 0.98) &&
              ((game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x) < 1.02)) {
             game::viewports[entity.zoom_input_component->viewportIndex].entityScale = {1, 1};
@@ -40,6 +42,14 @@ void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, En
         }
         break;
     }
+
+    if ((game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x *
+           ViewPort::levelWidth < game::viewports[entity.zoom_input_component->viewportIndex].frame.w) ||
+         (game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y *
+           ViewPort::levelHeight < game::viewports[entity.zoom_input_component->viewportIndex].frame.h)){
+        game::viewports[entity.zoom_input_component->viewportIndex].entityScale = old_entityScale;
+    }
+
 }
 
 void ZoomInputSystem::handleEvent(SDL_Event& e, const Entity& entity)
