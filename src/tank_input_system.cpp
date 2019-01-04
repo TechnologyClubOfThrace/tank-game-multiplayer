@@ -23,6 +23,7 @@
 #include "tank_input_system.h"
 #include "render_utils.h"
 #include "game.h"
+//#include <math.h>
 
 TankInputSystem::TankInputSystem()
 {
@@ -80,10 +81,34 @@ void TankInputSystem::fireBullet(Entity &entity)
     //first of all setup initial position and
     //sprite that includes the tank image
     auto bullet_entity = std::make_unique<BulletEntity>();
-    bullet_entity->transform_component->Position.x = entity.transform_component->Position.x;
-    bullet_entity->transform_component->Position.y = entity.transform_component->Position.y;
+   // bullet_entity->transform_component->Position.x = entity.transform_component->Position.x;
+   // bullet_entity->transform_component->Position.y = entity.transform_component->Position.y;
     bullet_entity->transform_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
     RenderUtils::LoadTextureFromFile("bullet_w65h20.png", *bullet_entity->sprite_component);
+    *bullet_entity->rigid_body2d_component = *entity.rigid_body2d_component;
+    bullet_entity->rigid_body2d_component->Position.x += entity.sprite_component->sourceRectangle.w/2;
+    bullet_entity->rigid_body2d_component->Position.y += entity.sprite_component->sourceRectangle.h/2;
+    Vector2D PositionTranspose{0,0};
+    PositionTranspose.x=entity.sprite_component->sourceRectangle.w/2;
+    PositionTranspose.RotateDegrees(entity.transform_component->RotationAngleDegrees);
+    bullet_entity->rigid_body2d_component->Position.x+=PositionTranspose.x;
+    bullet_entity->rigid_body2d_component->Position.y+=PositionTranspose.y; //transposed the front half of tank sprite
+    Vector2D CentersDistance{0,0};
+    CentersDistance.x=bullet_entity->sprite_component->sourceRectangle.w/2;
+    CentersDistance.RotateDegrees(entity.transform_component->RotationAngleDegrees);
+    Vector2D RadialTranspose{0,0};
+    RadialTranspose.x= -bullet_entity->sprite_component->sourceRectangle.w/2;
+    RadialTranspose.y= bullet_entity->sprite_component->sourceRectangle.h/2;
+    bullet_entity->rigid_body2d_component->Position+=CentersDistance;
+    bullet_entity->rigid_body2d_component->Position+=RadialTranspose;
+
+    //bullet_entity->sprite_component->sourceRectangle.x/2;
+    //bullet_entity->sprite_component->sourceRectangle.y/2;
+    bullet_entity->rigid_body2d_component->Velocity={0,0};
+    bullet_entity->rigid_body2d_component->VelocityMaximumMagnitude=1;
+    bullet_entity->rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->RotationAngleDegrees);
+
+
     //bullet_entity->transform_component->RotationAngleDegrees = 0;
     /*
     //initial values for tank entity physics
