@@ -29,6 +29,7 @@
 #include "tile_entity.h"
 #include "game.h"
 #include "render_utils.h"
+#include "viewport.h"
 
 class SceneManager
 {
@@ -36,9 +37,6 @@ public:
     SceneManager();
 
     TileSet tileSet;
-
-    double levelWidth;
-    double levelHeight;
 
     bool LoadFirstScene(const std::string &tmxFilePath);
     bool LoadTileset();

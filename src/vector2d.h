@@ -31,12 +31,12 @@
 class Vector2D
 {
 public:
-    Vector2D();
+    Vector2D() = delete;
     Vector2D(double x, double y);
 
     //variables
-    double x = 0;
-    double y = 0;
+    double x;
+    double y;
 
     //functions
     void RotateArcs(const double angle);

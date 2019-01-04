@@ -78,7 +78,9 @@ void PhysicsSystem::UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponen
 void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
 {    
     if(!rigidBody2dComponent.isAccelerationfrozen){
+
          rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+
 
         if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.VelocityMaximumMagnitude){
             //std::cout << "will call rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude)" << std::endl;
@@ -124,6 +126,4 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
     transformComponent.Position = rigidBody2dComponent.Position;
     transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
     rigidBody2dComponent.RotationAngleDegrees = transformComponent.RotationAngleDegrees;
-
-
 }

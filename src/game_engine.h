@@ -22,7 +22,6 @@
 #define GAME_ENGINE_H
 
 #include <SDL.h>
-
 #include <chrono>
 
 #include "scene_manager.h"
@@ -34,52 +33,70 @@
 //systems
 #include "render_system.h"
 #include "tank_input_system.h"
+#include "zoom_input_system.h"
 #include "physics_system.h"
 #include "fps_system.h"
 
+#ifdef __EMSCRIPTEN__
+#include "emscripten.h"
+#endif
 
 class GameEngine
 {
 public:
-    GameEngine(int screenWidth, int screenHeight);
+    GameEngine();
 
     //public variables
     //========================
-    bool Running = false;
-    //Screen dimensions
-    int ScreenWidth = 0;
-    int ScreenHeight = 0;
+    static bool Running;
+
     //Event handler
-    SDL_Event e;
+    static SDL_Event e;
 
 
     //public pointers
     //========================
     //The window we'll be rendering to
-    SDL_Window* gWindow = nullptr;
+    static SDL_Window* gWindow;
 
     //public class variables
     //========================
-    SceneManager sceneManager;
-    FpsEntity fpsEntity;
+    static SceneManager sceneManager;
+    static FpsEntity fpsEntity;
 
 
     //public methods
     //========================
-    bool Init();
-    void StartGameLoop();
-    void HandleEvents();
-    void Update();
-    void Draw();
+    static bool Init();
+    static void StartGameLoop();
+    static void HandleEvents();
+    static void Update();
+    static void Draw();
+    static void game_engine_one_iteration();
+    static void game_engine_infinite_loop();
+    static void game_engine_infinite_loop2();
 
+    static void DisplayEnvironmentInfo();
 private:
-    std::chrono::milliseconds::rep deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
-
     //systems
-    RenderSystem renderSystem;
-    TankInputSystem tankInputSystem;
-    PhysicsSystem physicsSystem;
-    FpsSystem fpsSystem;
+    static RenderSystem renderSystem;
+    static TankInputSystem tankInputSystem;
+    static PhysicsSystem physicsSystem;
+    static FpsSystem fpsSystem;
+
+    //frame cap related valiables
+    //80 fps are ok. High fps values might produce incorrect results because of number rounding
+     //IMPORTANT! For smooth movement of game objects, the fps value should be choosed based on the update frequency of
+    //each object. For example if a tank object moves on the x vector 0.1 pixel / ms then choosing 60 fps will result
+    //in a not smooth movement because the object position will be calculated every 16ms. So, the first time its x position
+    //will be 16ms* 0.1 = round(1.6) = 2, the next will be 1.6 + 16ms*0.1 = round(1.6 + 1.6)=3 and the next will be 5 etc..
+    //For slow moving objects it is better to choose an fps that will move them 1px on each update call.
+    //For the above example,80fps will be much better: 12.5*0.1 = round(1.25) = 1, next: 1.25 + 1.25 = round(1.5) = 2, next: 1.5 + 1.25 = round(2.75) = 3, next: 2.75 + 1.25 = round(4) 4 etc...
+    static int fps;
+    static std::chrono::milliseconds::rep frame_delay_for_stable_fps;//the second part is how many fps we need
+    static std::chrono::high_resolution_clock::time_point begin_time_point;//stores the time point before processing game objects and drawing
+    static std::chrono::milliseconds::rep deltaTime;
+    //the time it takes to display the current frame after the previous one, in milliseconds
 };
 
 #endif // GAME_ENGINE_H

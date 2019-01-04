@@ -30,7 +30,7 @@ class RigidBody2DComponent
 public:
     RigidBody2DComponent();
 
-    Vector2D Velocity{};
+    Vector2D Velocity {0,0};
     double AngularVelocityMagnitude {}; // degrees/ms
     double AngularVelocityMaximumMagnitude ; // degrees/ms
     double AngularAccelerationMagnitude {}; // degrees/ms^2
@@ -45,13 +45,6 @@ public:
     double RotationAngleDegrees = 0; //object's angle
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
-
-    /*
-    bool AppliedForwardForce = false;
-    bool AppliedBackwardsForce = false;
-    bool AppliedTorque = false;
-    */
-
 };
 
 #endif // RIGID_BODY_COMPONENT_H

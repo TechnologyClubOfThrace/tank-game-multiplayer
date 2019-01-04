@@ -38,6 +38,7 @@ SceneManager::SceneManager()
  */
 bool SceneManager::LoadFirstScene(const std::string &tmxFilePath)
 {
+    std::cout << "[ENTERED] SceneManager::LoadFirstScene(const std::string &tmxFilePath)" << std::endl;
     //Load the tilemap xml file
     pugi::xml_document tmx_doc;
     pugi::xml_parse_result result = tmx_doc.load_file(tmxFilePath.c_str());
@@ -45,30 +46,37 @@ bool SceneManager::LoadFirstScene(const std::string &tmxFilePath)
         std::cerr << "Could not load tilemap xml file in path: " << tmxFilePath << std::endl;
         return false;
     }
+    std::cout << "[OK] tmx_doc.load_file(tmxFilePath.c_str());" << std::endl;
 
     //read map info
     int level_width_tiles_count = tmx_doc.child("map").attribute("width").as_int(); //total number of tiles verticaly
     int level_height_tiles_count = tmx_doc.child("map").attribute("height").as_int(); //total number of tiles horizontaly
     tileSet.tileWidth = tmx_doc.child("map").attribute("tilewidth").as_int();
     tileSet.tileHeight = tmx_doc.child("map").attribute("tileheight").as_int();
+    std::cout << "[OK] read map info" << std::endl;
 
-    levelWidth = level_width_tiles_count * tileSet.tileWidth;
-    levelHeight = level_height_tiles_count * tileSet.tileHeight;
+    ViewPort::levelWidth = level_width_tiles_count * tileSet.tileWidth;
+    ViewPort::levelHeight = level_height_tiles_count * tileSet.tileHeight;
 
     //read tileset .tsx filename
     //and load tileset texture.
     //In case of error in tileset loading
     //stop scene processing and return false;
     tileSet.tsx_fileName = tmx_doc.child("map").child("tileset").attribute("source").as_string();
+    std::cout << "[OK] read tsx_fileName" << std::endl;
 
     if (!LoadTileset()) return false;
+    std::cout << "[OK] LoadTileset" << std::endl;
     if (!LoadSceneEntities(tmx_doc, tmxFilePath)) return false;
+    std::cout << "[OK] LoadSceneEntities" << std::endl;
 
     return true;
 }
 
 bool SceneManager::LoadTileset()
 {
+     std::cout << "[ENTERED] LoadTileset" << std::endl;
+     std::cout << "[ENTERED] WILL OPEN XML: " << tileSet.tsx_fileName << std::endl;
     //Load the tilemap xml file
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(tileSet.tsx_fileName.c_str());
@@ -76,12 +84,16 @@ bool SceneManager::LoadTileset()
         std::cerr << "Could not load tileset xml file in path: " << tileSet.tsx_fileName << std::endl;
         return false;
     }
+    std::cout << "[OK] doc.load_file(tileSet.tsx_fileName.c_str());" << std::endl;
+
 
     tileSet.spacing = doc.child("tileset").attribute("spacing").as_int();
     tileSet.tileCount = doc.child("tileset").attribute("tilecount").as_int();
     tileSet.columns = doc.child("tileset").attribute("columns").as_int();
     tileSet.image_fileName = doc.child("tileset").child("image").attribute("source").as_string();
+    std::cout << "[OK] READ TILESET INFO FROM XML" << std::endl;
 
+    std::cout << "[WILL] RenderUtils::LoadTextureFromFile(tileSet.image_fileName, tileSet.texture); FILENAME: " << tileSet.image_fileName << std::endl;
     return RenderUtils::LoadTextureFromFile(tileSet.image_fileName, tileSet.texture);
 }
 

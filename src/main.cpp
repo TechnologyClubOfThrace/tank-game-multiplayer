@@ -34,7 +34,6 @@
 #include "game_engine.h"
 #include "game.h"
 #include "render_utils.h"
-
 #include "tank_entity.h"
 #include "scene_manager.h"
 
@@ -42,7 +41,7 @@ using namespace std;
 
 #undef main
 
-void configureViewports(GameEngine &game_engine)
+void configureViewports()
 {
     //game viewports configuration
     //The tank game has 2 viewports;
@@ -53,21 +52,58 @@ void configureViewports(GameEngine &game_engine)
     ViewPort viewport;
     viewport.frame.x = 0;
     viewport.frame.y = 0;
-    viewport.frame.w = game_engine.ScreenWidth;
-    viewport.frame.h = game_engine.ScreenHeight;
-    viewport.camera.frame = viewport.frame;
-    game::viewports.emplace_back(viewport);
+    viewport.frame.w = ViewPort::ScreenWidth;
+    viewport.frame.h = ViewPort::ScreenHeight;
+    viewport.entityScale.x = 1.0;
+    viewport.entityScale.y = viewport.entityScale.x;
+    viewport.cameraID = 0;
+    //viewport.camera.frame = viewport.frame;
+    game::viewports.emplace_back(std::move(viewport));
+
     //Viewport 1:
     ViewPort viewport_radar;
     viewport_radar.frame.w = 150;
     viewport_radar.frame.h = 0;
     viewport_radar.frame.x = 0;
     viewport_radar.frame.y = 0;
-    game::viewports.emplace_back(viewport_radar);
+    viewport_radar.cameraID = 1;
+    viewport_radar.background_sprite_component = std::make_shared<SpriteComponent>();
+    RenderUtils::LoadTextureFromFile("grey_300x200.png", *viewport_radar.background_sprite_component);
+    RenderUtils::setBlendMode(viewport_radar.background_sprite_component->texture, SDL_BLENDMODE_BLEND);
+    RenderUtils::setAlpha(viewport_radar.background_sprite_component->texture, 50);
+    game::viewports.emplace_back(std::move(viewport_radar));
     //end of viewport configuration
+
+    ViewPort viewport2;
+    viewport2.frame.x = 0;
+    viewport2.frame.y = 0;
+    viewport2.frame.w = ViewPort::ScreenWidth;
+    viewport2.frame.h = ViewPort::ScreenHeight;
+    viewport2.entityScale.x = 1.0;
+    viewport2.entityScale.y = viewport2.entityScale.x;
+    viewport2.cameraID = 1;
+    //viewport.camera.frame = viewport.frame;
+    game::viewports.emplace_back(std::move(viewport2));
 }
 
-void configureTankEntity(GameEngine &game_engine)
+void configureCameras()
+{
+    Camera c0;
+    c0.frame.x = 0;
+    c0.frame.y = 0;
+    c0.frame.w = game::viewports[0].frame.w;
+    c0.frame.h = game::viewports[0].frame.h;
+    ViewPort::allCameras.emplace_back(c0);
+
+    Camera c1;
+    c1.frame.x = 0;
+    c1.frame.y = 0;
+    c1.frame.w = game::viewports[1].frame.w;
+    c1.frame.h = game::viewports[1].frame.h;
+    ViewPort::allCameras.emplace_back(c1);
+}
+
+void configureTankEntity()
 {
     //tank entity configuration
 
@@ -83,14 +119,18 @@ void configureTankEntity(GameEngine &game_engine)
     //The viewport dimensions (width,height) are relative to the
     //level dimensions, scaled down.
     //Everything drawn inside the viewport is scaled down.
-    tank_entity->viewport_component->entityScale.x =  game::viewports[tank_entity->viewport_component->viewportID].frame.w / static_cast<double>(game_engine.ScreenWidth);
-    tank_entity->viewport_component->entityScale.y = tank_entity->viewport_component->entityScale.x;
-    game::viewports[tank_entity->viewport_component->viewportID].frame.h = static_cast<int>(std::round(tank_entity->viewport_component->entityScale.y * game_engine.ScreenHeight));
-    game::viewports[tank_entity->viewport_component->viewportID].frame.x = game_engine.ScreenWidth - game::viewports[tank_entity->viewport_component->viewportID].frame.w - 100;
-    game::viewports[tank_entity->viewport_component->viewportID].frame.y = game_engine.ScreenHeight - game::viewports[tank_entity->viewport_component->viewportID].frame.h - 100;
-    game::viewports[tank_entity->viewport_component->viewportID].camera.frame = game::viewports[tank_entity->viewport_component->viewportID].frame;
-    tank_entity->viewport_component->destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * tank_entity->viewport_component->entityScale.x));
-    tank_entity->viewport_component->destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * tank_entity->viewport_component->entityScale.y));
+    ViewportTarget viewportTarget(1);
+    //viewportTarget.entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
+    //viewportTarget.entityScale.y = viewportTarget.entityScale.x;
+    game::viewports[viewportTarget.viewportID].entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(ViewPort::levelWidth);
+    game::viewports[viewportTarget.viewportID].entityScale.y = game::viewports[viewportTarget.viewportID].entityScale.x;
+    game::viewports[viewportTarget.viewportID].frame.h = static_cast<int>(std::round(game::viewports[viewportTarget.viewportID].entityScale.y * ViewPort::levelHeight));
+    game::viewports[viewportTarget.viewportID].frame.x = ViewPort::ScreenWidth - game::viewports[viewportTarget.viewportID].frame.w - 20;
+    game::viewports[viewportTarget.viewportID].frame.y = ViewPort::ScreenHeight - game::viewports[viewportTarget.viewportID].frame.h - 20;
+    //game::viewports[viewportTarget.viewportID].camera.frame = game::viewports[viewportTarget.viewportID].frame;
+    viewportTarget.destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * game::viewports[viewportTarget.viewportID].entityScale.x));
+    viewportTarget.destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * game::viewports[viewportTarget.viewportID].entityScale.y));
+    tank_entity->viewport_component->viewports.emplace_back(viewportTarget);
 
     //initial values for tank entity physics
     tank_entity->rigid_body2d_component->Acceleration.x = 0.000;
@@ -105,33 +145,50 @@ void configureTankEntity(GameEngine &game_engine)
     tank_entity->rigid_body2d_component->isAccelerationfrozen = false;
     tank_entity->rigid_body2d_component->isAngularAccelerationfrozen = false;
 
+    //insert the tank entity into the entities collection
     game::entityObjects.emplace_back(std::move(tank_entity));
 }
 
 int main()
 {
-    GameEngine game_engine(700,600);
+    std::cout << "Begin - main()" << std::endl;
+
+    ViewPort::ScreenWidth = 700;
+    ViewPort::ScreenHeight = 700;
+
     //Start up SDL and create window
-    if( !game_engine.Init())
+    if( !GameEngine::Init())
     {
         //if game engine fails to init, quit the application
         printf( "Failed to initialize!\n" );
         return 0;
     }
+    std::cout << "[OK] GameEngine::Init()" << std::endl;
+
+    GameEngine::DisplayEnvironmentInfo();
 
     //load the first level of the game from the tilemap file
     //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
-    game_engine.sceneManager.LoadFirstScene("aris-first-map.tmx");
+    //GameEngine::sceneManager.LoadFirstScene("aris-first-map.tmx");
+    GameEngine::sceneManager.LoadFirstScene("4kmap.tmx");
+    std::cout << "[OK] GameEngine::sceneManager.LoadFirstScene(aris-first-map.tmx)" << std::endl;
 
     //view ports configuration
     //The game has 2 viewports:
     //(1) the main view port and
     //(2) the radar viewport on the bottom right
-    configureViewports(game_engine);
+    configureViewports();
+    std::cout << "[OK] configureViewports();" << std::endl;
+
+    configureCameras();
 
     //tank entity configuration
-    configureTankEntity(game_engine);
+    configureTankEntity();
+    std::cout << "[OK] configureTankEntity();" << std::endl;
 
     //start main game loop
-    game_engine.StartGameLoop();
+    GameEngine::StartGameLoop();
+    std::cout << "[OK] GameEngine::StartGameLoop();" << std::endl;
+
+    return 0;
 }

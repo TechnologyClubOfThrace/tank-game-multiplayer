@@ -4,6 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += exceptions_off #disable c++ exceptions handling to gain memory, speed and code simplicity. http://doc.qt.io/qt-5/qmake-variable-reference.html
 
+DEFINES += PUGIXML_NO_EXCEPTIONS
+
 HEADERS += \
     game_engine.h \
     vector2d.h \
@@ -32,8 +34,9 @@ HEADERS += \
     fps_component.h \
     viewport_component.h \
     render_utils.h \
-    pugiconfig.hpp \
-    pugixml.hpp
+    viewport_target.h \
+    zoom_input_component.h \
+    zoom_input_system.h
 
 SOURCES += \
         main.cpp \
@@ -64,7 +67,9 @@ SOURCES += \
     fps_component.cpp \
     viewport_component.cpp \
     render_utils.cpp \
-    pugixml.cpp
+    viewport_target.cpp \
+    zoom_input_component.cpp \
+    zoom_input_system.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
@@ -95,12 +100,15 @@ win32-msvc*:contains(QMAKE_HOST.arch, x86_64) {
 windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x64 -lSDL2
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x64 -lSDL2_ttf
 windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x64 -lSDL2_image
+CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Debug -lpugixml
+CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Release -lpugixml
 } else {
 #32bit msvc selected kit
 windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x86 -lSDL2
-
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x86 -lSDL2_ttf
 windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x86 -lSDL2_image
+CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Debug_x86 -lpugixml
+CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Release_x86 -lpugixml
 }
 
 win32-msvc*{
@@ -108,6 +116,7 @@ win32-msvc*{
 windows: INCLUDEPATH += C:\\libs\\SDL2-2.0.9\\include
 windows: INCLUDEPATH += C:\\libs\\SDL2_ttf-2.0.14\\include
 windows: INCLUDEPATH += C:\\libs\\SDL2_image-2.0.4\\include
+windows: INCLUDEPATH += C:\\libs\\pugixml-1.9\\src
 }
 
 

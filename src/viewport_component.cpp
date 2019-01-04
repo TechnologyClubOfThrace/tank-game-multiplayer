@@ -1,6 +1,6 @@
 #include "viewport_component.h"
 
-ViewportComponent::ViewportComponent()
+ViewportComponent::ViewportComponent(size_t viewportID)
 {
-
+    viewports.emplace_back(ViewportTarget(viewportID));
 }

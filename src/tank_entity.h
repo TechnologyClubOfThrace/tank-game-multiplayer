@@ -24,6 +24,7 @@
 #define TANK_ENTITY_H
 
 #include "entity.h"
+#include "zoom_input_component.h"
 
 class TankEntity : public Entity
 {

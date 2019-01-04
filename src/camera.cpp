@@ -31,29 +31,3 @@
 Camera::Camera()
 {
 }
-
-/*
-void Camera::followEntityObject(TransformComponent &transformComponent, SpriteComponent &spriteComponent, double levelWidth, double levelHeight)
-{
-        this->frame.x = static_cast<int>(round((transformComponent.Position.x + spriteComponent.sourceRectangle.w / 2 ) - (this->frame.w / 2)));
-        this->frame.y = static_cast<int>(round((transformComponent.Position.y + spriteComponent.sourceRectangle.h / 2 ) - (this->frame.h / 2)));
-
-        //Keep the camera in bounds
-        if( this->frame.x < 0 )
-        {
-            this->frame.x = 0;
-        }
-        if( this->frame.y < 0 )
-        {
-            this->frame.y = 0;
-        }
-        if( this->frame.x > levelWidth - this->frame.w )
-        {
-            this->frame.x = levelWidth - this->frame.w;
-        }
-        if( this->frame.y > levelHeight - this->frame.h )
-        {
-            this->frame.y = levelHeight - this->frame.h;
-        }
-}
-*/
