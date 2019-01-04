@@ -65,6 +65,27 @@ GameEngine::GameEngine()
 {
 }
 
+void GameEngine::DisplayEnvironmentInfo()
+{
+    std::cout << ">>> Begin DisplayEnvironmentInfo <<< " << std::endl;
+
+    SDL_version sdl_version;
+    SDL_GetVersion(&sdl_version);
+    std::cout << "SDL_GetVersion: " << std::to_string(sdl_version.major) << "." << std::to_string(sdl_version.minor) << "." << std::to_string(sdl_version.patch) << std::endl;
+
+    std::cout << "SDL_GetRevision: " << SDL_GetRevision() << std::endl;
+
+    std::cout << "SDL_GetCurrentVideoDriver: " << SDL_GetCurrentVideoDriver() << std::endl;
+
+    std::cout << "SDL_GetPlatform: " << SDL_GetPlatform() << std::endl;
+
+    std::cout << "SDL_GetDisplayName(0): " << SDL_GetDisplayName(0) << std::endl;
+
+    std::cout << "SDL_GetDisplayName(0): " << SDL_GetDisplayName(0) << std::endl;
+
+    std::cout << ">>> End DisplayEnvironmentInfo <<<" << std::endl;
+}
+
 bool GameEngine::Init()
 {
     //Initialization flag
@@ -79,6 +100,7 @@ bool GameEngine::Init()
     }
     else
     {
+
 
         // Better drawing quality
          //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -194,7 +216,7 @@ void GameEngine::game_engine_infinite_loop()
         //the duration it took to process the game objects
         deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
 
-        std::cout << "gameloop exec time: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count() << std::endl;
+        //std::cout << "gameloop exec time: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count() << std::endl;
 
         //frame cap.
         //If frame finished early wait for the remaining time

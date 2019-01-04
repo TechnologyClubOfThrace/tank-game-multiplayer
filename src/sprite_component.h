@@ -35,7 +35,6 @@ public:
 
     SDL_Rect sourceRectangle {};//initial texture size. Set on texture load.
     SDL_Rect destinationRectangle {};//A copy of sourceRectangle on texture load. Render system might change x and y to render the texture on screen
-    bool renderPositionRelatedToCamera = false;//If set to true, the sprite stays on the same position when the camera is moved
     SDL_Texture * texture = nullptr;
 };
 

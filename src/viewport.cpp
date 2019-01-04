@@ -43,6 +43,7 @@ ViewPort::~ViewPort()
 
 void ViewPort::FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, ViewPort& viewport, double levelWidth, double levelHeight)
 {   
+    //todo: remove these 2 variables
     auto cameraID = viewport.cameraID;
     auto entityScale = viewport.entityScale;
 

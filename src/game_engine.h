@@ -76,6 +76,7 @@ public:
     static void game_engine_infinite_loop();
     static void game_engine_infinite_loop2();
 
+    static void DisplayEnvironmentInfo();
 private:
     //systems
     static RenderSystem renderSystem;

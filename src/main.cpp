@@ -166,9 +166,12 @@ int main()
     }
     std::cout << "[OK] GameEngine::Init()" << std::endl;
 
+    GameEngine::DisplayEnvironmentInfo();
+
     //load the first level of the game from the tilemap file
     //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
-    GameEngine::sceneManager.LoadFirstScene("aris-first-map.tmx");
+    //GameEngine::sceneManager.LoadFirstScene("aris-first-map.tmx");
+    GameEngine::sceneManager.LoadFirstScene("4kmap.tmx");
     std::cout << "[OK] GameEngine::sceneManager.LoadFirstScene(aris-first-map.tmx)" << std::endl;
 
     //view ports configuration

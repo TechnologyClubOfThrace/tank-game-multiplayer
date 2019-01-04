@@ -36,7 +36,7 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
                 static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.h) * viewport.entityScale.y))
     };
 
-
+    //todo: SDL added batching support. should check when it is available because it will improve rendering performance
     //auto batching = SDL_GetHintBoolean(SDL_HINT_RENDER_BATCHING, SDL_TRUE);
     SDL_RenderSetClipRect(RenderUtils::windowRenderer, &viewport.frame);
 
