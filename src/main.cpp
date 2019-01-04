@@ -120,6 +120,7 @@ void configureTankEntity()
     //level dimensions, scaled down.
     //Everything drawn inside the viewport is scaled down.
     ViewportTarget viewportTarget(1);
+    viewportTarget.EntityScale = {3,3};//the tank entity inside the radar viewport will appear 3 times larger to be visible
     //viewportTarget.entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
     //viewportTarget.entityScale.y = viewportTarget.entityScale.x;
     game::viewports[viewportTarget.viewportID].entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(ViewPort::levelWidth);

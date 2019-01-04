@@ -32,9 +32,13 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
     SDL_Rect destinationRectangle {
                 static_cast<int>(round(static_cast<double>(viewport.frame.x) + (transformComponent.Position.x * viewport.entityScale.x) - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.x))),
                 static_cast<int>(round(static_cast<double>(viewport.frame.y) + (transformComponent.Position.y * viewport.entityScale.y) - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.y))),
-                static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.w) * viewport.entityScale.x)),
-                static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.h) * viewport.entityScale.y))
+                static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.w * transformComponent.Scale.x * viewportTarget.EntityScale.x) * viewport.entityScale.x)),
+                static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.h * transformComponent.Scale.y * viewportTarget.EntityScale.y) * viewport.entityScale.y))
     };
+
+    //if (SDL_HasIntersection(&viewport.frame, &destinationRectangle) == SDL_FALSE){
+    //    return;
+    //}
 
     //todo: SDL added batching support. should check when it is available because it will improve rendering performance
     //auto batching = SDL_GetHintBoolean(SDL_HINT_RENDER_BATCHING, SDL_TRUE);

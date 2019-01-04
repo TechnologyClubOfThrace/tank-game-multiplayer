@@ -10,6 +10,7 @@ class ViewportTarget
 public:
     ViewportTarget() = delete;
     ViewportTarget(size_t viewportID);
+    Vector2D EntityScale {1,1};
     bool movesTheCamera = false;
     size_t viewportID {};//the vieport id where the related entity sprite will be drawn
     //Vector2D entityScale {1, 1};//the scale at whitch the entity sprite will be rendered inside the viewport
