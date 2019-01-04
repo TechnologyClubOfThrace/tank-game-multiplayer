@@ -133,14 +133,13 @@ void configureTankEntity()
     tank_entity->viewport_component->viewports.emplace_back(viewportTarget);
 
     //initial values for tank entity physics
-    tank_entity->rigid_body2d_component->Acceleration.x = 0.0003;
-    tank_entity->rigid_body2d_component->DirectionalForce = {3, 0};
-    tank_entity->rigid_body2d_component->TorqueMagnitude = 100;
+    tank_entity->rigid_body2d_component->Acceleration.x = 0.000;
+    tank_entity->rigid_body2d_component->Force = {0, 0};
+    tank_entity->rigid_body2d_component->TorqueMagnitude = 000;
     tank_entity->rigid_body2d_component->Mass = 10000;
-    tank_entity->rigid_body2d_component->Force = {0.25,0};
     tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
     tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
-    tank_entity->rigid_body2d_component->MaxVelocityMagnitude = 0.10;
+    tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.10;
     tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
     tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
     tank_entity->rigid_body2d_component->isAccelerationfrozen = false;

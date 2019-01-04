@@ -32,10 +32,13 @@ class TankInputSystem
 {
 public:
     TankInputSystem();
-    void SetDeltaRotDegZero(RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateForce(RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
-    void UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent);
-    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent, TransformComponent &transformComponent);
+    void ApplyRightTorque(RigidBody2DComponent &rigidBody2dComponent);
+    void ApplyLeftTorque(RigidBody2DComponent &rigidBody2dComponent);
+    void ApplyForwardForce(RigidBody2DComponent &rigidBody2dComponent);
+    void ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dComponent);
+    void KillTorque(RigidBody2DComponent &rigidBody2dComponent);
+    void KillForce(RigidBody2DComponent &rigidBody2dComponent);
+    void handleEvent(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
     void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
 };
 

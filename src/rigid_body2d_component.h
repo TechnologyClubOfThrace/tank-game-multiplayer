@@ -35,14 +35,14 @@ public:
     double AngularVelocityMaximumMagnitude ; // degrees/ms
     double AngularAccelerationMagnitude {}; // degrees/ms^2
     double TorqueMagnitude {} ; // torque units
-    double MoI {};
-    Vector2D Acceleration {0,0}; // pixels/ms^2
-    double MaxVelocityMagnitude {}; // pixels/ms
-    Vector2D Force {0,0};
-    Vector2D DirectionalForce {0,0};
+    double MoI {}; //Moment of Inertia. Set equal to mass.
+    Vector2D Acceleration {}; // pixels/ms^2
+    double VelocityMaximumMagnitude {}; // pixels/ms
+    Vector2D Force{};
     double deltaRotationAngleeDegrees {}; //the most recent rotation degrees that increased the RotationAngleDegrees
     double Mass {};
-
+    Vector2D Position {}; //position's representational vector used in physics system calculations
+    double RotationAngleDegrees = 0; //object's angle
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
 };

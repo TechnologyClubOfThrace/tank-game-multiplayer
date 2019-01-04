@@ -1,0 +1,21 @@
+ApplyForce()
+ApplyRotationForce()
+ApplyTorque()
+
+StartConstantSpeed()
+ApplyConstantRotationalMovement()
+
+
+
+ApplyForce()
+vec.Acceleration = vec.Force / mass
+vec.Velocity+= vec.Acceleration*deltaTime
+vec.DeltaPosition=vec.Velocity*deltaTime + 0.5*vec.Acceleration*deltaTime*deltaTime
+vec.Position+=vec.DeltaPosition
+
+
+ApplyRotationForce()
+vec.Torque
+
+
+

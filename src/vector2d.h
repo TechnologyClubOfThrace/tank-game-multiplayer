@@ -53,6 +53,8 @@ public:
     Vector2D& operator+= (const Vector2D &vector2d);
     Vector2D operator+ (const Vector2D &vector2d) const;
     Vector2D& operator-= (const Vector2D &vector2d);
+    static double Dot (const Vector2D &vector2d_1, const Vector2D &vector2d_2); //returns the dot product of two vectors
+    static double Cross (const Vector2D &vector2d_1, const Vector2D &vector2d_2); //returns the magnitude of vertical vector
 
     //static functions
     static Vector2D Up();
