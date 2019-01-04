@@ -75,14 +75,6 @@ void TankInputSystem::handleEvent(SDL_Event &e, TankInputComponent &tankInputCom
 {
     switch (tankInputComponent.state) {
     case State::stopped:
-        if (e.button.state == SDL_PRESSED) {
-            //move forward
-            rigidBody2dComponent.isAccelerationfrozen = false;
-            rigidBody2dComponent.Force = rigidBody2dComponent.DirectionalForce;
-            rigidBody2dComponent.Force.RotateDegrees(transformComponent.RotationAngleDegrees);
-            rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
-            tankInputComponent.state = State::forward;
-        }
         switch( e.key.keysym.sym )
         {
         case SDLK_w:
