@@ -349,12 +349,15 @@ void GameEngine::HandleEvents()
         }
 
         for (const auto& entity : game::entityObjects){
-            if(entity->tank_input_component){
-                tankInputSystem.handleEvent(e, *entity);
-            }
+            //ZoomInputSystem
             if (entity->zoom_input_component){
                 ZoomInputSystem::handleEvent(e, *entity);
-            }
+            }//ZoomInputSystem
+
+            //tankInputSystem
+            if(entity->tank_input_component){
+                tankInputSystem.handleEvent(e, *entity);
+            }//tankInputSystem
         }
 
         //A player might press the fire key and a new bullet game object
@@ -383,12 +386,20 @@ void GameEngine::Update()
         //it might mark itself for deletion (Exists=False), so we should remove it from the vector.
         //To remove an item from the vector while iterating it, we should follow this method,
         //using an iterator.
+
+        //ZoomInputSystem >>> zoom_input_component
+        //IMPORTANT! zoom handling should be before the physicsSystem else
+        //zooming is not smooth.
+        if((*it)->zoom_input_component){
+            ZoomInputSystem::Update(deltaTime, *(*it));
+        }//ZoomInputSystem >>> zoom_input_component
+
+        //physicsSystem >>> rigid_body2d_component
         if((*it)->rigid_body2d_component){
             physicsSystem.Update(deltaTime,
                                   *(*it)->transform_component,
                                   *(*it)->rigid_body2d_component);
 
-            //game::viewports[0].FollowEntity(*(*it)->transform_component, *(*it)->sprite_component, GameEngine::sceneManager.levelWidth, GameEngine::sceneManager.levelHeight);
             if ((*it)->viewport_component->movesTheCamera){
                 for (auto& viewportTarget : (*it)->viewport_component->viewports){
                     if (viewportTarget.movesTheCamera){
@@ -402,11 +413,7 @@ void GameEngine::Update()
                     }
                 }
             }
-        } //if((*it)->rigid_body2d_component
-
-        if((*it)->zoom_input_component){
-            ZoomInputSystem::Update(deltaTime, *(*it));
-        }
+        }//physicsSystem >>> rigid_body2d_component
 
         ++it;
     }

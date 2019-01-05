@@ -43,12 +43,14 @@ void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, En
         break;
     }
 
+
     if ((game::viewports[entity.zoom_input_component->viewportIndex].entityScale.x *
            ViewPort::levelWidth < game::viewports[entity.zoom_input_component->viewportIndex].frame.w) ||
          (game::viewports[entity.zoom_input_component->viewportIndex].entityScale.y *
            ViewPort::levelHeight < game::viewports[entity.zoom_input_component->viewportIndex].frame.h)){
         game::viewports[entity.zoom_input_component->viewportIndex].entityScale = old_entityScale;
     }
+
 
 }
 
