@@ -29,7 +29,7 @@ Vector2D::Vector2D(double x, double y) : x(x), y(y)
 //-----------------------------------------------------------------------------
 // Purpose: Rotate a vector
 //-----------------------------------------------------------------------------
-void Vector2D::RotateArcs( const double angleArcs )
+void Vector2D::RotateArcs(const double angleArcs)
 {
     double xt = (x * cos(angleArcs)) - (y * sin(angleArcs));
     double yt = (y * cos(angleArcs)) + (x * sin(angleArcs));
@@ -57,7 +57,7 @@ void Vector2D::setZeroMagnitude()
 
 void Vector2D::SetMagnitude(const double newMagnitudes)
 {
-    double mag = newMagnitudes / this->Magnitude();
+    const double mag = newMagnitudes / this->Magnitude();
     this->x = this->x * mag;
     this->y = this->y * mag;
 }
@@ -118,18 +118,13 @@ Vector2D& Vector2D::operator-=(const Vector2D &vector2d)
 
 double Vector2D::Dot(const Vector2D &vector2d_1, const Vector2D &vector2d_2)
 {
-    return (vector2d_1.x*vector2d_2.x)+(vector2d_1.y*vector2d_2.y);
+    return (vector2d_1.x * vector2d_2.x) + (vector2d_1.y * vector2d_2.y);
 }
 
 double Vector2D::Cross(const Vector2D &vector2d_1, const Vector2D &vector2d_2)
 {
-    return (vector2d_1.x*vector2d_2.y)-(vector2d_1.y*vector2d_2.x);
+    return (vector2d_1.x * vector2d_2.y) - (vector2d_1.y * vector2d_2.x);
 }
-
-
-
-
-
 
 Vector2D Vector2D::Up()
 {

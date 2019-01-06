@@ -124,8 +124,8 @@ bool GameEngine::Init()
         else
         {
             //Create renderer for window
-            RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED );
-            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE );
+            RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED);
+            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE);
             if(RenderUtils::windowRenderer == nullptr )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -197,8 +197,8 @@ void GameEngine::game_engine_infinite_loop()
     //will be 16ms* 0.1 = round(1.6) = 2, the next will be 1.6 + 16ms*0.1 = round(1.6 + 1.6)=3 and the next will be 5 etc..
     //For slow moving objects it is better to choose an fps that will move them 1px on each update call.
     //For the above example,80fps will be much better: 12.5*0.1 = round(1.25) = 1, next: 1.25 + 1.25 = round(1.5) = 2, next: 1.5 + 1.25 = round(2.75) = 3, next: 2.75 + 1.25 = round(4) 4 etc...
-    GameEngine::fps = 80;
-    GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
+    GameEngine::fps = 80;//todo:fps is ignored here. is set manually after 2 lines with frame_delay_for_stable_fps=
+    GameEngine::frame_delay_for_stable_fps = 1000 / fps; //the second part is how many fps we need
     GameEngine::frame_delay_for_stable_fps = 14;
     GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
     GameEngine::deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
@@ -304,11 +304,8 @@ void GameEngine::game_engine_one_iteration()
     SDL_RenderClear(RenderUtils::windowRenderer);
     Draw();//draw the objects on screen
 
-    //SDL_Delay(12);
-
     //the duration it took to process the game objects
     deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-
 
     //frame cap.
     //If frame finished early wait for the remaining time
@@ -323,7 +320,6 @@ void GameEngine::game_engine_one_iteration()
     if (fpsEntity.fps_component->displayFpsCounter){
         deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
         fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
-        //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
         renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
     }
 
