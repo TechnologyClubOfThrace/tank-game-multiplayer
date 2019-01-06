@@ -35,11 +35,12 @@ public:
     ViewPort();
     ~ViewPort();
 
-    //variables
+    //member variables
     SDL_Rect frame;//the location of the viewport
     size_t cameraID = 0;//the related camera index inside the camera array
-    Vector2D entityScale {1, 1};//the scale at whitch the entity sprite will be rendered inside the viewport
-    std::shared_ptr<SpriteComponent> background_sprite_component = nullptr;//todo: why cant i use a unique_ptr here;
+    Vector2D entityScale {1, 1};//the scale at which the entity sprite will be rendered inside the viewport. background_sprite_component is not affected
+    std::shared_ptr<SpriteComponent> background_sprite_component = nullptr;//the background sprite of the viewport   todo: why cant i use a unique_ptr here;
+
     static std::vector<Camera> allCameras;
 
     //Screen dimensions
@@ -51,7 +52,7 @@ public:
     static double levelHeight;
 
     //methods
-    static void FollowEntity(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget& viewportTarget, ViewPort &viewport, double levelWidth, double levelHeight); //Center the camera over the game object
+    static void FollowEntity(const TransformComponent &transformComponent, const SpriteComponent &spriteComponent, const ViewPort &viewport); //Center the camera over the game object
 };
 
 #endif // VIEWPORT_H

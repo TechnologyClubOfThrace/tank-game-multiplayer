@@ -199,6 +199,7 @@ void GameEngine::game_engine_infinite_loop()
     //For the above example,80fps will be much better: 12.5*0.1 = round(1.25) = 1, next: 1.25 + 1.25 = round(1.5) = 2, next: 1.5 + 1.25 = round(2.75) = 3, next: 2.75 + 1.25 = round(4) 4 etc...
     GameEngine::fps = 80;
     GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
+    GameEngine::frame_delay_for_stable_fps = 14;
     GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
     GameEngine::deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
 
@@ -388,7 +389,7 @@ void GameEngine::Update()
         //using an iterator.
 
         //ZoomInputSystem >>> zoom_input_component
-        //IMPORTANT! zoom handling should be before the physicsSystem else
+        //IMPORTANT! zoom handling should be before the FollowEntity else
         //zooming is not smooth.
         if((*it)->zoom_input_component){
             ZoomInputSystem::Update(deltaTime, *(*it));
@@ -399,21 +400,21 @@ void GameEngine::Update()
             physicsSystem.Update(deltaTime,
                                   *(*it)->transform_component,
                                   *(*it)->rigid_body2d_component);
+        }//physicsSystem >>> rigid_body2d_component
 
+        //FollowEntity
+        if ((*it)->viewport_component){
             if ((*it)->viewport_component->movesTheCamera){
                 for (auto& viewportTarget : (*it)->viewport_component->viewports){
                     if (viewportTarget.movesTheCamera){
                         ViewPort::FollowEntity(
                                     *(*it)->transform_component,
                                     *(*it)->sprite_component,
-                                    viewportTarget,
-                                    game::viewports[viewportTarget.viewportID],
-                                    ViewPort::levelWidth,
-                                    ViewPort::levelHeight);
+                                    game::viewports[viewportTarget.viewportID]);
                     }
                 }
             }
-        }//physicsSystem >>> rigid_body2d_component
+        }//FollowEntity
 
         ++it;
     }
