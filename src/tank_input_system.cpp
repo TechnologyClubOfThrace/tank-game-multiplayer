@@ -86,25 +86,36 @@ void TankInputSystem::fireBullet(Entity &entity)
     bullet_entity->transform_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
     RenderUtils::LoadTextureFromFile("bullet_w65h20.png", *bullet_entity->sprite_component);
     *bullet_entity->rigid_body2d_component = *entity.rigid_body2d_component;
+    //move the bullet design point from the tank design point to the center of the tank
     bullet_entity->rigid_body2d_component->Position.x += entity.sprite_component->sourceRectangle.w/2;
     bullet_entity->rigid_body2d_component->Position.y += entity.sprite_component->sourceRectangle.h/2;
+    //calculate a vector for the tank sprite and then add it to the bullet position vector.
     Vector2D PositionTranspose{0,0};
     PositionTranspose.x=entity.sprite_component->sourceRectangle.w/2;
     PositionTranspose.RotateDegrees(entity.transform_component->RotationAngleDegrees);
     bullet_entity->rigid_body2d_component->Position.x+=PositionTranspose.x;
-    bullet_entity->rigid_body2d_component->Position.y+=PositionTranspose.y; //transposed the front half of tank sprite
+    bullet_entity->rigid_body2d_component->Position.y+=PositionTranspose.y; //transposed to the front half of tank sprite
+/*
+    Will calculate a vector that represent the subtraction of the tank sprite direction vector
+    and the bullet vector. It has to do with the circular draw of the sprites.
+*/
     Vector2D CentersDistance{0,0};
     CentersDistance.x=bullet_entity->sprite_component->sourceRectangle.w/2;
-    CentersDistance.RotateDegrees(entity.transform_component->RotationAngleDegrees);
-    Vector2D RadialTranspose{0,0};
-    RadialTranspose.x= -bullet_entity->sprite_component->sourceRectangle.w/2;
-    RadialTranspose.y= bullet_entity->sprite_component->sourceRectangle.h/2;
-    bullet_entity->rigid_body2d_component->Position+=CentersDistance;
-    bullet_entity->rigid_body2d_component->Position+=RadialTranspose;
+    CentersDistance.y=bullet_entity->sprite_component->sourceRectangle.h/2;
+    bullet_entity->rigid_body2d_component->Position-=CentersDistance; //subtracted the vectors.
+    //At this point the end of the tank vector is on the middle of the bullet circle.
+    //A bullet radial vector has to be added for proper representation.
+    //The required vector length is the bullet radius. That is the half of the bullet's width.
 
-    //bullet_entity->sprite_component->sourceRectangle.x/2;
-    //bullet_entity->sprite_component->sourceRectangle.y/2;
-    bullet_entity->rigid_body2d_component->Velocity={0,0};
+    Vector2D RadialTranspose{0,0};
+    RadialTranspose.x= bullet_entity->sprite_component->sourceRectangle.w/2;
+//  We need to rotate the vector so it colinear to the tank's radial vector.
+    RadialTranspose.RotateDegrees(bullet_entity->rigid_body2d_component->RotationAngleDegrees);
+    bullet_entity->rigid_body2d_component->Position+=RadialTranspose;
+    //At this point the end of the tank sprite should be aligned with the back mid point of the bullet sprite.
+
+    //Bullet Speed part
+    bullet_entity->rigid_body2d_component->Velocity={0,0}; //set to 1 for bullet to move. 0 for stopped bullet
     bullet_entity->rigid_body2d_component->VelocityMaximumMagnitude=1;
     bullet_entity->rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->RotationAngleDegrees);
 

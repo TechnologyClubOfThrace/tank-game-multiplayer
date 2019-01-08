@@ -124,8 +124,8 @@ bool GameEngine::Init()
         else
         {
             //Create renderer for window
-            RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED);
-            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE);
+            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED);
+            RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE);
             if(RenderUtils::windowRenderer == nullptr )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
