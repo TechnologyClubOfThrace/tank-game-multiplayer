@@ -115,7 +115,10 @@ void TankInputSystem::fireBullet(Entity &entity)
     //At this point the end of the tank sprite should be aligned with the back mid point of the bullet sprite.
 
     //Bullet Speed part
-    bullet_entity->rigid_body2d_component->Velocity={0,0}; //set to 1 for bullet to move. 0 for stopped bullet
+    bullet_entity->rigid_body2d_component->Acceleration={0,0};
+    bullet_entity->rigid_body2d_component->TorqueMagnitude=0;
+
+    bullet_entity->rigid_body2d_component->Velocity={1,0}; //set to 1 for bullet to move. 0 for stopped bullet
     bullet_entity->rigid_body2d_component->VelocityMaximumMagnitude=1;
     bullet_entity->rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->RotationAngleDegrees);
 
@@ -220,6 +223,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyLeftTorque(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
+            break;             
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
@@ -251,6 +260,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyLeftTorque(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
              }
+            break;
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
@@ -284,7 +299,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                 entity.tank_input_component->state = State::backwardsRotationClockwise;
             }
             break;
-
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
         }
         break;
 
@@ -319,7 +339,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                 entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
             }
             break;
-
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
         }
         break;
 
@@ -350,6 +375,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyBackwardsForce(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::backwardsRotationClockwise;
              }
+            break;
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
@@ -384,6 +415,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
              }
             break;
 
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
         }
         break;
 
@@ -417,6 +454,13 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
              }
             break;
 
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
+
         }
         break;
 
@@ -448,6 +492,13 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyForwardForce(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
+            break;
+
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
