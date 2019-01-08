@@ -32,12 +32,12 @@ TankInputSystem::TankInputSystem()
 
 void TankInputSystem::ApplyRightTorque(RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.TorqueMagnitude = 100;
+    rigidBody2dComponent.TorqueMagnitude = 20;
 }
 
 void TankInputSystem::ApplyLeftTorque(RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.TorqueMagnitude = -100;
+    rigidBody2dComponent.TorqueMagnitude = -20;
 }
 
 void TankInputSystem::ApplyForwardForce(RigidBody2DComponent &rigidBody2dComponent)
@@ -81,52 +81,46 @@ void TankInputSystem::fireBullet(Entity &entity)
     //first of all setup initial position and
     //sprite that includes the tank image
     auto bullet_entity = std::make_unique<BulletEntity>();
-   // bullet_entity->transform_component->Position.x = entity.transform_component->Position.x;
-   // bullet_entity->transform_component->Position.y = entity.transform_component->Position.y;
     bullet_entity->transform_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
     RenderUtils::LoadTextureFromFile("bullet_w65h20.png", *bullet_entity->sprite_component);
+    // TODO: isolate the bullet_entity->rigid_body2d_component from the entity.rigid2dbodycomponent!!!!
+    // there is no real reason for directly copying the tank's pointer!
+    // Possible errors when the tank object expands with more features!!!
+    // The bullet could inherit unpredictable features!
     *bullet_entity->rigid_body2d_component = *entity.rigid_body2d_component;
+    //move the bullet design point from the tank design point to the center of the tank
     bullet_entity->rigid_body2d_component->Position.x += entity.sprite_component->sourceRectangle.w/2;
     bullet_entity->rigid_body2d_component->Position.y += entity.sprite_component->sourceRectangle.h/2;
+    //calculate a vector for the tank sprite and then add it to the bullet position vector.
     Vector2D PositionTranspose{0,0};
     PositionTranspose.x=entity.sprite_component->sourceRectangle.w/2;
     PositionTranspose.RotateDegrees(entity.transform_component->RotationAngleDegrees);
     bullet_entity->rigid_body2d_component->Position.x+=PositionTranspose.x;
-    bullet_entity->rigid_body2d_component->Position.y+=PositionTranspose.y; //transposed the front half of tank sprite
+    bullet_entity->rigid_body2d_component->Position.y+=PositionTranspose.y; //transposed to the front half of tank sprite
+    //Will calculate a vector that represent the subtraction of the tank sprite direction vector
+    //and the bullet vector. It has to do with the circular draw of the sprites.
     Vector2D CentersDistance{0,0};
     CentersDistance.x=bullet_entity->sprite_component->sourceRectangle.w/2;
-    CentersDistance.RotateDegrees(entity.transform_component->RotationAngleDegrees);
+    CentersDistance.y=bullet_entity->sprite_component->sourceRectangle.h/2;
+    bullet_entity->rigid_body2d_component->Position-=CentersDistance; //subtracted the vectors.
+    //At this point the end of the tank vector is on the middle of the bullet circle.
+    //A bullet radial vector has to be added for proper representation.
+    //The required vector length is the bullet radius. That is the half of the bullet's width.
     Vector2D RadialTranspose{0,0};
-    RadialTranspose.x= -bullet_entity->sprite_component->sourceRectangle.w/2;
-    RadialTranspose.y= bullet_entity->sprite_component->sourceRectangle.h/2;
-    bullet_entity->rigid_body2d_component->Position+=CentersDistance;
+    RadialTranspose.x= bullet_entity->sprite_component->sourceRectangle.w/2;
+//  We need to rotate the vector so it colinear to the tank's radial vector.
+    RadialTranspose.RotateDegrees(bullet_entity->rigid_body2d_component->RotationAngleDegrees);
     bullet_entity->rigid_body2d_component->Position+=RadialTranspose;
+    //At this point the end of the tank sprite should be aligned with the back mid point of the bullet sprite.
 
-    //bullet_entity->sprite_component->sourceRectangle.x/2;
-    //bullet_entity->sprite_component->sourceRectangle.y/2;
-    bullet_entity->rigid_body2d_component->Velocity={0,0};
+    //Bullet Speed part
+    bullet_entity->rigid_body2d_component->Acceleration={0,0};
+    bullet_entity->rigid_body2d_component->TorqueMagnitude=0;
+
+    bullet_entity->rigid_body2d_component->Velocity={1,0}; //set to 1 for bullet to move. 0 for stopped bullet
     bullet_entity->rigid_body2d_component->VelocityMaximumMagnitude=1;
     bullet_entity->rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->RotationAngleDegrees);
 
-
-    //bullet_entity->transform_component->RotationAngleDegrees = 0;
-    /*
-    //initial values for tank entity physics
-    tank_entity->rigid_body2d_component->Acceleration.x = 0.000;
-    tank_entity->rigid_body2d_component->Force = {0, 0};
-    tank_entity->rigid_body2d_component->TorqueMagnitude = 000;
-    tank_entity->rigid_body2d_component->Mass = 10000;
-    tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
-    tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
-    tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.10;
-    tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
-    tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
-    tank_entity->rigid_body2d_component->isAccelerationfrozen = false;
-    tank_entity->rigid_body2d_component->isAngularAccelerationfrozen = false;
-    */
-
-    //insert the tank entity into the entities collection
-    int sa =1 ;
     game::entityObjects_for_addition.emplace_back(std::move(bullet_entity));
 }
 
@@ -209,6 +203,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyLeftTorque(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
+            break;             
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
@@ -240,6 +240,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyLeftTorque(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
              }
+            break;
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
@@ -273,7 +279,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                 entity.tank_input_component->state = State::backwardsRotationClockwise;
             }
             break;
-
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
         }
         break;
 
@@ -308,7 +319,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                 entity.tank_input_component->state = State::backwardsRotationCounterClockwise;
             }
             break;
-
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
         }
         break;
 
@@ -339,6 +355,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyBackwardsForce(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::backwardsRotationClockwise;
              }
+            break;
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
@@ -373,6 +395,12 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
              }
             break;
 
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
         }
         break;
 
@@ -406,6 +434,13 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
              }
             break;
 
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
+            break;
+
         }
         break;
 
@@ -437,6 +472,13 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
                  ApplyForwardForce(*entity.rigid_body2d_component);
                  entity.tank_input_component->state = State::forwardRotationCounterClockwise;
              }
+            break;
+
+        case SDLK_SPACE:
+            if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
+                //fire bullet
+                TankInputSystem::fireBullet(entity);
+            }
             break;
         }
         break;
