@@ -11,6 +11,7 @@ SharedSpriteComponent::~SharedSpriteComponent()
 
 void SharedSpriteComponent::FreeTextureMemory()
 {
+    int i = 0;
     //should not delete the texture from memory
     //because it is used in other textures too
 }

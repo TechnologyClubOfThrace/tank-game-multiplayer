@@ -36,6 +36,6 @@ void SpriteComponent::FreeTextureMemory()
 {
     if( texture != nullptr )
     {
-        SDL_DestroyTexture(texture);
+        //SDL_DestroyTexture(texture);
     }
 }

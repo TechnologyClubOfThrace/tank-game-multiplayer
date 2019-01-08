@@ -37,7 +37,8 @@ HEADERS += \
     viewport_target.h \
     zoom_input_component.h \
     zoom_input_system.h \
-    bullet_entity.h
+    bullet_entity.h \
+    unified_tiles_entity.h
 
 SOURCES += \
         main.cpp \
@@ -71,7 +72,8 @@ SOURCES += \
     viewport_target.cpp \
     zoom_input_component.cpp \
     zoom_input_system.cpp \
-    bullet_entity.cpp
+    bullet_entity.cpp \
+    unified_tiles_entity.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

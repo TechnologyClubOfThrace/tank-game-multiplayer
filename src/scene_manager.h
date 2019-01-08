@@ -29,7 +29,10 @@
 #include "tile_entity.h"
 #include "game.h"
 #include "render_utils.h"
+#include "render_system.h"
 #include "viewport.h"
+#include "unified_tiles_entity.h"
+#include "tank_entity.h"
 
 class SceneManager
 {

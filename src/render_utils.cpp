@@ -92,3 +92,20 @@ void RenderUtils::setAlpha(SDL_Texture *&texture, Uint8 alpha)
     SDL_SetTextureAlphaMod(texture, alpha);
 }
 
+void RenderUtils::createBlankTexture(const int width, const int height, SDL_Texture *&texture, const bool setAsTargetRenderer, Uint32 pixelFormat)
+{
+    //Create uninitialized texture
+    texture = SDL_CreateTexture(windowRenderer, pixelFormat, SDL_TEXTUREACCESS_TARGET, width, height );
+    if( texture == nullptr )
+    {
+        printf( "Unable to create blank texture! SDL Error: %s\n", SDL_GetError() );
+    }
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+
+    //if (setAsTargetRenderer){
+        int res = SDL_SetRenderTarget(RenderUtils::windowRenderer, texture);
+    //    std::cout << res << std::endl;
+    //}
+}
+
+

@@ -99,11 +99,33 @@ bool SceneManager::LoadTileset()
 
 bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::string &tmxFilePath)
 {
+    auto unifiedTilesEntity = std::make_unique<UnifiedTilesEntity>();
+
     //check if first level exist in the file
     if (std::string(tmx_doc.child("map").child("layer").attribute("name").as_string()) != "Level-1"){
         std::cerr << "First scene (Level-1) does not exist in the tilemap xml file." << tmxFilePath << std::endl;
         return false;
     }
+
+    //p
+    Uint32 pixelFormat;
+    SDL_QueryTexture(tileSet.texture, &pixelFormat, nullptr, nullptr, nullptr);
+    //Create uninitialized texture
+    unifiedTilesEntity->sprite_component->texture = SDL_CreateTexture(RenderUtils::windowRenderer,
+                                                                      pixelFormat,
+                                                                      SDL_TEXTUREACCESS_TARGET,
+                                                                      static_cast<int>(ViewPort::levelWidth),
+                                                                      static_cast<int>(ViewPort::levelHeight));
+    if( unifiedTilesEntity->sprite_component->texture == nullptr )
+    {
+        printf( "Unable to create blank texture! SDL Error: %s\n", SDL_GetError() );
+    }
+    SDL_SetTextureBlendMode(unifiedTilesEntity->sprite_component->texture, SDL_BLENDMODE_BLEND);
+    int res = SDL_SetRenderTarget(RenderUtils::windowRenderer, unifiedTilesEntity->sprite_component->texture);
+
+    //RenderUtils::createBlankTexture(static_cast<int>(ViewPort::levelWidth), static_cast<int>(ViewPort::levelHeight), unifiedTilesEntity->sprite_component->texture, true, pixelFormat);
+    unifiedTilesEntity->sprite_component->sourceRectangle.w = static_cast<int>(ViewPort::levelWidth);
+    unifiedTilesEntity->sprite_component->sourceRectangle.h = static_cast<int>(ViewPort::levelHeight);
 
     //first level exist. Read map data
      std::string level_map_data(tmx_doc.child("map").child("layer").child("data").text().as_string());
@@ -127,13 +149,46 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     SpriteRectFromTileIndex(tile_index_number, tileEntity->sprite_component);
                     tileEntity->transform_component->Position.x = row * tileSet.tileWidth;
                     tileEntity->transform_component->Position.y = col * tileSet.tileHeight;
-                    game::entityObjects.emplace_back(std::move(tileEntity));
+                    //game::entityObjects.emplace_back(std::move(tileEntity));
+
+                    /*
+                    SDL_Rect destrect;
+                    destrect = tileEntity->sprite_component->sourceRectangle;
+                    destrect.x = static_cast<int>(tileEntity->transform_component->Position.x);
+                    destrect.x = static_cast<int>(tileEntity->transform_component->Position.y);
+
+
+                    int rencp = SDL_RenderCopy(RenderUtils::windowRenderer,
+                                   tileEntity->sprite_component->texture,
+                                   &tileEntity->sprite_component->sourceRectangle,
+                                   &destrect);
+
+                    */
+                    ViewPort viewport;
+                    viewport.frame.x = 0;
+                    viewport.frame.y = 0;
+                    viewport.frame.w = ViewPort::levelWidth;
+                    viewport.frame.h = ViewPort::levelHeight;
+
+
+                    RenderSystem::RenderInViewport(*tileEntity->transform_component,
+                                                   *tileEntity->sprite_component,
+                                                   tileEntity->viewport_component->viewports[0],
+                                                   viewport);
                     row++;
                 }
             }
             col++;
          }
      }
+
+     unifiedTilesEntity->sprite_component->destinationRectangle = unifiedTilesEntity->sprite_component->sourceRectangle;
+     int a = 1;
+     //SDL_RenderPresent(RenderUtils::windowRenderer);
+    game::entityObjects.emplace_back(std::move(unifiedTilesEntity));
+    //Reset render target
+    SDL_SetRenderTarget(RenderUtils::windowRenderer, nullptr);
+
     return true;
 }
 

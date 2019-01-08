@@ -168,12 +168,6 @@ int main()
 
     GameEngine::DisplayEnvironmentInfo();
 
-    //load the first level of the game from the tilemap file
-    //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
-    //GameEngine::sceneManager.LoadFirstScene("aris-first-map.tmx");
-    GameEngine::sceneManager.LoadFirstScene("4kmap.tmx");
-    std::cout << "[OK] GameEngine::sceneManager.LoadFirstScene(aris-first-map.tmx)" << std::endl;
-
     //view ports configuration
     //The game has 2 viewports:
     //(1) the main view port and
@@ -182,6 +176,12 @@ int main()
     std::cout << "[OK] configureViewports();" << std::endl;
 
     configureCameras();
+
+    //load the first level of the game from the tilemap file
+    //game_engine.sceneManager.LoadFirstScene("tank_tiled_map.tmx");
+    //GameEngine::sceneManager.LoadFirstScene("aris-first-map.tmx");
+    GameEngine::sceneManager.LoadFirstScene("4kmap.tmx");
+    std::cout << "[OK] GameEngine::sceneManager.LoadFirstScene(aris-first-map.tmx)" << std::endl;
 
     //tank entity configuration
     configureTankEntity();

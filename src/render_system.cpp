@@ -44,7 +44,7 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
     //auto batching = SDL_GetHintBoolean(SDL_HINT_RENDER_BATCHING, SDL_TRUE);
     SDL_RenderSetClipRect(RenderUtils::windowRenderer, &viewport.frame);
 
-    SDL_RenderCopyEx(RenderUtils::windowRenderer,
+    int res = SDL_RenderCopyEx(RenderUtils::windowRenderer,
                      spriteComponent.texture,
                      &spriteComponent.sourceRectangle,//source rectangle
                      &destinationRectangle,//destination rectangle
@@ -52,6 +52,10 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
                      nullptr,//center
                      SDL_RendererFlip::SDL_FLIP_NONE
                 );
+
+    if (res != 0){
+        printf( "SDL_RenderCopyEx failed! SDL Error: %s\n", SDL_GetError() );
+    }
 }
 
 void RenderSystem::RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport)
