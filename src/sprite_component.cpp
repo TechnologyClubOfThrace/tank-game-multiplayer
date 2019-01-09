@@ -24,7 +24,11 @@
 
 SpriteComponent::SpriteComponent()
 {
+     m_texturePointerHandler = TexturePointerHandler::FreeTextureOnDestructor;
+}
 
+SpriteComponent::SpriteComponent(TexturePointerHandler texturePointerHandler) : m_texturePointerHandler(texturePointerHandler)
+{
 }
 
 SpriteComponent::~SpriteComponent()
@@ -32,10 +36,11 @@ SpriteComponent::~SpriteComponent()
     FreeTextureMemory();
 }
 
+
 void SpriteComponent::FreeTextureMemory()
 {
-    if( texture != nullptr )
+    if( texture != nullptr && m_texturePointerHandler == TexturePointerHandler::FreeTextureOnDestructor)
     {
-        //SDL_DestroyTexture(texture);
+        SDL_DestroyTexture(texture);
     }
 }
