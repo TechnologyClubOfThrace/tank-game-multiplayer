@@ -6,7 +6,7 @@ SharedSpriteComponent::SharedSpriteComponent()
 
 SharedSpriteComponent::~SharedSpriteComponent()
 {
-
+    int b=1;
 }
 
 void SharedSpriteComponent::FreeTextureMemory()

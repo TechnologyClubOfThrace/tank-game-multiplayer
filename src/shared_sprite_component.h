@@ -7,9 +7,10 @@ class SharedSpriteComponent : public SpriteComponent
 {
 public:
     SharedSpriteComponent();
-    ~SharedSpriteComponent();
+    ~SharedSpriteComponent() override;
 
-    virtual void FreeTextureMemory();
+protected:
+    void FreeTextureMemory() override;
 };
 
 #endif // SHARED_SPRITE_COMPONENT_H

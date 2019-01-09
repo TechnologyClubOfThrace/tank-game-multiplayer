@@ -31,11 +31,13 @@ class SpriteComponent
 public:
     SpriteComponent();
     virtual ~SpriteComponent();
-    virtual void FreeTextureMemory();
 
     SDL_Rect sourceRectangle {};//initial texture size. Set on texture load.
     SDL_Rect destinationRectangle {};//A copy of sourceRectangle on texture load. Render system might change x and y to render the texture on screen
     SDL_Texture * texture = nullptr;
+
+protected:
+    virtual void FreeTextureMemory();
 };
 
 #endif // SPRITE_COMPONENT_H

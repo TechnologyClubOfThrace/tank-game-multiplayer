@@ -32,12 +32,12 @@ TankInputSystem::TankInputSystem()
 
 void TankInputSystem::ApplyRightTorque(RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.TorqueMagnitude = 20;
+    rigidBody2dComponent.TorqueMagnitude = 50;
 }
 
 void TankInputSystem::ApplyLeftTorque(RigidBody2DComponent &rigidBody2dComponent)
 {
-    rigidBody2dComponent.TorqueMagnitude = -20;
+    rigidBody2dComponent.TorqueMagnitude = -50;
 }
 
 void TankInputSystem::ApplyForwardForce(RigidBody2DComponent &rigidBody2dComponent)

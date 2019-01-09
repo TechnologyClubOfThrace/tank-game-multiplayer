@@ -97,6 +97,9 @@ private:
     static std::chrono::high_resolution_clock::time_point begin_time_point;//stores the time point before processing game objects and drawing
     static std::chrono::milliseconds::rep deltaTime;
     //the time it takes to display the current frame after the previous one, in milliseconds
+
+    static int max_fps_ticks;
+    static int fps_ticks;
 };
 
 #endif // GAME_ENGINE_H

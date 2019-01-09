@@ -60,6 +60,8 @@ std::chrono::milliseconds::rep GameEngine::frame_delay_for_stable_fps = 1000 / f
 std::chrono::high_resolution_clock::time_point GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
 std::chrono::milliseconds::rep GameEngine::deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
 
+int GameEngine::max_fps_ticks = 20;
+int GameEngine::fps_ticks = 0;
 
 GameEngine::GameEngine()
 {
@@ -231,10 +233,14 @@ void GameEngine::game_engine_infinite_loop()
 
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
-           deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-           fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+           fps_ticks++;
+           if (fps_ticks > max_fps_ticks){
+               fps_ticks = 0;
+               deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+               fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+               //std::cout << "deltatime: " << deltaTime << std::endl;
+           }
            renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
-           //std::cout << "deltatime: " << deltaTime << std::endl;
        }
 
        //display everything in screen
@@ -317,11 +323,17 @@ void GameEngine::game_engine_one_iteration()
    //End of frame cap
 
     //display the fps counter if needed
-    if (fpsEntity.fps_component->displayFpsCounter){
-        deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-        fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
-        renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
-    }
+   //display the fps counter if needed
+   if (fpsEntity.fps_component->displayFpsCounter){
+       fps_ticks++;
+       if (fps_ticks > max_fps_ticks){
+           fps_ticks = 0;
+           deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+           fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+           //std::cout << "deltatime: " << deltaTime << std::endl;
+       }
+       renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
+   }
 
 
     //display everything in screen
