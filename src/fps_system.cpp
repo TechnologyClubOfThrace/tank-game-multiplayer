@@ -17,7 +17,8 @@ void FpsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
                        std::unique_ptr<SpriteComponent> &spriteComponent,
                        std::unique_ptr<FpsComponent> &fpsComponent)
 {
-    fpsComponent->fps = std::to_string(static_cast<int>(deltaTime > 0 ? round(1000/deltaTime) : 0));
+    fpsComponent->fps = std::string("Fps: ").append(std::to_string(static_cast<int>(deltaTime > 0 ? round(1000/deltaTime) : 0))).append(
+                "\nTotal entities: " + std::to_string(fpsComponent->entities_count));
     loadFromRenderedText(spriteComponent, fpsComponent);
 
     //fps_str = fps > 0 ? (fps < 5000 ? "FPS: " + std::to_string(fps) : fps_str) : fps_str;

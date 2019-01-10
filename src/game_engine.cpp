@@ -127,7 +127,7 @@ bool GameEngine::Init()
         {
             //Create renderer for window
             RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
-            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE);
+            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE | SDL_RENDERER_TARGETTEXTURE);
             if(RenderUtils::windowRenderer == nullptr )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -237,6 +237,7 @@ void GameEngine::game_engine_infinite_loop()
            if (fps_ticks > max_fps_ticks){
                fps_ticks = 0;
                deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+               fpsEntity.fps_component->entities_count = game::entityObjects.size();
                fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
                //std::cout << "deltatime: " << deltaTime << std::endl;
            }

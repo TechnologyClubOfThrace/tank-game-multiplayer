@@ -11,6 +11,7 @@ public:
     ~FpsComponent();
 
     std::string fps {};
+    size_t entities_count = 0;
     bool displayFpsCounter = true;
     TTF_Font * font = nullptr;
     SDL_Color textColor = { 204, 0, 204, 255 };
