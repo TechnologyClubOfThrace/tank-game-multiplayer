@@ -20,6 +20,7 @@ public:
     static void setBlendMode(SDL_Texture *&texture, SDL_BlendMode blending);
     static void setAlpha(SDL_Texture *&texture, Uint8 alpha);
     static void createBlankTexture(const int width, const int height, SDL_Texture *&texture, const bool setAsTargetRenderer, Uint32 pixelFormat);
+    static bool LoadSpriteFromFile(std::string path, SpriteComponent &sprite);
 };
 
 #endif // RENDER_UTILS_H

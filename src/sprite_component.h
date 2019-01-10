@@ -39,7 +39,6 @@ public:
     ~SpriteComponent();
 
     SDL_Rect sourceRectangle {};//initial texture size. Set on texture load.
-    SDL_Rect destinationRectangle {};//A copy of sourceRectangle on texture load. Render system might change x and y to render the texture on screen
     SDL_Texture * texture = nullptr;
 
 private:

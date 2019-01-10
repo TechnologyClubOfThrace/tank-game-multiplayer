@@ -52,7 +52,6 @@ bool FpsSystem::loadFromRenderedText( std::unique_ptr<SpriteComponent> &spriteCo
             //Get image dimension
             spriteComponent->sourceRectangle.w = textSurface->w;
             spriteComponent->sourceRectangle.h = textSurface->h;
-            spriteComponent->destinationRectangle = spriteComponent->sourceRectangle;
         }
 
         //Get rid of old surface
