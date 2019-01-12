@@ -9,7 +9,7 @@ BulletEntity::BulletEntity()
     sprite_component = std::make_unique<SpriteComponent>();//appearance - rendering system
     rigid_body2d_component = std::make_unique<RigidBody2DComponent>();//physics
     collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();//collision shapes
-    viewport_component = std::make_unique<ViewportComponent>(0);//target viewport rendering
+    target_viewport_component = std::make_unique<TargetViewportComponent>(0);//target viewport rendering
 
     //reuse the bullet sprite component
     if(BulletEntity::m_bullet_sprite_component.texture == nullptr){

@@ -4,5 +4,5 @@ TileEntity::TileEntity()
 {
     transform_component = std::make_unique<TransformComponent>();
     sprite_component = std::make_unique<SpriteComponent>(TexturePointerHandler::KeepTexturePointer);
-    viewport_component = std::make_unique<ViewportComponent>(0);
+    target_viewport_component = std::make_unique<TargetViewportComponent>(0);
 }

@@ -27,7 +27,6 @@
 #include "camera.h"
 #include "sprite_component.h"
 #include "transform_component.h"
-#include "viewport_target.h"
 
 class ViewPort
 {

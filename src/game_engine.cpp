@@ -241,7 +241,7 @@ void GameEngine::game_engine_infinite_loop()
                fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
                //std::cout << "deltatime: " << deltaTime << std::endl;
            }
-           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
+           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
        }
 
        //display everything in screen
@@ -291,7 +291,7 @@ void GameEngine::game_engine_infinite_loop2()
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
            //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
-           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
+           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
        }
 
        //display everything in screen
@@ -333,7 +333,7 @@ void GameEngine::game_engine_one_iteration()
            fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
-       renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.viewport_component->viewports[0], game::viewports[fpsEntity.viewport_component->viewports[0].viewportID]);
+       renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
    }
 
 
@@ -412,9 +412,9 @@ void GameEngine::Update()
         }//physicsSystem >>> rigid_body2d_component
 
         //FollowEntity
-        if ((*it)->viewport_component){
-            if ((*it)->viewport_component->movesTheCamera){
-                for (auto& viewportTarget : (*it)->viewport_component->viewports){
+        if ((*it)->target_viewport_component){
+            if ((*it)->target_viewport_component->movesTheCamera){
+                for (auto& viewportTarget : (*it)->target_viewport_component->target_viewports){
                     if (viewportTarget.movesTheCamera){
                         ViewPort::FollowEntity(
                                     *(*it)->transform_component,
@@ -445,10 +445,10 @@ void GameEngine::Draw()
 
         //render entities inside the viewport
         for (const auto& entity : game::entityObjects){
-            if (entity->viewport_component){
+            if (entity->target_viewport_component){
                 //if an entity has a viewport component then loop through all
                 //viewport targets it contains if one maches the current viewPortIndex
-                for (auto& viewportTarget : entity->viewport_component->viewports){
+                for (auto& viewportTarget : entity->target_viewport_component->target_viewports){
                     if (viewportTarget.viewportID == viewPortIndex){
                         renderSystem.RenderInViewport(*entity->transform_component,
                                                       *entity->sprite_component,

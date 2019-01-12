@@ -4,5 +4,5 @@ FpsEntity::FpsEntity()
 {
     transform_component = std::make_unique<TransformComponent>();
     sprite_component = std::make_unique<SpriteComponent>();
-    viewport_component = std::make_unique<ViewportComponent>(2);
+    target_viewport_component = std::make_unique<TargetViewportComponent>(2);
 }

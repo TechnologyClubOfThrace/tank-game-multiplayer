@@ -52,7 +52,7 @@
 #include "tank_input_component.h"
 #include "rigid_body2d_component.h"
 #include "collider2d_collection_component.h"
-#include "viewport_component.h"
+#include "target_viewport_component.h"
 
 class Entity
 {
@@ -67,7 +67,7 @@ public:
     std::unique_ptr<ZoomInputComponent> zoom_input_component;
     std::unique_ptr<RigidBody2DComponent> rigid_body2d_component;
     std::unique_ptr<Collider2DCollectionComponent> collider2d_collection_component;
-    std::unique_ptr<ViewportComponent> viewport_component;
+    std::unique_ptr<TargetViewportComponent> target_viewport_component;
 };
 
 #endif // ENTITY_H

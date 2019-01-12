@@ -147,7 +147,7 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
 
                     RenderSystem::RenderInViewport(*tileEntity->transform_component,
                                                    *tileEntity->sprite_component,
-                                                   tileEntity->viewport_component->viewports[0],
+                                                   tileEntity->target_viewport_component->target_viewports[0],
                                                    viewport);
                     row++;
                 }

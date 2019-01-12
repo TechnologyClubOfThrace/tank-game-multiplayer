@@ -119,7 +119,7 @@ void configureTankEntity()
     //The viewport dimensions (width,height) are relative to the
     //level dimensions, scaled down.
     //Everything drawn inside the viewport is scaled down.
-    ViewportTarget viewportTarget(1);
+    TargetViewport viewportTarget(1);
     viewportTarget.EntityScale = {3,3};//the tank entity inside the radar viewport will appear 3 times larger to be visible
     //viewportTarget.entityScale.x = game::viewports[viewportTarget.viewportID].frame.w / static_cast<double>(GameEngine::sceneManager.levelWidth);
     //viewportTarget.entityScale.y = viewportTarget.entityScale.x;
@@ -131,7 +131,7 @@ void configureTankEntity()
     //game::viewports[viewportTarget.viewportID].camera.frame = game::viewports[viewportTarget.viewportID].frame;
     viewportTarget.destinationRectangle.w =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.w * game::viewports[viewportTarget.viewportID].entityScale.x));
     viewportTarget.destinationRectangle.h =  static_cast<int>(std::round(tank_entity->sprite_component->sourceRectangle.h * game::viewports[viewportTarget.viewportID].entityScale.y));
-    tank_entity->viewport_component->viewports.emplace_back(viewportTarget);
+    tank_entity->target_viewport_component->target_viewports.emplace_back(viewportTarget);
 
     //initial values for tank entity physics
     tank_entity->rigid_body2d_component->Acceleration.x = 0.000;

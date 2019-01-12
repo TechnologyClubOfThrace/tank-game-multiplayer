@@ -31,14 +31,14 @@
 #include "sprite_component.h"
 #include "viewport.h"
 #include "render_utils.h"
-#include "viewport_target.h"
+#include "target_viewport.h"
 
 class RenderSystem
 {
 public:
     RenderSystem();
     //void RenderInViewport2(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort &viewport);
-    static void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort &viewport);
+    static void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, TargetViewport &targetViewport, const ViewPort &viewport);
     void RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport);
 };
 

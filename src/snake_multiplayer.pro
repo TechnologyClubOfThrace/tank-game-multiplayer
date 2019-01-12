@@ -31,13 +31,13 @@ HEADERS += \
     fps_entity.h \
     fps_system.h \
     fps_component.h \
-    viewport_component.h \
     render_utils.h \
-    viewport_target.h \
     zoom_input_component.h \
     zoom_input_system.h \
     bullet_entity.h \
-    unified_tiles_entity.h
+    unified_tiles_entity.h \
+    target_viewport.h \
+    target_viewport_component.h
 
 SOURCES += \
         main.cpp \
@@ -65,13 +65,13 @@ SOURCES += \
     fps_entity.cpp \
     fps_system.cpp \
     fps_component.cpp \
-    viewport_component.cpp \
     render_utils.cpp \
-    viewport_target.cpp \
     zoom_input_component.cpp \
     zoom_input_system.cpp \
     bullet_entity.cpp \
-    unified_tiles_entity.cpp
+    unified_tiles_entity.cpp \
+    target_viewport.cpp \
+    target_viewport_component.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
