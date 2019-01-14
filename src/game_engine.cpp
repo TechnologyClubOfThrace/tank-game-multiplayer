@@ -322,13 +322,13 @@ void GameEngine::game_engine_one_iteration()
    }
    //End of frame cap
 
-    //display the fps counter if needed
    //display the fps counter if needed
    if (fpsEntity.fps_component->displayFpsCounter){
        fps_ticks++;
        if (fps_ticks > max_fps_ticks){
            fps_ticks = 0;
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+           fpsEntity.fps_component->entities_count = game::entityObjects.size();
            fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
