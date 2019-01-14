@@ -49,7 +49,6 @@ FpsEntity GameEngine::fpsEntity;
 
 // ======= PRIVATE =======
 //systems
-RenderSystem GameEngine::renderSystem;
 TankInputSystem GameEngine::tankInputSystem;
 PhysicsSystem GameEngine::physicsSystem;
 FpsSystem GameEngine::fpsSystem;
@@ -241,7 +240,7 @@ void GameEngine::game_engine_infinite_loop()
                fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
                //std::cout << "deltatime: " << deltaTime << std::endl;
            }
-           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
+           RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
        }
 
        //display everything in screen
@@ -291,7 +290,7 @@ void GameEngine::game_engine_infinite_loop2()
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
            //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
-           renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
+           RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
        }
 
        //display everything in screen
@@ -333,7 +332,7 @@ void GameEngine::game_engine_one_iteration()
            fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
-       renderSystem.RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
+       RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
    }
 
 
@@ -406,9 +405,7 @@ void GameEngine::Update()
 
         //physicsSystem >>> rigid_body2d_component
         if((*it)->rigid_body2d_component){
-            physicsSystem.Update(deltaTime,
-                                  *(*it)->transform_component,
-                                  *(*it)->rigid_body2d_component);
+            physicsSystem.Update(deltaTime, *(*it));
         }//physicsSystem >>> rigid_body2d_component
 
         //FollowEntity
@@ -425,9 +422,15 @@ void GameEngine::Update()
             }
         }//FollowEntity
 
-        ++it;
-    }
-}
+        //check if the entity is marked for removal
+        if (!(*it)->properties_component->shouldBeRemoved){
+            ++it;
+        } else {
+            game::entityObjects.erase(it);
+        }
+
+    } //for(auto it = game::entityObjects.begin();....
+} //void GameEngine::Update()
 
 //draws the game objects
 void GameEngine::Draw()
@@ -439,7 +442,7 @@ void GameEngine::Draw()
 
         //render viewport background if exists
         if (game::viewports[viewPortIndex].background_sprite_component) {
-            renderSystem.RenderViewportSprite(*game::viewports[viewPortIndex].background_sprite_component,
+            RenderSystem::RenderViewportSprite(*game::viewports[viewPortIndex].background_sprite_component,
                                               game::viewports[viewPortIndex]);
         }
 
@@ -450,7 +453,7 @@ void GameEngine::Draw()
                 //viewport targets it contains if one maches the current viewPortIndex
                 for (auto& viewportTarget : entity->target_viewport_component->target_viewports){
                     if (viewportTarget.viewportID == viewPortIndex){
-                        renderSystem.RenderInViewport(*entity->transform_component,
+                        RenderSystem::RenderInViewport(*entity->transform_component,
                                                       *entity->sprite_component,
                                                       viewportTarget,
                                                       game::viewports[viewPortIndex]);

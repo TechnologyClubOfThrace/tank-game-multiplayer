@@ -40,10 +40,10 @@ public:
 
     SDL_Rect sourceRectangle {};//initial texture size. Set on texture load.
     SDL_Texture * texture = nullptr;
+    TexturePointerHandler texturePointerHandler;
 
 private:
     void FreeTextureMemory();
-    TexturePointerHandler m_texturePointerHandler;
 };
 
 #endif // SPRITE_COMPONENT_H

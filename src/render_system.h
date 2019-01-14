@@ -39,7 +39,7 @@ public:
     RenderSystem();
     //void RenderInViewport2(TransformComponent &transformComponent, SpriteComponent &spriteComponent, ViewportTarget &viewportTarget, const ViewPort &viewport);
     static void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, TargetViewport &targetViewport, const ViewPort &viewport);
-    void RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport);
+    static void RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport);
 };
 
 #endif // RENDER_SYSTEM_H

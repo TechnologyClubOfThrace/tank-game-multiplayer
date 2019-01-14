@@ -36,94 +36,90 @@ Torque MUST take positive and negative values in order to rotate clockwise or co
 increase /decrease the angular velocity
 */
 
-void PhysicsSystem::UpdateAngularAcceleration (RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateAngularAcceleration (const Entity& entity)
 {
-    rigidBody2dComponent.AngularAccelerationMagnitude = rigidBody2dComponent.TorqueMagnitude / rigidBody2dComponent.MoI;
+    entity.rigid_body2d_component->AngularAccelerationMagnitude = entity.rigid_body2d_component->TorqueMagnitude / entity.rigid_body2d_component->MoI;
 }
 
-void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
 {
-       if(!rigidBody2dComponent.isAngularAccelerationfrozen){
-        rigidBody2dComponent.AngularVelocityMagnitude += rigidBody2dComponent.AngularAccelerationMagnitude * deltaTime;
+       if(!entity.rigid_body2d_component->isAngularAccelerationfrozen){
+        entity.rigid_body2d_component->AngularVelocityMagnitude += entity.rigid_body2d_component->AngularAccelerationMagnitude * deltaTime;
 
-        if(rigidBody2dComponent.AngularVelocityMagnitude > rigidBody2dComponent.AngularVelocityMaximumMagnitude){
-            rigidBody2dComponent.AngularVelocityMagnitude = rigidBody2dComponent.AngularVelocityMaximumMagnitude;
-            rigidBody2dComponent.isAngularAccelerationfrozen = true;
+        if(entity.rigid_body2d_component->AngularVelocityMagnitude > entity.rigid_body2d_component->AngularVelocityMaximumMagnitude){
+            entity.rigid_body2d_component->AngularVelocityMagnitude = entity.rigid_body2d_component->AngularVelocityMaximumMagnitude;
+            entity.rigid_body2d_component->isAngularAccelerationfrozen = true;
         }
     }
 }
 
 
-void PhysicsSystem::UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
 {
-    rigidBody2dComponent.deltaRotationAngleeDegrees = rigidBody2dComponent.AngularVelocityMagnitude * deltaTime +
-    0.5 * rigidBody2dComponent.AngularAccelerationMagnitude * std::pow(deltaTime, 2);
+    entity.rigid_body2d_component->deltaRotationAngleeDegrees = entity.rigid_body2d_component->AngularVelocityMagnitude * deltaTime +
+    0.5 * entity.rigid_body2d_component->AngularAccelerationMagnitude * std::pow(deltaTime, 2);
 
    }
 
 
 // UpdateForce rotates the Force vector and maintains the same length
 
-void PhysicsSystem::UpdateForce(RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateForce(const Entity& entity)
 {
-   rigidBody2dComponent.Force.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
+   entity.rigid_body2d_component->Force.RotateDegrees(entity.rigid_body2d_component->deltaRotationAngleeDegrees);
 }
 
-void PhysicsSystem::UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateAcceleration(const Entity& entity)
 {
-    rigidBody2dComponent.Acceleration = rigidBody2dComponent.Force / rigidBody2dComponent.Mass;
+    entity.rigid_body2d_component->Acceleration = entity.rigid_body2d_component->Force / entity.rigid_body2d_component->Mass;
 }
 
 //this function updates the velocity magnitude ONLY. Velocity needs rotation just like the Force() does!!!
-void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
 {    
-    if(!rigidBody2dComponent.isAccelerationfrozen){
+    if(!entity.rigid_body2d_component->isAccelerationfrozen){
 
-         rigidBody2dComponent.Velocity += rigidBody2dComponent.Acceleration * static_cast<double>(deltaTime);
+         entity.rigid_body2d_component->Velocity += entity.rigid_body2d_component->Acceleration * static_cast<double>(deltaTime);
 
 
-        if(rigidBody2dComponent.Velocity.Magnitude() > rigidBody2dComponent.VelocityMaximumMagnitude){
+        if(entity.rigid_body2d_component->Velocity.Magnitude() > entity.rigid_body2d_component->VelocityMaximumMagnitude){
             //std::cout << "will call rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.MaxVelocityMagnitude)" << std::endl;
-            rigidBody2dComponent.Velocity.SetMagnitude(rigidBody2dComponent.VelocityMaximumMagnitude);
-            rigidBody2dComponent.isAccelerationfrozen = true;
-
-
+            entity.rigid_body2d_component->Velocity.SetMagnitude(entity.rigid_body2d_component->VelocityMaximumMagnitude);
+            entity.rigid_body2d_component->isAccelerationfrozen = true;
         }
-
-
     }
-
 }
 
 
-void PhysicsSystem::UpdateVelocityDegrees(RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdateVelocityDegrees(const Entity& entity)
 {
-    rigidBody2dComponent.Velocity.RotateDegrees(rigidBody2dComponent.deltaRotationAngleeDegrees);
-
+    entity.rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->deltaRotationAngleeDegrees);
 }
 
-void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
 {
-    rigidBody2dComponent.Position += rigidBody2dComponent.Velocity * deltaTime;
+    entity.rigid_body2d_component->Position += entity.rigid_body2d_component->Velocity * deltaTime;
 }
 
 
-void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
-                           TransformComponent &transformComponent,
-                           RigidBody2DComponent &rigidBody2dComponent)
+void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
 {
-    UpdateAngularAcceleration (rigidBody2dComponent);
-    UpdateAngularVelocity(deltaTime,rigidBody2dComponent);
-    UpdateDeltaRotationDegrees(deltaTime,rigidBody2dComponent);
-    UpdateForce(rigidBody2dComponent);
-    UpdateAcceleration(rigidBody2dComponent);
-    UpdateVelocity(deltaTime,rigidBody2dComponent);
-    UpdateVelocityDegrees(rigidBody2dComponent);
+    UpdateAngularAcceleration (entity);
+    UpdateAngularVelocity(deltaTime, entity);
+    UpdateDeltaRotationDegrees(deltaTime, entity);
+    UpdateForce(entity);
+    UpdateAcceleration(entity);
+    UpdateVelocity(deltaTime, entity);
+    UpdateVelocityDegrees(entity);
 
 
-    UpdatePosition(deltaTime,rigidBody2dComponent);
+    UpdatePosition(deltaTime, entity);
 
-    transformComponent.Position = rigidBody2dComponent.Position;
-    transformComponent.RotationAngleDegrees += rigidBody2dComponent.deltaRotationAngleeDegrees;
-    rigidBody2dComponent.RotationAngleDegrees = transformComponent.RotationAngleDegrees;
+    entity.transform_component->Position = entity.rigid_body2d_component->Position;
+    entity.transform_component->RotationAngleDegrees += entity.rigid_body2d_component->deltaRotationAngleeDegrees;
+    entity.rigid_body2d_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
+
+    if (entity.collider2d_collection_component){
+        CollisionSystem::DetectAndRespond(entity);
+    }
 }

@@ -24,7 +24,7 @@
 
 Entity::Entity()
 {
-
+    properties_component = std::make_unique<PropertiesComponent>();
 }
 
 Entity::~Entity()

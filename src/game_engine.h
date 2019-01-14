@@ -79,7 +79,6 @@ public:
     static void DisplayEnvironmentInfo();
 private:
     //systems
-    static RenderSystem renderSystem;
     static TankInputSystem tankInputSystem;
     static PhysicsSystem physicsSystem;
     static FpsSystem fpsSystem;

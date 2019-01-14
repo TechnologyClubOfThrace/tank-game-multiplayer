@@ -46,6 +46,7 @@
 enum class Collider2DType
 {
     BaseClass,
+    PointCollider2D,
     RectangleCollider2D,
     ConvexPolygonColider2D
 };

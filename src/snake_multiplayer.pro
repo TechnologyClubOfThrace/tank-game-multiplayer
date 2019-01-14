@@ -37,7 +37,10 @@ HEADERS += \
     bullet_entity.h \
     unified_tiles_entity.h \
     target_viewport.h \
-    target_viewport_component.h
+    target_viewport_component.h \
+    point_collider2d.h \
+    collision_system.h \
+    properties_component.h
 
 SOURCES += \
         main.cpp \
@@ -71,7 +74,10 @@ SOURCES += \
     bullet_entity.cpp \
     unified_tiles_entity.cpp \
     target_viewport.cpp \
-    target_viewport_component.cpp
+    target_viewport_component.cpp \
+    point_collider2d.cpp \
+    collision_system.cpp \
+    properties_component.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {
@@ -102,15 +108,15 @@ win32-msvc*:contains(QMAKE_HOST.arch, x86_64) {
 windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x64 -lSDL2
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x64 -lSDL2_ttf
 windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x64 -lSDL2_image
-CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Debug -lpugixml
-CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Release -lpugixml
+windows: CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Debug -lpugixml
+windows: CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\x64\\Release -lpugixml
 } else {
 #32bit msvc selected kit
 windows: LIBS += -LC:\\libs\\SDL2-2.0.9\\lib\\x86 -lSDL2
 windows: LIBS += -LC:\\libs\\SDL2_ttf-2.0.14\\lib\\x86 -lSDL2_ttf
 windows: LIBS += -LC:\\libs\\SDL2_image-2.0.4\\lib\\x86 -lSDL2_image
-CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Debug_x86 -lpugixml
-CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Release_x86 -lpugixml
+windows: CONFIG(debug, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Debug_x86 -lpugixml
+windows: CONFIG(release, debug|release): LIBS += -LC:\\libs\\pugixml-1.9\\Release_x86 -lpugixml
 }
 
 win32-msvc*{

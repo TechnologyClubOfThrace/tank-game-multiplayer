@@ -9,7 +9,7 @@ RenderUtils::RenderUtils()
 }
 
 //loads a texture from an image file
-bool RenderUtils::LoadSpriteFromFile(std::string path, SpriteComponent& sprite)
+bool RenderUtils::LoadSpriteFromFile(const std::string &path, SpriteComponent& sprite)
 {
     //std::cout << "[ENTERED] LoadTextureFromFile" << std::endl;
     //Get rid of preexisting texture
@@ -56,7 +56,7 @@ bool RenderUtils::LoadSpriteFromFile(std::string path, SpriteComponent& sprite)
 }
 
 //loads a texture from an image file. todo: should remove this method.
-bool RenderUtils::LoadTextureFromFile(std::string path, SDL_Texture*& texture)
+bool RenderUtils::LoadTextureFromFile(const std::string& path, SDL_Texture*& texture)
 {
     //std::cout << "[ENTERED] LoadTextureFromFile" << std::endl;
     //Get rid of preexisting texture
@@ -100,7 +100,7 @@ bool RenderUtils::LoadTextureFromFile(std::string path, SDL_Texture*& texture)
 
 //loads a texture from an image file
 
-bool RenderUtils::LoadTextureFromFile(std::string path, SpriteComponent &spriteComponent)
+bool RenderUtils::LoadTextureFromFile(const std::string& path, SpriteComponent &spriteComponent)
 {
     LoadTextureFromFile(path, spriteComponent.texture);
 

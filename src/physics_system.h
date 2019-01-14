@@ -30,27 +30,23 @@
 #include <chrono>
 #include <cmath>
 #include <iostream>
-#include "rigid_body2d_component.h"
-#include "transform_component.h"
-#include "tank_input_component.h"
+#include "entity.h"
+#include "collision_system.h"
 
 class PhysicsSystem
 {
 public:
     PhysicsSystem();
 
-    void Update(const std::chrono::milliseconds::rep &deltaTime,
-                TransformComponent &transformComponent,
-
-                RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
-    void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateAngularAcceleration (RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateForce(RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateAcceleration(RigidBody2DComponent &rigidBody2dComponent);
-    void UpdateVelocityDegrees(RigidBody2DComponent &rigidBody2dComponent);
+    void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity);
+    void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    void UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    void UpdateAngularAcceleration (const Entity &entity);
+    void UpdateForce(const Entity &entity);
+    void UpdateAcceleration(const Entity &entity);
+    void UpdateVelocityDegrees(const Entity &entity);
 };
 
 #endif // PHYSICS_SYSTEM_H

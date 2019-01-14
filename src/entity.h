@@ -53,6 +53,7 @@
 #include "rigid_body2d_component.h"
 #include "collider2d_collection_component.h"
 #include "target_viewport_component.h"
+#include "properties_component.h"
 
 class Entity
 {
@@ -61,6 +62,7 @@ public:
     ~Entity();
 
     //components
+    std::unique_ptr<PropertiesComponent> properties_component;
     std::unique_ptr<TransformComponent> transform_component;
     std::unique_ptr<SpriteComponent> sprite_component;
     std::unique_ptr<TankInputComponent> tank_input_component;

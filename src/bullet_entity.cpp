@@ -15,5 +15,7 @@ BulletEntity::BulletEntity()
     if(BulletEntity::m_bullet_sprite_component.texture == nullptr){
         RenderUtils::LoadSpriteFromFile("bullet_w65h20.png", BulletEntity::m_bullet_sprite_component);
     }
+    //copy existing static sprite component data and reuse the texture pointer
     *sprite_component = BulletEntity::m_bullet_sprite_component;
+    sprite_component->texturePointerHandler = TexturePointerHandler::KeepTexturePointer;
 }
