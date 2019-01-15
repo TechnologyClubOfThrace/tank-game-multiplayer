@@ -3,6 +3,7 @@
 
 #include "viewport.h"
 #include "entity.h"
+#include "point_collider2d.h"
 
 class CollisionSystem
 {

@@ -32,6 +32,9 @@ public:
     Collider2DCollectionComponent();
 
     std::vector<Collider2D> colliders;
+
+    bool isCollisionChecker = false;
+    bool allowsCollisionCheck = false;
 };
 
 #endif // COLLIDER2D_COLLECTION_COMPONENT_H

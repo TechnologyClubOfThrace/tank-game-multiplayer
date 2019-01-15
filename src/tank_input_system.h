@@ -28,6 +28,7 @@
 #include "rigid_body2d_component.h"
 #include "transform_component.h"
 #include "bullet_entity.h"
+#include "point_collider2d.h"
 
 class TankInputSystem
 {

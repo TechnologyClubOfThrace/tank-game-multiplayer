@@ -18,4 +18,7 @@ BulletEntity::BulletEntity()
     //copy existing static sprite component data and reuse the texture pointer
     *sprite_component = BulletEntity::m_bullet_sprite_component;
     sprite_component->texturePointerHandler = TexturePointerHandler::KeepTexturePointer;
+
+    //the bullet checks for collisions with other entities that allow collision check
+    collider2d_collection_component->isCollisionChecker = true;
 }
