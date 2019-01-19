@@ -157,6 +157,25 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
      }
 
 
+    unifiedTilesEntity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();
+    unifiedTilesEntity->collider2d_collection_component->allowsCollisionCheck = true;
+
+    Rectangle2D rect2d(0,-100,ViewPort::levelWidth,110);
+    auto recttop = std::make_unique<RectangleCollider2D>(rect2d);
+    unifiedTilesEntity->collider2d_collection_component->colliders.emplace_back(std::move(recttop));
+
+    Rectangle2D rect2d_left(-100,0,110,ViewPort::levelHeight);
+    auto rectleft = std::make_unique<RectangleCollider2D>(rect2d_left);
+    unifiedTilesEntity->collider2d_collection_component->colliders.emplace_back(std::move(rectleft));
+
+    Rectangle2D rect2d_right(ViewPort::levelWidth-10,0,100,ViewPort::levelHeight);
+    auto rectright = std::make_unique<RectangleCollider2D>(rect2d_right);
+    unifiedTilesEntity->collider2d_collection_component->colliders.emplace_back(std::move(rectright));
+
+    Rectangle2D rect2d_bottom(0,ViewPort::levelHeight-10,ViewPort::levelWidth,100);
+    auto rectbottom = std::make_unique<RectangleCollider2D>(rect2d_bottom);
+    unifiedTilesEntity->collider2d_collection_component->colliders.emplace_back(std::move(rectbottom));
+
     game::entityObjects.emplace_back(std::move(unifiedTilesEntity));
     //Reset render target
     SDL_SetRenderTarget(RenderUtils::windowRenderer, nullptr);

@@ -27,6 +27,7 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <cmath>
+#include <limits>
 
 class Vector2D
 {
@@ -53,6 +54,7 @@ public:
     Vector2D& operator+= (const Vector2D &vector2d);
     Vector2D operator+ (const Vector2D &vector2d) const;
     Vector2D& operator-= (const Vector2D &vector2d);
+    bool operator== (const Vector2D& other) const;
     static double Dot (const Vector2D &vector2d_1, const Vector2D &vector2d_2); //returns the dot product of two vectors
     static double Cross (const Vector2D &vector2d_1, const Vector2D &vector2d_2); //returns the magnitude of vertical vector
 

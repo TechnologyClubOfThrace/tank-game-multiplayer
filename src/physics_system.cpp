@@ -102,7 +102,7 @@ void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTi
 }
 
 
-void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
+void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity, const std::vector<std::unique_ptr<Entity>>::iterator in_it)
 {
     UpdateAngularAcceleration (entity);
     UpdateAngularVelocity(deltaTime, entity);
@@ -120,6 +120,6 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, cons
     entity.rigid_body2d_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
 
     if (entity.collider2d_collection_component){
-        CollisionSystem::DetectAndRespond(entity);
+        CollisionSystem::DetectAndRespond(entity, in_it);
     }
 }

@@ -31,7 +31,7 @@ class Collider2DCollectionComponent
 public:
     Collider2DCollectionComponent();
 
-    std::vector<Collider2D> colliders;
+    std::vector<std::unique_ptr<Collider2D>> colliders;
 
     bool isCollisionChecker = false;
     bool allowsCollisionCheck = false;

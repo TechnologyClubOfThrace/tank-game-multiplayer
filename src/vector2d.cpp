@@ -116,6 +116,12 @@ Vector2D& Vector2D::operator-=(const Vector2D &vector2d)
     return *this;
 }
 
+bool Vector2D::operator==(const Vector2D &other) const
+{
+    //todo: should get the type T of std::numeric_limits<T>::epsilon() at compile time based on this.x type
+    return (fabs(this->x - other.x) < std::numeric_limits<double>::epsilon()) && (fabs(this->y - other.y) < std::numeric_limits<double>::epsilon());
+}
+
 double Vector2D::Dot(const Vector2D &vector2d_1, const Vector2D &vector2d_2)
 {
     return (vector2d_1.x * vector2d_2.x) + (vector2d_1.y * vector2d_2.y);

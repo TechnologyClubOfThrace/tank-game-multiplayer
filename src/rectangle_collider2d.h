@@ -24,11 +24,15 @@
 #define RECTANGLE_COLLIDER2D_H
 
 #include "collider2d.h"
+#include "rectangle2d.h"
 
 class RectangleCollider2D : public Collider2D
 {
 public:
     RectangleCollider2D();
+    RectangleCollider2D(Rectangle2D rect);
+
+    Rectangle2D rectangle;
 };
 
 #endif // RECTANGLE_COLLIDER2D_H

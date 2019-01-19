@@ -40,7 +40,8 @@ HEADERS += \
     target_viewport_component.h \
     point_collider2d.h \
     collision_system.h \
-    properties_component.h
+    properties_component.h \
+    rectangle2d.h
 
 SOURCES += \
         main.cpp \
@@ -77,7 +78,8 @@ SOURCES += \
     target_viewport_component.cpp \
     point_collider2d.cpp \
     collision_system.cpp \
-    properties_component.cpp
+    properties_component.cpp \
+    rectangle2d.cpp
 
 
 win32-g++:contains(QMAKE_HOST.arch, x86_64) {

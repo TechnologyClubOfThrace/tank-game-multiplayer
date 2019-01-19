@@ -30,6 +30,7 @@
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <vector>
 #include "entity.h"
 #include "collision_system.h"
 
@@ -38,7 +39,7 @@ class PhysicsSystem
 public:
     PhysicsSystem();
 
-    void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity);
+    void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity,  const std::vector<std::unique_ptr<Entity>>::iterator in_it);
     void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
     void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
     void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);

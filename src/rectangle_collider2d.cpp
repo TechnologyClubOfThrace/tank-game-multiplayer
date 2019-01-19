@@ -25,3 +25,7 @@
 RectangleCollider2D::RectangleCollider2D() : Collider2D (Collider2DType::RectangleCollider2D)
 {
 }
+
+RectangleCollider2D::RectangleCollider2D(Rectangle2D rect) : Collider2D (Collider2DType::RectangleCollider2D), rectangle(rect)
+{
+}

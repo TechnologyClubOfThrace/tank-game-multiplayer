@@ -11,6 +11,8 @@ public:
     PointCollider2D(Vector2D point);
 
     Vector2D point;
+
+    bool operator==(const PointCollider2D& other) const;
 };
 
 #endif // POINT_COLLIDER2D_H

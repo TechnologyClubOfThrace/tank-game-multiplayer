@@ -33,6 +33,7 @@
 #include "viewport.h"
 #include "unified_tiles_entity.h"
 #include "tank_entity.h"
+#include "rectangle_collider2d.h"
 
 class SceneManager
 {

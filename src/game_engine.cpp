@@ -405,7 +405,7 @@ void GameEngine::Update()
 
         //physicsSystem >>> rigid_body2d_component
         if((*it)->rigid_body2d_component){
-            physicsSystem.Update(deltaTime, *(*it));
+            physicsSystem.Update(deltaTime, *(*it), it);
         }//physicsSystem >>> rigid_body2d_component
 
         //FollowEntity
