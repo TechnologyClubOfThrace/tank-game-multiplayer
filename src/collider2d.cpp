@@ -22,11 +22,13 @@
 
 #include "collider2d.h"
 
-Collider2D::Collider2D() : collider2DType(Collider2DType::BaseClass)
+Collider2D::Collider2D()
+    : collider2DType(Collider2DType::BaseClass), collisionResponse(CollisionRespose::RevertTransform)
 {
 }
 
-Collider2D::Collider2D(const Collider2DType collider2DType) : collider2DType(collider2DType)
+Collider2D::Collider2D(const Collider2DType collider2d_type, const CollisionRespose collision_response)
+    : collider2DType(collider2d_type), collisionResponse(collision_response)
 {
 }
 

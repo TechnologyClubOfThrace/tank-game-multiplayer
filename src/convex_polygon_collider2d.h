@@ -30,7 +30,7 @@
 class ConvexPolygonCollider2D : public Collider2D
 {
 public:
-    ConvexPolygonCollider2D();
+    ConvexPolygonCollider2D(const CollisionRespose collision_response);
 
     std::vector<Vector2D> points;
 };

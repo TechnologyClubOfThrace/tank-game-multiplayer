@@ -127,7 +127,7 @@ void TankInputSystem::fireBullet(Entity &entity)
     bullet_entity->rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->RotationAngleDegrees);
 
     //collider setup
-    auto pointCollider2D = std::make_unique<PointCollider2D>(bullet_entity->rigid_body2d_component->Position);
+    auto pointCollider2D = std::make_unique<PointCollider2D>(bullet_entity->rigid_body2d_component->Position, CollisionRespose::RemoveEntity);
     bullet_entity->collider2d_collection_component->colliders.emplace_back(std::move(pointCollider2D));
 
     game::entityObjects_for_addition.emplace_back(std::move(bullet_entity));

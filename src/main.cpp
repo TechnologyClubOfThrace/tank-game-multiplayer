@@ -140,11 +140,21 @@ void configureTankEntity()
     tank_entity->rigid_body2d_component->Mass = 10000;
     tank_entity->rigid_body2d_component->AngularVelocityMaximumMagnitude = 0.06;
     tank_entity->rigid_body2d_component->AngularVelocityMagnitude = 0;
-    tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.10;
+    tank_entity->rigid_body2d_component->VelocityMaximumMagnitude = 0.30;
     tank_entity->rigid_body2d_component->MoI = tank_entity->rigid_body2d_component->Mass;
     tank_entity->rigid_body2d_component->AngularAccelerationMagnitude = tank_entity->rigid_body2d_component->TorqueMagnitude/tank_entity->rigid_body2d_component->MoI;
     tank_entity->rigid_body2d_component->isAccelerationfrozen = false;
     tank_entity->rigid_body2d_component->isAngularAccelerationfrozen = false;
+    tank_entity->rigid_body2d_component->Position = tank_entity->transform_component->Position;
+
+    //collider setup
+    Rectangle2D rect(tank_entity->transform_component->Position.x,
+                     tank_entity->transform_component->Position.y,
+                     tank_entity->sprite_component->sourceRectangle.w,
+                     tank_entity->sprite_component->sourceRectangle.h);
+
+    auto rectCollider = std::make_unique<RectangleCollider2D>(rect, CollisionRespose::CollideAndSlide);
+    tank_entity->collider2d_collection_component->colliders.emplace_back(std::move(rectCollider));
 
     //insert the tank entity into the entities collection
     game::entityObjects.emplace_back(std::move(tank_entity));

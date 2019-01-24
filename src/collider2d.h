@@ -51,6 +51,14 @@ enum class Collider2DType
     ConvexPolygonColider2D
 };
 
+enum class CollisionRespose
+{
+    NoResponse,
+    RemoveEntity,
+    CollideAndSlide,
+    RevertTransform
+};
+
 
 class Collider2D
 {
@@ -59,9 +67,10 @@ public:
     virtual ~Collider2D();
 
     const Collider2DType collider2DType;
+    const CollisionRespose collisionResponse;
 
 protected:
-    Collider2D(const Collider2DType collider2DType);
+    Collider2D(const Collider2DType collider2d_type, const CollisionRespose collision_response);
 };
 
 #endif // COLLIDER2D_H

@@ -7,8 +7,8 @@
 class PointCollider2D : public Collider2D
 {
 public:
-    PointCollider2D();
-    PointCollider2D(Vector2D point);
+    PointCollider2D(const CollisionRespose collision_response);
+    PointCollider2D(Vector2D point, const CollisionRespose collision_response);
 
     Vector2D point;
 

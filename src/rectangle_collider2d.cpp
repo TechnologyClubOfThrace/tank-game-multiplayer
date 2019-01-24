@@ -22,10 +22,13 @@
 
 #include "rectangle_collider2d.h"
 
-RectangleCollider2D::RectangleCollider2D() : Collider2D (Collider2DType::RectangleCollider2D)
+RectangleCollider2D::RectangleCollider2D(const CollisionRespose collision_response)
+    : Collider2D (Collider2DType::RectangleCollider2D, collision_response)
 {
 }
 
-RectangleCollider2D::RectangleCollider2D(Rectangle2D rect) : Collider2D (Collider2DType::RectangleCollider2D), rectangle(rect)
+RectangleCollider2D::RectangleCollider2D(Rectangle2D rect, const CollisionRespose collision_response)
+    : RectangleCollider2D (collision_response)
 {
+    rectangle = rect;
 }

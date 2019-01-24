@@ -45,6 +45,8 @@ public:
     double RotationAngleDegrees = 0; //object's angle
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
+
+    RigidBody2DComponent Clone();
 };
 
 #endif // RIGID_BODY_COMPONENT_H

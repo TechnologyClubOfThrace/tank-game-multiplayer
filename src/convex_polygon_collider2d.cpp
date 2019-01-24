@@ -22,6 +22,7 @@
 
 #include "convex_polygon_collider2d.h"
 
-ConvexPolygonCollider2D::ConvexPolygonCollider2D() : Collider2D(Collider2DType::ConvexPolygonColider2D)
+ConvexPolygonCollider2D::ConvexPolygonCollider2D(const CollisionRespose collision_response)
+    : Collider2D(Collider2DType::ConvexPolygonColider2D, collision_response)
 {
 }

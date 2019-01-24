@@ -410,15 +410,12 @@ void GameEngine::Update()
 
         //FollowEntity
         if ((*it)->target_viewport_component){
-            if ((*it)->target_viewport_component->movesTheCamera){
-                for (auto& viewportTarget : (*it)->target_viewport_component->target_viewports){
-                    if (viewportTarget.movesTheCamera){
+            if ((*it)->target_viewport_component->cameraFollowerViewPortTargetIndex != std::numeric_limits<size_t>::max()){
                         ViewPort::FollowEntity(
                                     *(*it)->transform_component,
                                     *(*it)->sprite_component,
-                                    game::viewports[viewportTarget.viewportID]);
-                    }
-                }
+                                    game::viewports[(*it)->target_viewport_component->cameraFollowerViewPortTargetIndex]);
+
             }
         }//FollowEntity
 

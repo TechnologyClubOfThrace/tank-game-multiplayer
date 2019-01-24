@@ -29,8 +29,8 @@
 class RectangleCollider2D : public Collider2D
 {
 public:
-    RectangleCollider2D();
-    RectangleCollider2D(Rectangle2D rect);
+    RectangleCollider2D(const CollisionRespose collision_response);
+    RectangleCollider2D(Rectangle2D rect, const CollisionRespose collision_response);
 
     Rectangle2D rectangle;
 };
