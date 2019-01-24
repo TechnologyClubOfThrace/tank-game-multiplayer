@@ -44,3 +44,14 @@
 
 **Collider transformations**
 Ειδικά τα entities που κινούνται πρέπει μετά από την κίνησή τους από το physics engine, να εφαρμόζουν τα ανάλογα transformations και στους colliders που περιέχουν. **Σε αυτή την κατηγορία ανήκουν δύο entities, τα τανκ και τα bullet.** Τα υπόλοιπα entities έχουν στατικούς colliders.
+
+**Collider Response**
+Τα δύο colliders (tank, bullet) που έχουν την δυνατότητα ελέγχου για collisions με άλλα entities, μετά το collision θα πρέπει να δώσουν μία "απάντηση" ώς προς το τί θα γίνει. Αυτό ορίζεται από το ColliderResponse enum.
+
+**ColliderResponse Enum**
+| Remove | Should remove the entity from the collection  |
+| XCollision  |  Should revert the position.x and rotation to its previous value |
+| YCollision  |  Should revert the position.y and rotation to its previous value |
+| XYCollision  |  Should revert the position x, y and rotation to its previous value |
+
+- Οταν bullet συγκρουστεί με οποιοδήποτε άλλο collider
