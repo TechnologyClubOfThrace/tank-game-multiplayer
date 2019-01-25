@@ -108,6 +108,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, cons
     TransformComponent prevTransform(*entity.transform_component);
     RigidBody2DComponent prevRigidbody(*entity.rigid_body2d_component);
 
+    //apply physics to the entity's rigidbody
     UpdateAngularAcceleration (entity);
     UpdateAngularVelocity(deltaTime, entity);
     UpdateDeltaRotationDegrees(deltaTime, entity);
@@ -117,7 +118,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, cons
     UpdateVelocityDegrees(entity);
     UpdatePosition(deltaTime, entity);
 
-
+    //update entity's transform and rigidbody
     entity.transform_component->Position = entity.rigid_body2d_component->Position;
     entity.transform_component->RotationAngleDegrees += entity.rigid_body2d_component->deltaRotationAngleeDegrees;
     entity.rigid_body2d_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
@@ -126,6 +127,7 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, cons
     if (entity.collider2d_collection_component && entity.collider2d_collection_component->isCollisionChecker){
         auto collisionResult = CollisionSystem::DetectAndRespond(entity, in_it);
 
+        //check collision result
         if (collisionResult == CollisionSystemResult::RevertTransform){
             *entity.transform_component = prevTransform;
             *entity.rigid_body2d_component = prevRigidbody;
