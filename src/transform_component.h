@@ -32,6 +32,11 @@ class TransformComponent
 public:
     TransformComponent();
 
+    //copy constructor
+    TransformComponent(const TransformComponent& other);
+
+    TransformComponent& operator=(TransformComponent rhs);
+
     Vector2D Position {0,0};
     Vector2D Scale {1,1};
     double RotationAngleDegrees = 0;

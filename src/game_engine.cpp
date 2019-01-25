@@ -212,7 +212,7 @@ void GameEngine::game_engine_infinite_loop()
 
         HandleEvents();//process user input from keyboard/mouse/game controlers etc
         Update();//update game objects position, collitions etc
-        SDL_RenderClear(RenderUtils::windowRenderer);
+        //SDL_RenderClear(RenderUtils::windowRenderer);//TODO: calling SDL_RenderClear is not doing anything because the background is allways drawn. Can be removed.
         Draw();//draw the objects on screen
 
         //the duration it took to process the game objects

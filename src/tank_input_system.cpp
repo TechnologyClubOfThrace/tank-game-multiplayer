@@ -130,6 +130,11 @@ void TankInputSystem::fireBullet(Entity &entity)
     auto pointCollider2D = std::make_unique<PointCollider2D>(bullet_entity->rigid_body2d_component->Position, CollisionRespose::RemoveEntity);
     bullet_entity->collider2d_collection_component->colliders.emplace_back(std::move(pointCollider2D));
 
+    //display the bullet inside the radar viewport, scaled bigger x3
+    TargetViewport targetViewport(1);
+    targetViewport.EntityScale = Vector2D(3,3);
+    bullet_entity->target_viewport_component->target_viewports.emplace_back(targetViewport);
+
     game::entityObjects_for_addition.emplace_back(std::move(bullet_entity));
 }
 

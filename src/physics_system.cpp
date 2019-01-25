@@ -104,6 +104,10 @@ void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTi
 
 void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity, const std::vector<std::unique_ptr<Entity>>::iterator in_it)
 {
+    //store current position, rotation and rigidbody in case there is a collision to roll back the values
+    TransformComponent prevTransform(*entity.transform_component);
+    RigidBody2DComponent prevRigidbody(*entity.rigid_body2d_component);
+
     UpdateAngularAcceleration (entity);
     UpdateAngularVelocity(deltaTime, entity);
     UpdateDeltaRotationDegrees(deltaTime, entity);
@@ -111,30 +115,20 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, cons
     UpdateAcceleration(entity);
     UpdateVelocity(deltaTime, entity);
     UpdateVelocityDegrees(entity);
-
-
     UpdatePosition(deltaTime, entity);
 
-
-    auto prevPosition = entity.transform_component->Position;
-    auto prevRotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
-    auto force = entity.rigid_body2d_component->Force;
-    auto velocity = entity.rigid_body2d_component->Velocity;
 
     entity.transform_component->Position = entity.rigid_body2d_component->Position;
     entity.transform_component->RotationAngleDegrees += entity.rigid_body2d_component->deltaRotationAngleeDegrees;
     entity.rigid_body2d_component->RotationAngleDegrees = entity.transform_component->RotationAngleDegrees;
 
+    //check collisions
     if (entity.collider2d_collection_component && entity.collider2d_collection_component->isCollisionChecker){
         auto collisionResult = CollisionSystem::DetectAndRespond(entity, in_it);
 
         if (collisionResult == CollisionSystemResult::RevertTransform){
-            entity.transform_component->Position = prevPosition;
-            entity.transform_component->RotationAngleDegrees = prevRotationAngleDegrees;
-            entity.rigid_body2d_component->Position = prevPosition;
-            entity.rigid_body2d_component->RotationAngleDegrees = prevRotationAngleDegrees;
-            entity.rigid_body2d_component->Force = force;
-            entity.rigid_body2d_component->Velocity = velocity;
+            *entity.transform_component = prevTransform;
+            *entity.rigid_body2d_component = prevRigidbody;
         }
     }
 }
