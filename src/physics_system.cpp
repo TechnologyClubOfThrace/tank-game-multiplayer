@@ -135,4 +135,12 @@ void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, cons
             *entity.rigid_body2d_component = prevRigidbody;
         }
     }
+
+
+    //Update the transform of any children transform components.
+    //For simplicity and current requirements, collision detection in not applied
+    //in any child tranform component, only the parent tranform is checked for collisions.
+    if (entity.transform_component->children){
+
+    }
 }

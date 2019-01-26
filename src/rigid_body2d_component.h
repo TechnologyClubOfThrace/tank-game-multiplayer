@@ -45,6 +45,8 @@ public:
     double RotationAngleDegrees = 0; //object's angle
     bool isAccelerationfrozen = false;
     bool isAngularAccelerationfrozen = false;
+    double MaxTravellDistance = 0; //the maximum distance the entity can move. Should be possitive. Set to zero disables distance check
+    double CurrentDistanceTravelled = 0; //the distance the entity travelled so far. Calculated only if MaxTravellDistance != 0
 
     RigidBody2DComponent Clone();
 };

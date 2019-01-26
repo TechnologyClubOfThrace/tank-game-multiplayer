@@ -423,7 +423,7 @@ void GameEngine::Update()
         if (!(*it)->properties_component->shouldBeRemoved){
             ++it;
         } else {
-            game::entityObjects.erase(it);
+            it = game::entityObjects.erase(it);
         }
 
     } //for(auto it = game::entityObjects.begin();....

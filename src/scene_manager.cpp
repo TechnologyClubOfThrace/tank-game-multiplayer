@@ -164,7 +164,7 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
     auto recttop = std::make_unique<RectangleCollider2D>(rect2d, CollisionRespose::NoResponse);
     unifiedTilesEntity->collider2d_collection_component->colliders.emplace_back(std::move(recttop));
 
-    Rectangle2D rect2d_left(-100,0,110,ViewPort::levelHeight);
+    Rectangle2D rect2d_left(-100,0,162,ViewPort::levelHeight);
     auto rectleft = std::make_unique<RectangleCollider2D>(rect2d_left, CollisionRespose::NoResponse);
     unifiedTilesEntity->collider2d_collection_component->colliders.emplace_back(std::move(rectleft));
 
