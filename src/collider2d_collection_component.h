@@ -24,6 +24,7 @@
 #define COLLIDER2D_COLLECTION_COMPONENT_H
 
 #include <vector>
+#include <memory>
 #include "collider2d.h"
 
 class Collider2DCollectionComponent

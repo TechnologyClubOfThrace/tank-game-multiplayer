@@ -18,7 +18,7 @@ class CollisionSystem
 {
 public:
     CollisionSystem();
-    static CollisionSystemResult DetectAndRespond(const Entity &entity, const std::vector<std::unique_ptr<Entity>>::iterator in_it);
+    static CollisionSystemResult DetectAndRespond(const Entity &entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);
 
     static bool AreColliding(const std::unique_ptr<Collider2D> &checkerCollider, const std::unique_ptr<Collider2D> &otherCollider);
     static bool AreColliding(const ConvexPolygonCollider2D &convexCollider2d, const RectangleCollider2D &rectangleCollider2d);

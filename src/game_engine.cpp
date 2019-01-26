@@ -388,7 +388,7 @@ void GameEngine::Update()
     //the game object is removed from the gameObjects vector and its destructor is called
     //because it is a std::unique_ptr.
     //TODO: check if there is a more efficient method using remove instead of erase.
-    for(auto it = game::entityObjects.begin(); it != game::entityObjects.end();)
+    for(std::vector<std::unique_ptr<Entity>>::const_iterator it = game::entityObjects.begin(); it != game::entityObjects.end();)
     {
         //update game object
         //Because after calling update on each object, the object might non need to exist any more

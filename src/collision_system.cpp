@@ -14,7 +14,7 @@ void CollisionSystem::UpdateColliderFromTransform(RectangleCollider2D *rectangle
     rectangleCollider2D->rectangle.setXY(transform_component->Position);
 }
 
-CollisionSystemResult CollisionSystem::DetectAndRespond(const Entity &entity, const std::vector<std::unique_ptr<Entity>>::iterator in_it)
+CollisionSystemResult CollisionSystem::DetectAndRespond(const Entity &entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it)
 {
     //todo: because most entites contain one collider, we might first check for collisions on the first collider of both colliders without using a for loop. Should measure the performance first
     //first of all update the collider points
