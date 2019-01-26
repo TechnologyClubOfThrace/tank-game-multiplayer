@@ -105,8 +105,10 @@ void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTi
 void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity, const std::vector<std::unique_ptr<Entity>>::iterator in_it)
 {
     //store current position, rotation and rigidbody in case there is a collision to roll back the values
-    TransformComponent prevTransform(*entity.transform_component);
-    RigidBody2DComponent prevRigidbody(*entity.rigid_body2d_component);
+    static TransformComponent prevTransform;
+    static RigidBody2DComponent prevRigidbody;
+    prevTransform = *entity.transform_component;
+    prevRigidbody = *entity.rigid_body2d_component;
 
     //apply physics to the entity's rigidbody
     UpdateAngularAcceleration (entity);
