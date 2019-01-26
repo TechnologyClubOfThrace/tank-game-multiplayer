@@ -13,13 +13,11 @@ FpsSystem::~FpsSystem()
 //SDL_GetCPUCount
 //SDL_GetPlatform()
 //SDL_GetVersion(v)
-void FpsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
-                       std::unique_ptr<SpriteComponent> &spriteComponent,
-                       std::unique_ptr<FpsComponent> &fpsComponent)
+void FpsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const FpsEntity &fpsEntity)
 {
-    fpsComponent->fps = std::string("Fps: ").append(std::to_string(static_cast<int>(deltaTime > 0 ? round(1000/deltaTime) : 0))).append(
-                "\nTotal entities: " + std::to_string(fpsComponent->entities_count));
-    loadFromRenderedText(spriteComponent, fpsComponent);
+    fpsEntity.fps_component->fps = std::string("Fps: ").append(std::to_string(static_cast<int>(deltaTime > 0 ? round(1000/deltaTime) : 0))).append(
+                "\nTotal entities: " + std::to_string(fpsEntity.fps_component->entities_count));
+    LoadFromRenderedText(fpsEntity);
 
     //fps_str = fps > 0 ? (fps < 5000 ? "FPS: " + std::to_string(fps) : fps_str) : fps_str;
 
@@ -32,27 +30,27 @@ void FpsSystem::Update(const std::chrono::milliseconds::rep &deltaTime,
 }
 
 //loads a texture from string
-bool FpsSystem::loadFromRenderedText( std::unique_ptr<SpriteComponent> &spriteComponent,  std::unique_ptr<FpsComponent> &fpsComponent)
+bool FpsSystem::LoadFromRenderedText(const FpsEntity &fpsEntity)
 {
     //Render text surface
-    if (spriteComponent->texture){
-        SDL_DestroyTexture(spriteComponent->texture);
+    if (fpsEntity.sprite_component->texture){
+        SDL_DestroyTexture(fpsEntity.sprite_component->texture);
     }
 
-    SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped(fpsComponent->font, fpsComponent->fps.c_str(), fpsComponent->textColor, 1000 );
+    SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped(fpsEntity.fps_component->font, fpsEntity.fps_component->fps.c_str(), fpsEntity.fps_component->textColor, 1000 );
     if( textSurface != nullptr )
     {
         //Create texture from surface pixels
-        spriteComponent->texture = SDL_CreateTextureFromSurface(RenderUtils::windowRenderer, textSurface );
-        if( spriteComponent->texture == nullptr )
+        fpsEntity.sprite_component->texture = SDL_CreateTextureFromSurface(RenderUtils::windowRenderer, textSurface );
+        if(fpsEntity.sprite_component->texture == nullptr )
         {
             printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
         }
         else
         {
             //Get image dimension
-            spriteComponent->sourceRectangle.w = textSurface->w;
-            spriteComponent->sourceRectangle.h = textSurface->h;
+            fpsEntity.sprite_component->sourceRectangle.w = textSurface->w;
+            fpsEntity.sprite_component->sourceRectangle.h = textSurface->h;
         }
 
         //Get rid of old surface
@@ -63,5 +61,5 @@ bool FpsSystem::loadFromRenderedText( std::unique_ptr<SpriteComponent> &spriteCo
         printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
     }
 
-    return spriteComponent->texture != nullptr;
+    return fpsEntity.sprite_component->texture != nullptr;
 }

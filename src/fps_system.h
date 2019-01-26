@@ -3,9 +3,7 @@
 
 #include <SDL_ttf.h>
 #include <chrono>
-#include "fps_component.h"
-#include "transform_component.h"
-#include "sprite_component.h"
+#include "fps_entity.h"
 #include "scene_manager.h"
 #include "render_utils.h"
 
@@ -14,11 +12,9 @@ class FpsSystem
 public:
     FpsSystem();
     ~FpsSystem();
-
-    void Update(const std::chrono::milliseconds::rep &deltaTime,
-                std::unique_ptr<SpriteComponent> &spriteComponent,
-                std::unique_ptr<FpsComponent> &fpsComponent);
-    bool loadFromRenderedText( std::unique_ptr<SpriteComponent> &spriteComponent,  std::unique_ptr<FpsComponent> &fpsComponent);
+    static void Update(const std::chrono::milliseconds::rep &deltaTime, const FpsEntity &fpsEntity);
+private:
+    static bool LoadFromRenderedText(const FpsEntity &fpsEntity);
 };
 
 #endif // FPS_SYSTEM_H

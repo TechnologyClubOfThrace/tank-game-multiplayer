@@ -74,7 +74,7 @@ void TankInputSystem::KillForce(RigidBody2DComponent &rigidBody2dComponent)
 
 }
 
-void TankInputSystem::fireBullet(Entity &entity)
+void TankInputSystem::FireBullet(const Entity &entity)
 {
     //tank entity configuration
 
@@ -138,7 +138,7 @@ void TankInputSystem::fireBullet(Entity &entity)
     game::entityObjects_for_addition.emplace_back(std::move(bullet_entity));
 }
 
-void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
+void TankInputSystem::HandleEvent(const SDL_Event &e, const Entity &entity)
 {
     switch (entity.tank_input_component->state) {
     case State::stopped:
@@ -181,7 +181,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -221,7 +221,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -258,7 +258,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -296,7 +296,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -336,7 +336,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -373,7 +373,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -412,7 +412,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }
@@ -451,7 +451,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
 
@@ -491,7 +491,7 @@ void TankInputSystem::handleEvent(SDL_Event &e, Entity &entity)
         case SDLK_SPACE:
             if( e.type == SDL_KEYDOWN && e.key.repeat == 0 ){
                 //fire bullet
-                TankInputSystem::fireBullet(entity);
+                TankInputSystem::FireBullet(entity);
             }
             break;
         }

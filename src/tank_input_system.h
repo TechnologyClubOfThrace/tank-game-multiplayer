@@ -33,16 +33,17 @@
 class TankInputSystem
 {
 public:
-    TankInputSystem();
-    void ApplyRightTorque(RigidBody2DComponent &rigidBody2dComponent);
-    void ApplyLeftTorque(RigidBody2DComponent &rigidBody2dComponent);
-    void ApplyForwardForce(RigidBody2DComponent &rigidBody2dComponent);
-    void ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dComponent);
-    void KillTorque(RigidBody2DComponent &rigidBody2dComponent);
-    void KillForce(RigidBody2DComponent &rigidBody2dComponent);
-    void handleEvent(SDL_Event &e, Entity &entity);
-    void HandleUserInput(SDL_Event &e, TankInputComponent &tankInputComponent, RigidBody2DComponent &rigidBody2dComponent);
-    static void fireBullet(Entity &entity);
+    TankInputSystem(); 
+    static void HandleEvent(const SDL_Event &e, const Entity &entity);
+
+private:
+    static void ApplyRightTorque(RigidBody2DComponent &rigidBody2dComponent);
+    static void ApplyLeftTorque(RigidBody2DComponent &rigidBody2dComponent);
+    static void ApplyForwardForce(RigidBody2DComponent &rigidBody2dComponent);
+    static void ApplyBackwardsForce(RigidBody2DComponent &rigidBody2dComponent);
+    static void KillTorque(RigidBody2DComponent &rigidBody2dComponent);
+    static void KillForce(RigidBody2DComponent &rigidBody2dComponent);
+    static void FireBullet(const Entity &entity);
 };
 
 #endif // TANK_INPUT_SYSTEM_H

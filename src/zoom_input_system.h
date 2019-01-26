@@ -11,8 +11,8 @@ class ZoomInputSystem
 public:
     ZoomInputSystem();
 
-    static void handleEvent(SDL_Event& e, const Entity& entity);
-    static void Update(const std::chrono::milliseconds::rep &deltaTime, Entity &entity);
+    static void HandleEvent(const SDL_Event &e, const Entity& entity);
+    static void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
 };
 
 #endif // ZOOM_INPUT_SYSTEM_H

@@ -47,12 +47,6 @@ SDL_Window* GameEngine::gWindow = nullptr;
 SceneManager GameEngine::sceneManager;
 FpsEntity GameEngine::fpsEntity;
 
-// ======= PRIVATE =======
-//systems
-TankInputSystem GameEngine::tankInputSystem;
-PhysicsSystem GameEngine::physicsSystem;
-FpsSystem GameEngine::fpsSystem;
-
 // ======= FRAME CAPPING RELATED =======
 int GameEngine::fps = 70;
 std::chrono::milliseconds::rep GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
@@ -237,7 +231,7 @@ void GameEngine::game_engine_infinite_loop()
                fps_ticks = 0;
                deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
                fpsEntity.fps_component->entities_count = game::entityObjects.size();
-               fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+               FpsSystem::Update(deltaTime, fpsEntity);
                //std::cout << "deltatime: " << deltaTime << std::endl;
            }
            RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
@@ -274,7 +268,7 @@ void GameEngine::game_engine_infinite_loop2()
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-           fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+           FpsSystem::Update(deltaTime, fpsEntity);
        }
        deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
         //std::cout << deltaTime << std::endl;
@@ -329,7 +323,7 @@ void GameEngine::game_engine_one_iteration()
            fps_ticks = 0;
            deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
            fpsEntity.fps_component->entities_count = game::entityObjects.size();
-           fpsSystem.Update(deltaTime, fpsEntity.sprite_component, fpsEntity.fps_component);
+           FpsSystem::Update(deltaTime, fpsEntity);
            //std::cout << "deltatime: " << deltaTime << std::endl;
        }
        RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
@@ -349,10 +343,10 @@ void GameEngine::game_engine_one_iteration()
 void GameEngine::HandleEvents()
 {
     //loop for eny pending events
-    while( SDL_PollEvent( &e ) != 0 )
+    while(SDL_PollEvent(&e) != 0 )
     {
         //User requests quit
-        if( e.type == SDL_QUIT )
+        if(e.type == SDL_QUIT)
         {
              Running = false;
         }
@@ -360,12 +354,12 @@ void GameEngine::HandleEvents()
         for (const auto& entity : game::entityObjects){
             //ZoomInputSystem
             if (entity->zoom_input_component){
-                ZoomInputSystem::handleEvent(e, *entity);
+                ZoomInputSystem::HandleEvent(e, *entity);
             }//ZoomInputSystem
 
             //tankInputSystem
             if(entity->tank_input_component){
-                tankInputSystem.handleEvent(e, *entity);
+                TankInputSystem::HandleEvent(e, *entity);
             }//tankInputSystem
         }
 
@@ -374,7 +368,7 @@ void GameEngine::HandleEvents()
         //so that after returning fron the previous handleEvent call, it will be added to the
         //gameObjects vector.
         if (!game::entityObjects_for_addition.empty()){
-            std::move(game::entityObjects_for_addition.begin(), game::entityObjects_for_addition.end(), std::back_inserter(game::entityObjects));  // ##
+            std::move(game::entityObjects_for_addition.begin(), game::entityObjects_for_addition.end(), std::back_inserter(game::entityObjects));
             game::entityObjects_for_addition.clear();
         }
     }
@@ -390,12 +384,6 @@ void GameEngine::Update()
     //TODO: check if there is a more efficient method using remove instead of erase.
     for(std::vector<std::unique_ptr<Entity>>::const_iterator it = game::entityObjects.begin(); it != game::entityObjects.end();)
     {
-        //update game object
-        //Because after calling update on each object, the object might non need to exist any more
-        //it might mark itself for deletion (Exists=False), so we should remove it from the vector.
-        //To remove an item from the vector while iterating it, we should follow this method,
-        //using an iterator.
-
         //ZoomInputSystem >>> zoom_input_component
         //IMPORTANT! zoom handling should be before the FollowEntity else
         //zooming is not smooth.
@@ -405,7 +393,7 @@ void GameEngine::Update()
 
         //physicsSystem >>> rigid_body2d_component
         if((*it)->rigid_body2d_component){
-            physicsSystem.Update(deltaTime, *(*it), it);
+            PhysicsSystem::Update(deltaTime, *(*it), it);
         }//physicsSystem >>> rigid_body2d_component
 
         //FollowEntity
@@ -448,7 +436,7 @@ void GameEngine::Draw()
             if (entity->target_viewport_component){
                 //if an entity has a viewport component then loop through all
                 //viewport targets it contains if one maches the current viewPortIndex
-                for (auto& viewportTarget : entity->target_viewport_component->target_viewports){
+                for (const auto& viewportTarget : entity->target_viewport_component->target_viewports){
                     if (viewportTarget.viewportID == viewPortIndex){
                         RenderSystem::RenderInViewport(*entity->transform_component,
                                                       *entity->sprite_component,

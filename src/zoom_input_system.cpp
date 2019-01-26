@@ -6,7 +6,7 @@ ZoomInputSystem::ZoomInputSystem()
 
 }
 
-void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, Entity& entity)
+void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
 {
     auto old_entityScale = game::viewports[entity.zoom_input_component->viewportIndex].entityScale;
 
@@ -54,7 +54,7 @@ void ZoomInputSystem::Update(const std::chrono::milliseconds::rep &deltaTime, En
 
 }
 
-void ZoomInputSystem::handleEvent(SDL_Event& e, const Entity& entity)
+void ZoomInputSystem::HandleEvent(const SDL_Event& e, const Entity& entity)
 {
     switch (entity.zoom_input_component->zoomState){
 

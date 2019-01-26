@@ -27,7 +27,7 @@ RenderSystem::RenderSystem()
 
 }
 
-void RenderSystem::RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, TargetViewport &targetViewport, const ViewPort& viewport)
+void RenderSystem::RenderInViewport(const TransformComponent &transformComponent, const SpriteComponent &spriteComponent, const TargetViewport &targetViewport, const ViewPort& viewport)
 {
     SDL_Rect destinationRectangle {
                 static_cast<int>(round(static_cast<double>(viewport.frame.x) + (transformComponent.Position.x * viewport.entityScale.x) - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.x))),
@@ -54,7 +54,7 @@ void RenderSystem::RenderInViewport(TransformComponent &transformComponent, Spri
                 );
 }
 
-void RenderSystem::RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport)
+void RenderSystem::RenderViewportSprite(const SpriteComponent &spriteComponent, const ViewPort &viewport)
 {
     SDL_RenderCopyEx(RenderUtils::windowRenderer,
                      spriteComponent.texture,

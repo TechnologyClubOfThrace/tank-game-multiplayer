@@ -78,11 +78,6 @@ public:
 
     static void DisplayEnvironmentInfo();
 private:
-    //systems
-    static TankInputSystem tankInputSystem;
-    static PhysicsSystem physicsSystem;
-    static FpsSystem fpsSystem;
-
     //frame cap related valiables
     //80 fps are ok. High fps values might produce incorrect results because of number rounding
      //IMPORTANT! For smooth movement of game objects, the fps value should be choosed based on the update frequency of

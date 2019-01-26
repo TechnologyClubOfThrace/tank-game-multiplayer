@@ -38,16 +38,17 @@ class PhysicsSystem
 {
 public:
     PhysicsSystem();
+    static void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity,  std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);
 
-    void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity,  std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);
-    void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    void UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    void UpdateAngularAcceleration (const Entity &entity);
-    void UpdateForce(const Entity &entity);
-    void UpdateAcceleration(const Entity &entity);
-    void UpdateVelocityDegrees(const Entity &entity);
+private:
+    static void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    static void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    static void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    static void UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    static void UpdateAngularAcceleration (const Entity &entity);
+    static void UpdateForce(const Entity &entity);
+    static void UpdateAcceleration(const Entity &entity);
+    static void UpdateVelocityDegrees(const Entity &entity);
 };
 
 #endif // PHYSICS_SYSTEM_H

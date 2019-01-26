@@ -37,8 +37,8 @@ class RenderSystem
 {
 public:
     RenderSystem();
-    static void RenderInViewport(TransformComponent &transformComponent, SpriteComponent &spriteComponent, TargetViewport &targetViewport, const ViewPort &viewport);
-    static void RenderViewportSprite(SpriteComponent &spriteComponent, ViewPort &viewport);
+    static void RenderInViewport(const TransformComponent &transformComponent, const SpriteComponent &spriteComponent, const TargetViewport &targetViewport, const ViewPort &viewport);
+    static void RenderViewportSprite(const SpriteComponent &spriteComponent, const ViewPort &viewport);
 };
 
 #endif // RENDER_SYSTEM_H
