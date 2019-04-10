@@ -48,10 +48,11 @@ SceneManager GameEngine::sceneManager;
 FpsEntity GameEngine::fpsEntity;
 
 // ======= FRAME CAPPING RELATED =======
-int GameEngine::fps = 70;
-std::chrono::milliseconds::rep GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
+int GameEngine::fps = 67;
+std::chrono::nanoseconds::rep GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
 std::chrono::high_resolution_clock::time_point GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
 std::chrono::milliseconds::rep GameEngine::deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
+double GameEngine::d_deltaTime = 0;
 
 int GameEngine::max_fps_ticks = 20;
 int GameEngine::fps_ticks = 0;
@@ -96,6 +97,16 @@ bool GameEngine::Init()
     else
     {
 
+        //display SDL version
+        SDL_version compiled;
+        SDL_version linked;
+        SDL_VERSION(&compiled);
+        SDL_GetVersion(&linked);
+        std::cout << "We compiled against SDL version: " <<
+               compiled.major << "." << compiled.minor << "." << compiled.patch << std::endl;
+        std::cout << "But we are linking against SDL version: " <<
+               linked.major  << "." << linked.minor << "." << linked.patch << std::endl;
+
 
         // Better drawing quality
          //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -119,8 +130,8 @@ bool GameEngine::Init()
         else
         {
             //Create renderer for window
-            RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
-            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE | SDL_RENDERER_TARGETTEXTURE);
+            //RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE );
+            RenderUtils::windowRenderer = SDL_CreateRenderer( GameEngine::gWindow, -1, SDL_RENDERER_SOFTWARE);
             if(RenderUtils::windowRenderer == nullptr )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -177,7 +188,7 @@ void GameEngine::StartGameLoop()
     // void emscripten_set_main_loop(em_callback_func func, int fps, int simulate_infinite_loop);
     emscripten_set_main_loop(GameEngine::game_engine_one_iteration, 0, 1);
 #else
-    game_engine_infinite_loop();
+    game_engine_infinite_loop2();
 #endif
 }
 
@@ -201,6 +212,8 @@ void GameEngine::game_engine_infinite_loop()
     //enter game loop
     while (Running){
 
+        //deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+
         //store the begining time point of the proccesing.
         begin_time_point = std::chrono::high_resolution_clock::now();
 
@@ -219,6 +232,8 @@ void GameEngine::game_engine_infinite_loop()
        if (deltaTime < frame_delay_for_stable_fps){
            //sleep for the remaining time and set the deltaTime duration again
            std::this_thread::sleep_for(std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime));
+           //std::this_thread::sleep_for(std::chrono::milliseconds(10));
+           deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
            //std::cout << "sleeping for: " << std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime).count() << std::endl;
        }
        //End of frame cap
@@ -241,7 +256,7 @@ void GameEngine::game_engine_infinite_loop()
 
        SDL_RenderPresent(RenderUtils::windowRenderer);
 
-       deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+       //deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
     }
 }
 
@@ -249,46 +264,165 @@ void GameEngine::game_engine_infinite_loop()
 void GameEngine::game_engine_infinite_loop2()
 {
     GameEngine::fps = 80;
-    GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
-    GameEngine::deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
+    GameEngine::begin_time_point = std::chrono::steady_clock::now();//stores the time point before processing game objects and drawing
+    GameEngine::deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
+    d_deltaTime = 0;
 
     //enter game loop
     while (Running){
-        deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-
-        //frame cap.
-        //If frame finished early wait for the remaining time
-       if (deltaTime < frame_delay_for_stable_fps){
-           //sleep for the remaining time and set the deltaTime duration again
-           std::this_thread::sleep_for(std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime));
-           //std::cout << "sleeping for: " << std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime).count() << std::endl;
-       }
-       //End of frame cap
-
-       //display the fps counter if needed
-       if (fpsEntity.fps_component->displayFpsCounter){
-           deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-           FpsSystem::Update(deltaTime, fpsEntity);
-       }
-       deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
-        //std::cout << deltaTime << std::endl;
-
-        //store the begining time point of the proccesing.
-        begin_time_point = std::chrono::high_resolution_clock::now();
+       //store the begining time point of the proccesing.
+       begin_time_point = std::chrono::steady_clock::now();
 
         HandleEvents();//process user input from keyboard/mouse/game controlers etc
         Update();//update game objects position, collitions etc
-        SDL_RenderClear(RenderUtils::windowRenderer);
+        //SDL_RenderClear(RenderUtils::windowRenderer);
         Draw();//draw the objects on screen
 
        //display the fps counter if needed
        if (fpsEntity.fps_component->displayFpsCounter){
            //renderSystem.Render(*fpsEntity.transform_component, *fpsEntity.sprite_component, game::viewports);
+           FpsSystem::Update(deltaTime / 1000000, fpsEntity);
            RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
        }
 
        //display everything in screen
        SDL_RenderPresent(RenderUtils::windowRenderer);
+
+       deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - begin_time_point).count();
+       d_deltaTime = (static_cast<double>(deltaTime) / static_cast<double>(1000000.00));
+
+       //frame cap.
+       //If frame finished early wait for the remaining time
+      if (deltaTime < (frame_delay_for_stable_fps * 1000000)){
+          //sleep for the remaining time and set the deltaTime duration again
+          std::this_thread::sleep_for(std::chrono::nanoseconds( ((frame_delay_for_stable_fps * 1000000) - deltaTime)) / 2);
+          //std::this_thread::sleep_for(std::chrono::nanoseconds(7000000));
+          deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - begin_time_point).count();
+          d_deltaTime = (static_cast<double>(deltaTime) / static_cast<double>(1000000.00));
+          //std::cout << "sleeping for: " << std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime).count() << std::endl;
+      }
+      //End of frame cap
+    }
+}
+
+void GameEngine::game_engine_infinite_loop4()
+{
+    auto start = std::chrono::high_resolution_clock::now(), end = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    auto accum_start = std::chrono::high_resolution_clock::now();
+    while(GameEngine::Running){
+        start = std::chrono::high_resolution_clock::now();
+        //diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+
+        if(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - accum_start).count() >= 14666666){
+            // do render updates every 60th of a second
+            auto other_diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - accum_start).count();
+            d_deltaTime = (static_cast<double>(other_diff) / static_cast<double>(1000000.00));
+            HandleEvents();//process user input from keyboard/mouse/game controlers etc
+            Update();//update game objects position, collitions etc
+            //SDL_RenderClear(RenderUtils::windowRenderer);
+            Draw();//draw the objects on screen
+            //display everything in screen
+            SDL_RenderPresent(RenderUtils::windowRenderer);
+            accum_start = std::chrono::high_resolution_clock::now();
+        } else {
+            //accum_start = std::chrono::high_resolution_clock::now();
+            //std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - accum_start));
+        }
+        //end = std::chrono::high_resolution_clock::now();
+    }
+}
+
+void GameEngine::game_engine_infinite_loop5()
+{
+    d_deltaTime = 16;
+
+    while(GameEngine::Running){
+        HandleEvents();//process user input from keyboard/mouse/game controlers etc
+        Update();//update game objects position, collitions etc
+        //SDL_RenderClear(RenderUtils::windowRenderer);
+        Draw();//draw the objects on screen
+        //display everything in screen
+        SDL_RenderPresent(RenderUtils::windowRenderer);
+        std::this_thread::sleep_for(std::chrono::nanoseconds(6800000));
+        //SDL_Delay();
+    }
+}
+
+void GameEngine::game_engine_infinite_loop6()
+{
+    auto start = std::chrono::high_resolution_clock::now(), end = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+    d_deltaTime = 0;
+
+    while(GameEngine::Running){
+        diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        d_deltaTime += diff / 1000000.0;
+
+        if (d_deltaTime > 14) {
+            start = std::chrono::high_resolution_clock::now();
+            //std::cout << d_deltaTime << std::endl;
+            HandleEvents();//process user input from keyboard/mouse/game controlers etc
+            Update();//update game objects position, collitions etc
+            //SDL_RenderClear(RenderUtils::windowRenderer);
+            Draw();//draw the objects on screen
+            //display everything in screen
+            SDL_RenderPresent(RenderUtils::windowRenderer);
+            d_deltaTime = 0;
+        } else {
+            start = std::chrono::high_resolution_clock::now();
+            std::this_thread::sleep_for(std::chrono::nanoseconds(1000000));
+        }
+    }
+}
+
+void GameEngine::game_engine_infinite_loop3()
+{
+
+    GameEngine::fps = 80;
+    GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
+    GameEngine::deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
+
+    begin_time_point = std::chrono::high_resolution_clock::now();
+    std::this_thread::sleep_for(std::chrono::milliseconds(14));
+    auto delta_time_nano = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+
+    //auto ff = (std::chrono::high_resolution_clock::now() - begin_time_point);
+    //long long ff_micro = ff.count();
+    //auto cast_ff = std::chrono::duration_cast<std::chrono::nanoseconds>(ff);
+    //deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+
+    long long delta_remaining = 0;
+
+    //enter game loop
+    while (Running){
+        delta_time_nano = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+
+
+        if (delta_time_nano < 16666666){
+            //sleep for the remaining time and set the deltaTime duration again
+            std::this_thread::sleep_for(std::chrono::nanoseconds(16666666 - delta_time_nano));
+            //std::cout << "sleeping for: " << std::chrono::milliseconds(frame_delay_for_stable_fps - deltaTime).count() << std::endl;
+            delta_time_nano = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
+        }
+
+        d_deltaTime = (static_cast<double>(delta_time_nano) / static_cast<double>(1000000.00));
+        deltaTime = static_cast<long long>(d_deltaTime);
+
+        begin_time_point = std::chrono::high_resolution_clock::now();
+
+        HandleEvents();//process user input from keyboard/mouse/game controlers etc
+        Update();//update game objects position, collitions etc
+        //SDL_RenderClear(RenderUtils::windowRenderer);
+        Draw();//draw the objects on screen
+
+        //display everything in screen
+        SDL_RenderPresent(RenderUtils::windowRenderer);
+
+        //std::this_thread::sleep_for(std::chrono::milliseconds(14));
+        //deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time_point).count();
     }
 }
 
@@ -393,7 +527,8 @@ void GameEngine::Update()
 
         //physicsSystem >>> rigid_body2d_component
         if((*it)->rigid_body2d_component){
-            PhysicsSystem::Update(deltaTime, *(*it), it);
+            //PhysicsSystem::Update(deltaTime, *(*it), it);
+            PhysicsSystem::Update_test(d_deltaTime, *(*it), it);
         }//physicsSystem >>> rigid_body2d_component
 
         //FollowEntity

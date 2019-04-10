@@ -138,6 +138,7 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     tileEntity->transform_component->Position.y = col * tileSet.tileHeight;
                     //game::entityObjects.emplace_back(std::move(tileEntity));
 
+
                     ViewPort viewport;
                     viewport.frame.x = 0;
                     viewport.frame.y = 0;
@@ -149,12 +150,14 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                                                    *tileEntity->sprite_component,
                                                    tileEntity->target_viewport_component->target_viewports[0],
                                                    viewport);
+
                     row++;
                 }
             }
             col++;
          }
      }
+
 
 
     unifiedTilesEntity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();
@@ -179,6 +182,7 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
     game::entityObjects.emplace_back(std::move(unifiedTilesEntity));
     //Reset render target
     SDL_SetRenderTarget(RenderUtils::windowRenderer, nullptr);
+
 
     return true;
 }

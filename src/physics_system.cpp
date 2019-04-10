@@ -101,6 +101,13 @@ void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTi
     entity.rigid_body2d_component->Position += entity.rigid_body2d_component->Velocity * deltaTime;
 }
 
+void PhysicsSystem::Update_test(const double deltaTime, const Entity& entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it)
+{
+    entity.transform_component->Position.x += deltaTime * static_cast<double>(0.3);
+    //std::cout << entity.transform_component->Position.x << std::endl;
+    //std::cout << deltaTime << std::endl;
+    return;
+}
 
 void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it)
 {

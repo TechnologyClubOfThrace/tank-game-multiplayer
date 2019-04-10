@@ -38,7 +38,8 @@ class PhysicsSystem
 {
 public:
     PhysicsSystem();
-    static void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity,  std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);
+    static void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity,  std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);  
+    static void Update_test(const double deltaTime, const Entity &entity, std::vector<std::unique_ptr<Entity>>::const_iterator &in_it);
 
 private:
     static void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);

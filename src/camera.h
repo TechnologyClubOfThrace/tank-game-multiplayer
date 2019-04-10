@@ -23,13 +23,15 @@
 
 #include <SDL.h>
 #include <math.h>
+#include <rectangle2d.h>
 
 class Camera
 {
 public:
     Camera();
 
-    SDL_Rect frame;//the location and size of the camera inside the level
+    //SDL_Rect frame;//the location and size of the camera inside the level
+    Rectangle2D frame;
 };
 
 #endif // CAMERA_H

@@ -6,11 +6,12 @@ Rectangle2D::Rectangle2D()
 
 Rectangle2D::Rectangle2D(SDL_Rect rect) : Rectangle2D(rect.x, rect.y, rect.w, rect.h)
 {
+    calculate_right_and_bottom();
 }
 
 Rectangle2D::Rectangle2D(double x, double y, double w, double h) : _x(x), _y(y), _w(w), _h(h)
 {
-    calculate_left_and_bottom();
+    calculate_right_and_bottom();
 }
 
 double Rectangle2D::getX() const
@@ -39,14 +40,40 @@ double Rectangle2D::getBottom() const
     return this->_bottom;
 }
 
-void Rectangle2D::setXY(Vector2D &vector2d)
+void Rectangle2D::setXYWH(double x, double y, double w, double h)
 {
-    this->_x = vector2d.x;
-    this->_y = vector2d.y;
-    calculate_left_and_bottom();
+    this->_x = x;
+    this->_y = y;
+    this->_w = w;
+    this->_h = h;
+    calculate_right_and_bottom();
 }
 
-void Rectangle2D::calculate_left_and_bottom()
+void Rectangle2D::setXY(Vector2D &vector2d)
+{
+    setXY(vector2d.x, vector2d.y);
+}
+
+void Rectangle2D::setXY(double x, double y)
+{
+    this->_x = x;
+    this->_y = y;
+    calculate_right_and_bottom();
+}
+
+void Rectangle2D::setX(double x)
+{
+    this->_x = x;
+    this->_right = this->_x + this->_w;
+}
+
+void Rectangle2D::setY(double y)
+{
+    this->_y = y;
+    this->_bottom = this->_y + this->_h;
+}
+
+void Rectangle2D::calculate_right_and_bottom()
 {
     this->_right = this->_x + this->_w;
     this->_bottom = this->_y + this->_h;
