@@ -130,13 +130,13 @@ windows: INCLUDEPATH += C:\\libs\\pugixml-1.9\\src
 }
 
 
-mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.9/lib -lSDL2
+mac: LIBS += -L$$/usr/local/Cellar/sdl2/2.0.9_1/lib -lSDL2
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_image/2.0.4/lib -lSDL2_image
 mac: LIBS += -L$$/usr/local/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
 mac: LIBS += -L$$/usr/local/Cellar/pugixml/1.9/lib/pugixml-1.9 -lpugixml
 #mac: LIBS += -L$$/usr/local/Cellar/sdl2_mixer/2.0.4/lib -lSDL2_mixer
 
-mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.9/include/SDL2
+mac:INCLUDEPATH += /usr/local/Cellar/sdl2/2.0.9_1/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/sdl2_ttf/2.0.14/include/SDL2
 mac:INCLUDEPATH += /usr/local/Cellar/pugixml/1.9/include/pugixml-1.9
