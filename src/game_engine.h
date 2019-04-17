@@ -75,13 +75,13 @@ public:
     static void game_engine_one_iteration();
     static void game_engine_infinite_loop();
     static void game_engine_infinite_loop2();
-    static void game_engine_infinite_loop3();
-    static void game_engine_infinite_loop4();
-    static void game_engine_infinite_loop5();
-    static void game_engine_infinite_loop6();
+    static void game_engine_infinite_loop_simple_vsync();
+
 
     static void DisplayEnvironmentInfo();
 private:
+    static void DisplayRenderInfo();
+
     //frame cap related valiables
     //80 fps are ok. High fps values might produce incorrect results because of number rounding
      //IMPORTANT! For smooth movement of game objects, the fps value should be choosed based on the update frequency of

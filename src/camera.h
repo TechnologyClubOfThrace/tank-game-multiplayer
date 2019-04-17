@@ -23,7 +23,7 @@
 
 #include <SDL.h>
 #include <math.h>
-#include <rectangle2d.h>
+#include "rectangle2d.h"
 
 class Camera
 {

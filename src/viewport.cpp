@@ -45,10 +45,12 @@ void ViewPort::FollowEntity(const TransformComponent &transformComponent, const 
 {   
     //calculations do not need rounding because it causes the entity on camera to shake
     static double x,y;
-    //x = ( ((transformComponent.Position.x * viewport.entityScale.x) + (static_cast<double>(spriteComponent.sourceRectangle.w * viewport.entityScale.x) / 2.0) ) - (static_cast<double>(allCameras[viewport.cameraID].frame.getW()) / 2.0));
-    //y = ( ((transformComponent.Position.y * viewport.entityScale.y) + (static_cast<double>(spriteComponent.sourceRectangle.h * viewport.entityScale.y) / 2.0) ) - (static_cast<double>(allCameras[viewport.cameraID].frame.getH()) / 2.0));
-    x = transformComponent.Position.x - static_cast<double>(10.00);
-    y = transformComponent.Position.y - static_cast<double>(70.00);
+    x = ( ((transformComponent.Position.x * viewport.entityScale.x) + (static_cast<double>(spriteComponent.sourceRectangle.w * viewport.entityScale.x) / 2.0) ) - (static_cast<double>(allCameras[viewport.cameraID].frame.getW()) / 2.0));
+    y = ( ((transformComponent.Position.y * viewport.entityScale.y) + (static_cast<double>(spriteComponent.sourceRectangle.h * viewport.entityScale.y) / 2.0) ) - (static_cast<double>(allCameras[viewport.cameraID].frame.getH()) / 2.0));
+
+    //x = (transformComponent.Position.x - 10.00);
+    //y = (transformComponent.Position.y - 70.00);
+
     allCameras[viewport.cameraID].frame.setXY(x,y);
     //std::cout << "camera frame x:" << allCameras[viewport.cameraID].frame.getX() << ", y:" << allCameras[viewport.cameraID].frame.getY() << std::endl;
 
@@ -61,11 +63,11 @@ void ViewPort::FollowEntity(const TransformComponent &transformComponent, const 
     {
         allCameras[viewport.cameraID].frame.setY(0);
     }
-    if( allCameras[viewport.cameraID].frame.getX() > static_cast<int>(ViewPort::levelWidth * viewport.entityScale.x - allCameras[viewport.cameraID].frame.getW()))
+    if( allCameras[viewport.cameraID].frame.getX() > ViewPort::levelWidth * viewport.entityScale.x - allCameras[viewport.cameraID].frame.getW())
     {
         allCameras[viewport.cameraID].frame.setX(ViewPort::levelWidth * viewport.entityScale.x - allCameras[viewport.cameraID].frame.getW());
     }
-    if( allCameras[viewport.cameraID].frame.getY() > static_cast<int>(ViewPort::levelHeight * viewport.entityScale.y - allCameras[viewport.cameraID].frame.getH()))
+    if( allCameras[viewport.cameraID].frame.getY() > ViewPort::levelHeight * viewport.entityScale.y - allCameras[viewport.cameraID].frame.getH())
     {
         allCameras[viewport.cameraID].frame.setY(ViewPort::levelHeight * viewport.entityScale.y - allCameras[viewport.cameraID].frame.getH());
     }

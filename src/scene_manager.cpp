@@ -136,7 +136,9 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     SpriteRectFromTileIndex(tile_index_number, tileEntity->sprite_component);
                     tileEntity->transform_component->Position.x = row * tileSet.tileWidth;
                     tileEntity->transform_component->Position.y = col * tileSet.tileHeight;
+                    //if (col < 2) {
                     //game::entityObjects.emplace_back(std::move(tileEntity));
+                    //}
 
 
                     ViewPort viewport;
@@ -146,10 +148,13 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     viewport.frame.h = static_cast<int>(ViewPort::levelHeight);
 
 
+
                     RenderSystem::RenderInViewport(*tileEntity->transform_component,
                                                    *tileEntity->sprite_component,
                                                    tileEntity->target_viewport_component->target_viewports[0],
                                                    viewport);
+
+
 
                     row++;
                 }
@@ -182,7 +187,6 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
     game::entityObjects.emplace_back(std::move(unifiedTilesEntity));
     //Reset render target
     SDL_SetRenderTarget(RenderUtils::windowRenderer, nullptr);
-
 
     return true;
 }

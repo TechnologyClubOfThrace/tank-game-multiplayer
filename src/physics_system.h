@@ -38,14 +38,14 @@ class PhysicsSystem
 {
 public:
     PhysicsSystem();
-    static void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity,  std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);  
-    static void Update_test(const double deltaTime, const Entity &entity, std::vector<std::unique_ptr<Entity>>::const_iterator &in_it);
+    static void Update(const double &deltaTime, const Entity& entity,  std::vector<std::unique_ptr<Entity>>::const_iterator& in_it);
+    static void Update_test(const double &deltaTime, const Entity &entity, std::vector<std::unique_ptr<Entity>>::const_iterator &in_it);
 
 private:
-    static void UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    static void UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    static void UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
-    static void UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    static void UpdateAngularVelocity(const double &deltaTime, const Entity &entity);
+    static void UpdateVelocity(const double &deltaTime, const Entity &entity);
+    static void UpdatePosition(const double &deltaTime, const Entity &entity);
+    static void UpdateDeltaRotationDegrees(const double &deltaTime, const Entity &entity);
     static void UpdateAngularAcceleration (const Entity &entity);
     static void UpdateForce(const Entity &entity);
     static void UpdateAcceleration(const Entity &entity);
