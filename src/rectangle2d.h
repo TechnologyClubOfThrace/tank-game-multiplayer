@@ -18,12 +18,16 @@ public:
     double getRight() const;
     double getBottom() const;
 
+    void setXYWH(double x, double y, double w, double h);
     void setXY(Vector2D& vector2d);
+    void setXY(double x, double y);
+    void setX(double x);
+    void setY(double y);
 private:
     double _x,_y,_w,_h;
     double _right, _bottom;
 
-    void calculate_left_and_bottom();
+    void calculate_right_and_bottom();
 };
 
 #endif // RECTANGLE2D_H

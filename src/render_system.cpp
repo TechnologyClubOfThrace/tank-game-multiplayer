@@ -29,9 +29,15 @@ RenderSystem::RenderSystem()
 
 void RenderSystem::RenderInViewport(const TransformComponent &transformComponent, const SpriteComponent &spriteComponent, const TargetViewport &targetViewport, const ViewPort& viewport)
 {
+    static double x;
+    static double y;
+
+    x = static_cast<double>(viewport.frame.x) + (transformComponent.Position.x * viewport.entityScale.x) - ViewPort::allCameras[viewport.cameraID].frame.getX();
+    y = static_cast<double>(viewport.frame.y) + (transformComponent.Position.y * viewport.entityScale.y) - ViewPort::allCameras[viewport.cameraID].frame.getY();
+    //std::cout << "x=" << x << " ,y=" << y << std::endl;
     SDL_Rect destinationRectangle {
-                static_cast<int>(round(static_cast<double>(viewport.frame.x) + (transformComponent.Position.x * viewport.entityScale.x) - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.x))),
-                static_cast<int>(round(static_cast<double>(viewport.frame.y) + (transformComponent.Position.y * viewport.entityScale.y) - static_cast<double>(ViewPort::allCameras[viewport.cameraID].frame.y))),
+                static_cast<int>(ceil(x)),
+                static_cast<int>(ceil(y)),
                 static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.w) * transformComponent.Scale.x * targetViewport.EntityScale.x * viewport.entityScale.x)),
                 static_cast<int>(ceil(static_cast<double>(spriteComponent.sourceRectangle.h) * transformComponent.Scale.y * targetViewport.EntityScale.y * viewport.entityScale.y))
     };

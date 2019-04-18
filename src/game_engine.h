@@ -75,9 +75,13 @@ public:
     static void game_engine_one_iteration();
     static void game_engine_infinite_loop();
     static void game_engine_infinite_loop2();
+    static void game_engine_infinite_loop_simple_vsync();
+
 
     static void DisplayEnvironmentInfo();
 private:
+    static void DisplayRenderInfo();
+
     //frame cap related valiables
     //80 fps are ok. High fps values might produce incorrect results because of number rounding
      //IMPORTANT! For smooth movement of game objects, the fps value should be choosed based on the update frequency of
@@ -89,7 +93,7 @@ private:
     static int fps;
     static std::chrono::milliseconds::rep frame_delay_for_stable_fps;//the second part is how many fps we need
     static std::chrono::high_resolution_clock::time_point begin_time_point;//stores the time point before processing game objects and drawing
-    static std::chrono::milliseconds::rep deltaTime;
+    static double deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
     //the time it takes to display the current frame after the previous one, in milliseconds
 
     static int max_fps_ticks;

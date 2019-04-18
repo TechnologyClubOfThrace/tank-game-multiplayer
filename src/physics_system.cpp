@@ -41,7 +41,7 @@ void PhysicsSystem::UpdateAngularAcceleration (const Entity& entity)
     entity.rigid_body2d_component->AngularAccelerationMagnitude = entity.rigid_body2d_component->TorqueMagnitude / entity.rigid_body2d_component->MoI;
 }
 
-void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
+void PhysicsSystem::UpdateAngularVelocity(const double &deltaTime, const Entity& entity)
 {
        if(!entity.rigid_body2d_component->isAngularAccelerationfrozen){
         entity.rigid_body2d_component->AngularVelocityMagnitude += entity.rigid_body2d_component->AngularAccelerationMagnitude * deltaTime;
@@ -54,7 +54,7 @@ void PhysicsSystem::UpdateAngularVelocity(const std::chrono::milliseconds::rep &
 }
 
 
-void PhysicsSystem::UpdateDeltaRotationDegrees(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
+void PhysicsSystem::UpdateDeltaRotationDegrees(const double &deltaTime, const Entity& entity)
 {
     entity.rigid_body2d_component->deltaRotationAngleeDegrees = entity.rigid_body2d_component->AngularVelocityMagnitude * deltaTime +
     0.5 * entity.rigid_body2d_component->AngularAccelerationMagnitude * std::pow(deltaTime, 2);
@@ -75,7 +75,7 @@ void PhysicsSystem::UpdateAcceleration(const Entity& entity)
 }
 
 //this function updates the velocity magnitude ONLY. Velocity needs rotation just like the Force() does!!!
-void PhysicsSystem::UpdateVelocity(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
+void PhysicsSystem::UpdateVelocity(const double &deltaTime, const Entity& entity)
 {    
     if(!entity.rigid_body2d_component->isAccelerationfrozen){
 
@@ -96,13 +96,20 @@ void PhysicsSystem::UpdateVelocityDegrees(const Entity& entity)
     entity.rigid_body2d_component->Velocity.RotateDegrees(entity.rigid_body2d_component->deltaRotationAngleeDegrees);
 }
 
-void PhysicsSystem::UpdatePosition(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity)
+void PhysicsSystem::UpdatePosition(const double &deltaTime, const Entity& entity)
 {
     entity.rigid_body2d_component->Position += entity.rigid_body2d_component->Velocity * deltaTime;
 }
 
+void PhysicsSystem::Update_test(const double &deltaTime, const Entity& entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it)
+{
+    entity.transform_component->Position.x += deltaTime * 0.3;
+    std::cout << entity.transform_component->Position.x << std::endl;
+    std::cout << "Update_test deltaTime: " << deltaTime << std::endl;
+    return;
+}
 
-void PhysicsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const Entity& entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it)
+void PhysicsSystem::Update(const double &deltaTime, const Entity& entity, std::vector<std::unique_ptr<Entity>>::const_iterator& in_it)
 {
     //store current position, rotation and rigidbody in case there is a collision to roll back the values
     static TransformComponent prevTransform;

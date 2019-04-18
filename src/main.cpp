@@ -89,17 +89,11 @@ void configureViewports()
 void configureCameras()
 {
     Camera c0;
-    c0.frame.x = 0;
-    c0.frame.y = 0;
-    c0.frame.w = game::viewports[0].frame.w;
-    c0.frame.h = game::viewports[0].frame.h;
+    c0.frame.setXYWH(0,0, game::viewports[0].frame.w,game::viewports[0].frame.h);
     ViewPort::allCameras.emplace_back(c0);
 
     Camera c1;
-    c1.frame.x = 0;
-    c1.frame.y = 0;
-    c1.frame.w = game::viewports[1].frame.w;
-    c1.frame.h = game::viewports[1].frame.h;
+    c1.frame.setXYWH(0,0,game::viewports[1].frame.w,game::viewports[1].frame.h);
     ViewPort::allCameras.emplace_back(c1);
 }
 

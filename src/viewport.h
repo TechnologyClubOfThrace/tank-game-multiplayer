@@ -24,6 +24,7 @@
 #include <SDL.h>
 #include <memory>
 #include <vector>
+#include <iostream>
 #include "camera.h"
 #include "sprite_component.h"
 #include "transform_component.h"

@@ -136,7 +136,10 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     SpriteRectFromTileIndex(tile_index_number, tileEntity->sprite_component);
                     tileEntity->transform_component->Position.x = row * tileSet.tileWidth;
                     tileEntity->transform_component->Position.y = col * tileSet.tileHeight;
+                    //if (col < 2) {
                     //game::entityObjects.emplace_back(std::move(tileEntity));
+                    //}
+
 
                     ViewPort viewport;
                     viewport.frame.x = 0;
@@ -145,16 +148,21 @@ bool SceneManager::LoadSceneEntities(pugi::xml_document &tmx_doc, const std::str
                     viewport.frame.h = static_cast<int>(ViewPort::levelHeight);
 
 
+
                     RenderSystem::RenderInViewport(*tileEntity->transform_component,
                                                    *tileEntity->sprite_component,
                                                    tileEntity->target_viewport_component->target_viewports[0],
                                                    viewport);
+
+
+
                     row++;
                 }
             }
             col++;
          }
      }
+
 
 
     unifiedTilesEntity->collider2d_collection_component = std::make_unique<Collider2DCollectionComponent>();

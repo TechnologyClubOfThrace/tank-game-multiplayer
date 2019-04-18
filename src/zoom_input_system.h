@@ -12,7 +12,7 @@ public:
     ZoomInputSystem();
 
     static void HandleEvent(const SDL_Event &e, const Entity& entity);
-    static void Update(const std::chrono::milliseconds::rep &deltaTime, const Entity &entity);
+    static void Update(const double &deltaTime, const Entity &entity);
 };
 
 #endif // ZOOM_INPUT_SYSTEM_H
