@@ -73,9 +73,8 @@ public:
     static void Update();
     static void Draw();
     static void game_engine_one_iteration();
-    static void game_engine_infinite_loop();
-    static void game_engine_infinite_loop2();
     static void game_engine_infinite_loop_simple_vsync();
+    static void game_loop_fixed_update_time_step();
 
 
     static void DisplayEnvironmentInfo();

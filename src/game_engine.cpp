@@ -179,11 +179,16 @@ bool GameEngine::Init()
 
 void GameEngine::DisplayRenderInfo()
 {
+    //SDL_DisplayMode display_mode;
+    //SDL_GetDisplayMode(0, 0, &display_mode);
+    //auto refresh_rate = display_mode.refresh_rate; //60
+
     SDL_RendererInfo render_info;
     SDL_GetRendererInfo(RenderUtils::windowRenderer, &render_info);
     std::cout << " Renderer name: " << render_info.name << std::endl;
     std::cout << " Renderer max_texture_width: " << render_info.max_texture_width << std::endl;
     std::cout << " Renderer max_texture_height: " << render_info.max_texture_height << std::endl;
+
 }
 
 //main game loop
@@ -200,7 +205,43 @@ void GameEngine::StartGameLoop()
     emscripten_set_main_loop(GameEngine::game_engine_one_iteration, 0, 1);
 #else
     game_engine_infinite_loop_simple_vsync();
+    //game_loop_fixed_update_time_step();
 #endif
+}
+
+//related article for this game loop pattern
+//http://gameprogrammingpatterns.com/game-loop.html
+//I am trying without success, to limit the fps without using vsync.
+//The problem I am facing here is that the animation is not smooth.
+void GameEngine::game_loop_fixed_update_time_step()
+{
+    auto previous = std::chrono::steady_clock::now();
+    auto current = std::chrono::steady_clock::now();
+    long long lag = 0;
+    long long elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(current - previous).count();
+
+    static double fps_limit = 60;
+    //static double frame_time_nanosecs = 1000000000 / 61.5;
+    static double frame_time_nanosecs = 1000000000 / 60;
+
+    long long screen_sync = 14200000;
+
+    while (GameEngine::Running){
+        current = std::chrono::steady_clock::now();
+        GameEngine::deltaTime =  std::chrono::duration_cast<std::chrono::nanoseconds>(current - previous).count() / 1000000.00;
+        previous = current;
+
+        HandleEvents();
+
+        std::cout << "deltaTime: " << GameEngine::deltaTime << std::endl;
+        Update();
+        Draw();
+
+        SDL_RenderPresent(RenderUtils::windowRenderer);
+
+        std::this_thread::sleep_for(std::chrono::nanoseconds(static_cast<long long>(frame_time_nanosecs) - std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - current).count()));
+        //std::this_thread::sleep_for(std::chrono::nanoseconds(static_cast<long long>(frame_time_nanosecs - GameEngine::deltaTime )));
+    }
 }
 
 //main game loop
