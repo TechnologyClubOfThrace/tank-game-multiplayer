@@ -51,8 +51,7 @@ FpsEntity GameEngine::fpsEntity;
 int GameEngine::fps = 67;
 std::chrono::nanoseconds::rep GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
 std::chrono::high_resolution_clock::time_point GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
-std::chrono::milliseconds::rep GameEngine::deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
-double GameEngine::d_deltaTime = 0;
+double GameEngine::deltaTime = 0; //the time it takes to display the current frame after the previous one, in milliseconds
 
 int GameEngine::max_fps_ticks = 20;
 int GameEngine::fps_ticks = 0;
@@ -190,7 +189,7 @@ void GameEngine::DisplayRenderInfo()
 //main game loop
 void GameEngine::StartGameLoop()
 {
-    deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
+    GameEngine::deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(begin_time_point - begin_time_point).count();//stores the duration of procesing the game objects and drawing
 #ifdef __EMSCRIPTEN__
     std::cout << "sizeof(long double): " << sizeof(long double) << std::endl;
     std::cout << "sizeof(double): " << sizeof(double) << std::endl;
@@ -214,8 +213,8 @@ void GameEngine::game_engine_infinite_loop_simple_vsync()
     while (Running){
        //store the begining time point of the proccesing.
        begin_time_point_steady = std::chrono::steady_clock::now(); //stores the time point before processing game objects and drawing
-       GameEngine::d_deltaTime = ll_delta_time / 1000000.00;
-       //std::cout << "game_engine_infinite_loop_simple_vsync d_deltaTime: " << GameEngine::d_deltaTime << std::endl;
+       GameEngine::deltaTime = ll_delta_time / 1000000.00;
+       //std::cout << "game_engine_infinite_loop_simple_vsync deltaTime: " << GameEngine::deltaTime << std::endl;
 
         HandleEvents();//process user input from keyboard/mouse/game controlers etc
         Update();//update game objects position, collitions etc
@@ -226,7 +225,7 @@ void GameEngine::game_engine_infinite_loop_simple_vsync()
        //display the fps counter if needed
 
        if (fpsEntity.fps_component->displayFpsCounter){
-           FpsSystem::Update(ceil(GameEngine::d_deltaTime), fpsEntity);
+           FpsSystem::Update(ceil(GameEngine::deltaTime), fpsEntity);
            fpsEntity.fps_component->entities_count = game::entityObjects.size();
            RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
        }
@@ -247,8 +246,8 @@ void GameEngine::game_engine_one_iteration()
 
    //store the begining time point of the proccesing.
    begin_time_point_steady_ems = std::chrono::steady_clock::now(); //stores the time point before processing game objects and drawing
-   GameEngine::d_deltaTime = ll_delta_time_ems / static_cast<double>(1000000.00);
-   std::cout << "game_engine_one_iteration d_deltaTime: " << GameEngine::d_deltaTime << std::endl;
+   GameEngine::deltaTime = ll_delta_time_ems / static_cast<double>(1000000.00);
+   std::cout << "game_engine_one_iteration deltaTime: " << GameEngine::deltaTime << std::endl;
 
     HandleEvents();//process user input from keyboard/mouse/game controlers etc
     Update();//update game objects position, collitions etc
@@ -259,7 +258,7 @@ void GameEngine::game_engine_one_iteration()
    //display the fps counter if needed
 
    if (fpsEntity.fps_component->displayFpsCounter){
-       FpsSystem::Update(ceil(GameEngine::d_deltaTime), fpsEntity);
+       FpsSystem::Update(ceil(GameEngine::deltaTime), fpsEntity);
        fpsEntity.fps_component->entities_count = game::entityObjects.size();
        RenderSystem::RenderInViewport(*fpsEntity.transform_component, *fpsEntity.sprite_component, fpsEntity.target_viewport_component->target_viewports[0], game::viewports[fpsEntity.target_viewport_component->target_viewports[0].viewportID]);
    }
@@ -370,13 +369,13 @@ void GameEngine::Update()
         //IMPORTANT! zoom handling should be before the FollowEntity else
         //zooming is not smooth.
         if((*it)->zoom_input_component){
-            ZoomInputSystem::Update(d_deltaTime, *(*it));
+            ZoomInputSystem::Update(GameEngine::deltaTime, *(*it));
         }//ZoomInputSystem >>> zoom_input_component
 
         //physicsSystem >>> rigid_body2d_component
         if((*it)->rigid_body2d_component){
-            PhysicsSystem::Update(d_deltaTime, *(*it), it);
-            //PhysicsSystem::Update_test(d_deltaTime, *(*it), it);
+            PhysicsSystem::Update(GameEngine::deltaTime, *(*it), it);
+            //PhysicsSystem::Update_test(deltaTime, *(*it), it);
         }//physicsSystem >>> rigid_body2d_component
 
         //FollowEntity

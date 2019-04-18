@@ -12,7 +12,7 @@ class FpsSystem
 public:
     FpsSystem();
     ~FpsSystem();
-    static void Update(const std::chrono::milliseconds::rep &deltaTime, const FpsEntity &fpsEntity);
+    static void Update(const double &deltaTime, const FpsEntity &fpsEntity);
 private:
     static bool LoadFromRenderedText(const FpsEntity &fpsEntity);
 };

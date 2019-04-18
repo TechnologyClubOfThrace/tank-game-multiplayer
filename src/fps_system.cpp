@@ -13,7 +13,7 @@ FpsSystem::~FpsSystem()
 //SDL_GetCPUCount
 //SDL_GetPlatform()
 //SDL_GetVersion(v)
-void FpsSystem::Update(const std::chrono::milliseconds::rep &deltaTime, const FpsEntity &fpsEntity)
+void FpsSystem::Update(const double &deltaTime, const FpsEntity &fpsEntity)
 {
     fpsEntity.fps_component->fps = std::string("Fps: ").append(std::to_string(static_cast<int>(deltaTime > 0 ? round(1000/deltaTime) : 0))).append(
                 "\nTotal entities: " + std::to_string(fpsEntity.fps_component->entities_count));

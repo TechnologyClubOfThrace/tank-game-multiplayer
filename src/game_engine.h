@@ -93,8 +93,7 @@ private:
     static int fps;
     static std::chrono::milliseconds::rep frame_delay_for_stable_fps;//the second part is how many fps we need
     static std::chrono::high_resolution_clock::time_point begin_time_point;//stores the time point before processing game objects and drawing
-    static std::chrono::milliseconds::rep deltaTime;
-    static double d_deltaTime;
+    static double deltaTime;//the time it takes to display the current frame after the previous one, in milliseconds
     //the time it takes to display the current frame after the previous one, in milliseconds
 
     static int max_fps_ticks;
