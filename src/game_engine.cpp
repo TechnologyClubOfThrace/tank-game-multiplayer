@@ -49,7 +49,7 @@ FpsEntity GameEngine::fpsEntity;
 
 // ======= FRAME CAPPING RELATED =======
 int GameEngine::fps = 67;
-std::chrono::nanoseconds::rep GameEngine::frame_delay_for_stable_fps = 1000 / fps;//the second part is how many fps we need
+std::chrono::nanoseconds::rep GameEngine::frame_delay_for_stable_fps = 1000000 / fps;//the second part is how many fps we need
 std::chrono::high_resolution_clock::time_point GameEngine::begin_time_point = std::chrono::high_resolution_clock::now();//stores the time point before processing game objects and drawing
 double GameEngine::deltaTime = 0; //the time it takes to display the current frame after the previous one, in milliseconds
 

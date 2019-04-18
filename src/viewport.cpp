@@ -45,8 +45,8 @@ void ViewPort::FollowEntity(const TransformComponent &transformComponent, const 
 {   
     //calculations do not need rounding because it causes the entity on camera to shake
     static double x,y;
-    x = ( ((transformComponent.Position.x * viewport.entityScale.x) + (static_cast<double>(spriteComponent.sourceRectangle.w * viewport.entityScale.x) / 2.0) ) - (static_cast<double>(allCameras[viewport.cameraID].frame.getW()) / 2.0));
-    y = ( ((transformComponent.Position.y * viewport.entityScale.y) + (static_cast<double>(spriteComponent.sourceRectangle.h * viewport.entityScale.y) / 2.0) ) - (static_cast<double>(allCameras[viewport.cameraID].frame.getH()) / 2.0));
+    x = ( ((transformComponent.Position.x * viewport.entityScale.x) + (spriteComponent.sourceRectangle.w * viewport.entityScale.x) / 2.0) - (allCameras[viewport.cameraID].frame.getW()) / 2.0);
+    y = ( ((transformComponent.Position.y * viewport.entityScale.y) + (spriteComponent.sourceRectangle.h * viewport.entityScale.y) / 2.0) - (allCameras[viewport.cameraID].frame.getH()) / 2.0);
 
     //x = (transformComponent.Position.x - 10.00);
     //y = (transformComponent.Position.y - 70.00);
